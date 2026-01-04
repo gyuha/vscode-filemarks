@@ -28,6 +28,7 @@ export async function activate(context: vscode.ExtensionContext) {
     treeProvider = new FilemarkTreeProvider(bookmarkStore);
     const treeView = vscode.window.createTreeView('filemarks.treeView', {
       treeDataProvider: treeProvider,
+      dragAndDropController: treeProvider.dragAndDropController,
     });
     context.subscriptions.push(treeView);
 
@@ -134,9 +135,14 @@ async function handleToggleBookmark(num: number): Promise<void> {
 async function handleJumpToBookmark(num: number): Promise<void> {
   if (!bookmarkStore) return;
 
+  const config = vscode.workspace.getConfiguration('filemarks');
+  const showWarning = config.get<boolean>('showBookmarkNotDefinedWarning', true);
+
   const result = bookmarkStore.findBookmarkByNumber(num);
   if (!result) {
-    vscode.window.showWarningMessage(`Bookmark ${num} is not defined`);
+    if (showWarning) {
+      vscode.window.showWarningMessage(`Bookmark ${num} is not defined`);
+    }
     return;
   }
 
@@ -150,9 +156,15 @@ async function handleJumpToBookmark(num: number): Promise<void> {
     const document = await vscode.workspace.openTextDocument(absolutePath);
     const editor = await vscode.window.showTextDocument(document);
 
+    const revealLocation = config.get<string>('revealLocation', 'center');
+    const revealType =
+      revealLocation === 'top'
+        ? vscode.TextEditorRevealType.AtTop
+        : vscode.TextEditorRevealType.InCenter;
+
     const position = new vscode.Position(line, 0);
     editor.selection = new vscode.Selection(position, position);
-    editor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.InCenter);
+    editor.revealRange(new vscode.Range(position, position), revealType);
 
     vscode.window.showInformationMessage(
       `Jumped to bookmark ${num}: ${bookmark.filePath}:${line + 1}`
@@ -179,9 +191,16 @@ async function handleGoToBookmark(bookmark: BookmarkNode, line: number): Promise
     const document = await vscode.workspace.openTextDocument(absolutePath);
     const editor = await vscode.window.showTextDocument(document);
 
+    const config = vscode.workspace.getConfiguration('filemarks');
+    const revealLocation = config.get<string>('revealLocation', 'center');
+    const revealType =
+      revealLocation === 'top'
+        ? vscode.TextEditorRevealType.AtTop
+        : vscode.TextEditorRevealType.InCenter;
+
     const position = new vscode.Position(line, 0);
     editor.selection = new vscode.Selection(position, position);
-    editor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.InCenter);
+    editor.revealRange(new vscode.Range(position, position), revealType);
   } catch (error) {
     vscode.window.showErrorMessage(`Failed to go to bookmark: ${error}`);
   }

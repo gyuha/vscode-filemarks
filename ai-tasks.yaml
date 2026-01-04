@@ -620,7 +620,7 @@ phase_4:
     - id: 'T4.1'
       title: '설정 옵션 완성'
       priority: P1
-      status: pending
+      status: done
       estimated_hours: 4
       fr_refs: []
       depends_on: ['T3.5']
@@ -629,25 +629,25 @@ phase_4:
       subtasks:
         - id: 'T4.1.1'
           title: 'filemarks.saveBookmarksInProject 설정'
-          status: pending
+          status: done
         - id: 'T4.1.2'
           title: 'filemarks.navigateThroughAllFiles 설정'
-          status: pending
+          status: done
         - id: 'T4.1.3'
           title: 'filemarks.gutterIconFillColor 설정'
-          status: pending
+          status: done
         - id: 'T4.1.4'
           title: 'filemarks.gutterIconNumberColor 설정'
-          status: pending
+          status: done
         - id: 'T4.1.5'
           title: 'filemarks.showBookmarkNotDefinedWarning 설정'
-          status: pending
+          status: done
         - id: 'T4.1.6'
           title: 'filemarks.revealLocation 설정 (top/center)'
-          status: pending
+          status: done
         - id: 'T4.1.7'
           title: '설정 변경 시 즉시 반영'
-          status: pending
+          status: done
       acceptance_criteria:
         - '모든 설정이 Settings UI에 표시'
         - '설정 변경 시 동작에 반영'

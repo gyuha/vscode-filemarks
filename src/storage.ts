@@ -6,19 +6,27 @@ import type { FilemarkState } from './types';
 export class StorageService {
   private readonly STORAGE_FILE = 'filemarks.json';
   private workspacePath: string;
+  private context: vscode.ExtensionContext;
   private saveTimeout: NodeJS.Timeout | undefined;
   private readonly DEBOUNCE_DELAY = 500;
 
-  constructor(_context: vscode.ExtensionContext) {
+  constructor(context: vscode.ExtensionContext) {
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
     if (!workspaceFolder) {
       throw new Error('No workspace folder found');
     }
+    this.context = context;
     this.workspacePath = workspaceFolder.uri.fsPath;
   }
 
   private getStoragePath(): string {
-    return path.join(this.workspacePath, '.vscode', this.STORAGE_FILE);
+    const config = vscode.workspace.getConfiguration('filemarks');
+    const saveInProject = config.get<boolean>('saveBookmarksInProject', true);
+
+    if (saveInProject) {
+      return path.join(this.workspacePath, '.vscode', this.STORAGE_FILE);
+    }
+    return path.join(this.context.globalStorageUri.fsPath, this.STORAGE_FILE);
   }
 
   async load(): Promise<FilemarkState> {

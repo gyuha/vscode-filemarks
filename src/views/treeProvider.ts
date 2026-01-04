@@ -4,11 +4,39 @@ import type { BookmarkStore } from '../bookmarkStore';
 import type { TreeNode, BookmarkNode, FolderNode } from '../types';
 import { isBookmarkNode, isFolderNode } from '../types';
 
+class TreeDragAndDropController implements vscode.TreeDragAndDropController<TreeNode> {
+  dropMimeTypes = ['application/vnd.code.tree.filemarks'];
+  dragMimeTypes = ['application/vnd.code.tree.filemarks'];
+
+  constructor(private store: BookmarkStore) {}
+
+  async handleDrag(source: TreeNode[], dataTransfer: vscode.DataTransfer): Promise<void> {
+    dataTransfer.set('application/vnd.code.tree.filemarks', new vscode.DataTransferItem(source));
+  }
+
+  async handleDrop(target: TreeNode | undefined, dataTransfer: vscode.DataTransfer): Promise<void> {
+    const transferItem = dataTransfer.get('application/vnd.code.tree.filemarks');
+    if (!transferItem) return;
+
+    const source = transferItem.value as TreeNode[];
+    if (!source || source.length === 0) return;
+
+    const sourceNode = source[0];
+    const targetFolderId = target && isFolderNode(target) ? target.id : null;
+
+    if (sourceNode.id === targetFolderId) return;
+
+    await this.store.moveNode(sourceNode.id, targetFolderId);
+  }
+}
+
 export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   private readonly _onDidChangeTreeData = new vscode.EventEmitter<TreeNode | undefined | null>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
+  readonly dragAndDropController: vscode.TreeDragAndDropController<TreeNode>;
 
   constructor(private store: BookmarkStore) {
+    this.dragAndDropController = new TreeDragAndDropController(store);
     this.store.onDidChangeBookmarks(() => {
       this.refresh();
     });

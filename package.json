@@ -289,6 +289,30 @@
       "type": "object",
       "title": "Filemarks",
       "properties": {
+        "filemarks.saveBookmarksInProject": {
+          "type": "boolean",
+          "default": true,
+          "description": "Save bookmarks in project's .vscode folder (true) or global storage (false)"
+        },
+        "filemarks.navigateThroughAllFiles": {
+          "type": "boolean",
+          "default": true,
+          "description": "Navigate through bookmarks across all files when jumping (true) or only within current file (false)"
+        },
+        "filemarks.showBookmarkNotDefinedWarning": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show warning message when jumping to a bookmark number that doesn't exist"
+        },
+        "filemarks.revealLocation": {
+          "type": "string",
+          "enum": [
+            "top",
+            "center"
+          ],
+          "default": "center",
+          "description": "Where to position the cursor when jumping to a bookmark"
+        },
         "filemarks.gutterIconFillColor": {
           "type": "string",
           "default": "#157EFB",
