@@ -52,7 +52,7 @@ export class BookmarkStore {
       this.outputChannel.appendLine(
         `File deleted: ${relativePath}, removed bookmark ${bookmark.id}`
       );
-      vscode.window.showInformationMessage(`Bookmarks removed for deleted file: ${relativePath}`);
+      vscode.window.showInformationMessage(vscode.l10n.t('file.deleted', relativePath));
     }
   }
 
@@ -66,7 +66,7 @@ export class BookmarkStore {
       bookmark.updatedAt = new Date().toISOString();
       this.save();
       this.outputChannel.appendLine(`File renamed: ${oldPath} -> ${newPath}`);
-      vscode.window.showInformationMessage('Bookmarks updated for renamed file');
+      vscode.window.showInformationMessage(vscode.l10n.t('file.renamed'));
     }
   }
 

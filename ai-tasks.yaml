@@ -715,7 +715,7 @@ phase_4:
     - id: 'T4.4'
       title: '국제화 (i18n)'
       priority: P2
-      status: pending
+      status: done
       estimated_hours: 4
       fr_refs: []
       depends_on: ['T4.1']
@@ -724,16 +724,16 @@ phase_4:
       subtasks:
         - id: 'T4.4.1'
           title: 'package.nls.json 생성 (영어)'
-          status: pending
+          status: done
         - id: 'T4.4.2'
           title: 'package.nls.ko.json 생성 (한국어)'
-          status: pending
+          status: done
         - id: 'T4.4.3'
           title: 'l10n 폴더에 bundle.l10n.json 생성'
-          status: pending
+          status: done
         - id: 'T4.4.4'
           title: '모든 문자열 l10n.t() 적용'
-          status: pending
+          status: done
       acceptance_criteria:
         - '영어/한국어 전환 가능'
         - '모든 UI 문자열 번역'

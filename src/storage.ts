@@ -36,9 +36,7 @@ export class StorageService {
       const parsed = JSON.parse(content) as FilemarkState;
 
       if (!parsed.version || !Array.isArray(parsed.items)) {
-        vscode.window.showWarningMessage(
-          'Corrupted bookmarks file detected, attempting recovery...'
-        );
+        vscode.window.showWarningMessage(vscode.l10n.t('error.corruptedFile'));
         return this.recoverOrDefault(parsed);
       }
 
@@ -49,14 +47,12 @@ export class StorageService {
       }
 
       if (error instanceof SyntaxError) {
-        vscode.window.showErrorMessage(
-          'Failed to parse bookmarks file (corrupted JSON). Creating backup and starting fresh.'
-        );
+        vscode.window.showErrorMessage(vscode.l10n.t('error.corruptedJson'));
         await this.createBackup();
         return this.getDefaultState();
       }
 
-      vscode.window.showErrorMessage(`Failed to load bookmarks: ${error}`);
+      vscode.window.showErrorMessage(vscode.l10n.t('error.failedToLoad', String(error)));
       return this.getDefaultState();
     }
   }
@@ -97,7 +93,7 @@ export class StorageService {
           await fs.writeFile(storagePath, JSON.stringify(state, null, 2), 'utf-8');
           resolve();
         } catch (error) {
-          vscode.window.showErrorMessage(`Failed to save bookmarks: ${error}`);
+          vscode.window.showErrorMessage(vscode.l10n.t('error.failedToSave', String(error)));
           reject(error);
         }
       }, this.DEBOUNCE_DELAY);
