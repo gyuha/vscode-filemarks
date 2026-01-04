@@ -10,13 +10,13 @@ export class StorageService {
   private saveTimeout: NodeJS.Timeout | undefined;
   private readonly DEBOUNCE_DELAY = 500;
 
-  constructor(context: vscode.ExtensionContext) {
-    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
-    if (!workspaceFolder) {
+  constructor(context: vscode.ExtensionContext, workspaceFolder?: vscode.WorkspaceFolder) {
+    const folder = workspaceFolder || vscode.workspace.workspaceFolders?.[0];
+    if (!folder) {
       throw new Error('No workspace folder found');
     }
     this.context = context;
-    this.workspacePath = workspaceFolder.uri.fsPath;
+    this.workspacePath = folder.uri.fsPath;
   }
 
   private getStoragePath(): string {

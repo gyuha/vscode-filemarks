@@ -30,7 +30,7 @@ export class BookmarkStore {
       this.handleFileDelete(uri);
     });
 
-    watcher.onDidCreate(async uri => {
+    watcher.onDidCreate(async _uri => {
       const renames = await this.detectFileRename();
       if (renames) {
         this.handleFileRename(renames.oldUri, renames.newUri);

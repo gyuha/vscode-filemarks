@@ -1,0 +1,17 @@
+.vscode/**
+.vscode-test/**
+src/**
+.gitignore
+.prettierrc
+.eslintrc.json
+tsconfig.json
+esbuild.js
+**/*.map
+*.vsix
+node_modules/**
+test-workspace/**
+ai-tasks.yaml
+PRD.md
+req.md
+TEST_GUIDE.md
+.github/**

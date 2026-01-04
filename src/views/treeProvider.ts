@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as path from 'node:path';
 import type { BookmarkStore } from '../bookmarkStore';
 import type { TreeNode, BookmarkNode, FolderNode } from '../types';
-import { isBookmarkNode, isFolderNode } from '../types';
+import { isFolderNode } from '../types';
 
 class TreeDragAndDropController implements vscode.TreeDragAndDropController<TreeNode> {
   dropMimeTypes = ['application/vnd.code.tree.filemarks'];

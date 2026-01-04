@@ -2,8 +2,21 @@
   "name": "filemarks",
   "displayName": "Filemarks",
   "description": "Advanced bookmark management with numbered shortcuts and folder organization",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "publisher": "gyuha",
+  "author": {
+    "name": "Gyuha",
+    "url": "https://github.com/gyuha"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gyuha/vscode-filemarks"
+  },
+  "bugs": {
+    "url": "https://github.com/gyuha/vscode-filemarks/issues"
+  },
+  "homepage": "https://github.com/gyuha/vscode-filemarks#readme",
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -15,8 +28,12 @@
     "bookmarks",
     "numbered bookmarks",
     "navigation",
-    "filemarks"
+    "filemarks",
+    "code navigation",
+    "folder organization",
+    "productivity"
   ],
+  "icon": "icon.png",
   "activationEvents": [
     "onStartupFinished"
   ],
@@ -377,21 +394,29 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
-    "compile": "node esbuild.js",
-    "watch": "node esbuild.js --watch",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
     "package": "node esbuild.js --production",
+    "compile:esbuild": "node esbuild.js",
+    "watch:esbuild": "node esbuild.js --watch",
+    "pretest": "npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "format": "prettier --write \"src/**/*.ts\"",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./dist/test/runTest.js"
   },
   "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.10",
     "@types/node": "^20.x",
     "@types/uuid": "^10.0.0",
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^7.0.0",
     "@typescript-eslint/parser": "^7.0.0",
+    "@vscode/test-electron": "^2.5.2",
     "esbuild": "^0.20.0",
     "eslint": "^8.56.0",
+    "glob": "^13.0.0",
+    "mocha": "^11.7.5",
     "prettier": "^3.2.0",
     "typescript": "^5.3.0"
   },

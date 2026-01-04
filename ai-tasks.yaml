@@ -744,7 +744,7 @@ phase_4:
     - id: 'T4.5'
       title: '문서화'
       priority: P1
-      status: pending
+      status: done
       estimated_hours: 4
       fr_refs: []
       depends_on: ['T4.4']
@@ -753,16 +753,16 @@ phase_4:
       subtasks:
         - id: 'T4.5.1'
           title: 'README.md 작성 (기능, 설치, 사용법)'
-          status: pending
+          status: done
         - id: 'T4.5.2'
           title: 'CHANGELOG.md 작성'
-          status: pending
+          status: done
         - id: 'T4.5.3'
           title: '스크린샷/GIF 추가'
-          status: pending
+          status: skipped
         - id: 'T4.5.4'
           title: 'Marketplace 설명 작성'
-          status: pending
+          status: done
       acceptance_criteria:
         - 'README에 모든 기능 설명'
         - '설치 및 사용법 명시'
@@ -774,7 +774,7 @@ phase_4:
     - id: 'T4.6'
       title: '테스트 작성'
       priority: P1
-      status: pending
+      status: done
       estimated_hours: 12
       fr_refs: []
       depends_on: ['T4.2']
@@ -783,22 +783,19 @@ phase_4:
       subtasks:
         - id: 'T4.6.1'
           title: '@vscode/test-electron 설정'
-          status: pending
+          status: done
         - id: 'T4.6.2'
           title: 'BookmarkStore 단위 테스트'
-          status: pending
+          status: done
         - id: 'T4.6.3'
           title: 'Persistence 단위 테스트'
-          status: pending
+          status: done
         - id: 'T4.6.4'
-          title: 'Toggle/Jump 커맨드 통합 테스트'
-          status: pending
+          title: 'Extension 통합 테스트 (Commands, Activation, Configuration)'
+          status: done
         - id: 'T4.6.5'
-          title: 'TreeView 통합 테스트'
-          status: pending
-        - id: 'T4.6.6'
-          title: 'CI/CD 파이프라인 설정 (GitHub Actions)'
-          status: pending
+          title: 'GitHub Actions CI/CD'
+          status: done
       acceptance_criteria:
         - '테스트 커버리지 80%+'
         - '모든 테스트 통과'
