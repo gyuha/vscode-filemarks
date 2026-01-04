@@ -321,7 +321,7 @@ phase_2:
     - id: 'T2.1'
       title: '사이드바 TreeView 구현'
       priority: P0
-      status: pending
+      status: completed
       estimated_hours: 8
       fr_refs: ['FR-004']
       depends_on: ['T1.3']
@@ -330,28 +330,28 @@ phase_2:
       subtasks:
         - id: 'T2.1.1'
           title: 'package.json에 viewsContainers, views 등록'
-          status: pending
+          status: completed
         - id: 'T2.1.2'
           title: 'Activity Bar 아이콘 추가'
-          status: pending
+          status: completed
         - id: 'T2.1.3'
           title: 'src/views/FilemarkTreeProvider.ts 생성'
-          status: pending
+          status: completed
         - id: 'T2.1.4'
           title: 'TreeDataProvider 인터페이스 구현'
-          status: pending
+          status: completed
         - id: 'T2.1.5'
           title: 'getTreeItem(element) 구현'
-          status: pending
+          status: completed
         - id: 'T2.1.6'
           title: 'getChildren(element?) 구현 - 재귀 지원'
-          status: pending
+          status: completed
         - id: 'T2.1.7'
           title: 'refresh() 구현 - onDidChangeTreeData 이벤트'
-          status: pending
+          status: completed
         - id: 'T2.1.8'
           title: 'BookmarkStore 변경 시 TreeView 갱신'
-          status: pending
+          status: completed
       acceptance_criteria:
         - '사이드바에 Filemarks 패널 표시'
         - '폴더/북마크 트리 구조 표시'
@@ -364,7 +364,7 @@ phase_2:
     - id: 'T2.2'
       title: '북마크 클릭으로 이동'
       priority: P0
-      status: pending
+      status: completed
       estimated_hours: 2
       fr_refs: ['FR-004']
       depends_on: ['T2.1']
@@ -373,13 +373,13 @@ phase_2:
       subtasks:
         - id: 'T2.2.1'
           title: 'TreeItem에 command 속성 추가'
-          status: pending
+          status: completed
         - id: 'T2.2.2'
           title: 'filemarks.goToBookmark 커맨드 구현'
-          status: pending
+          status: completed
         - id: 'T2.2.3'
           title: '해당 파일 열기 + 라인 이동'
-          status: pending
+          status: completed
       acceptance_criteria:
         - '북마크 클릭 시 해당 파일/라인으로 이동'
         - '폴더 클릭 시 확장/축소'
@@ -390,7 +390,7 @@ phase_2:
     - id: 'T2.3'
       title: '북마크 삭제 기능'
       priority: P0
-      status: pending
+      status: completed
       estimated_hours: 3
       fr_refs: ['FR-007']
       depends_on: ['T2.1']
@@ -399,16 +399,16 @@ phase_2:
       subtasks:
         - id: 'T2.3.1'
           title: 'package.json에 menus.view/item/context 등록'
-          status: pending
+          status: completed
         - id: 'T2.3.2'
           title: 'filemarks.deleteBookmark 커맨드 구현'
-          status: pending
+          status: completed
         - id: 'T2.3.3'
           title: 'BookmarkStore.deleteBookmark(id) 구현'
-          status: pending
+          status: completed
         - id: 'T2.3.4'
           title: '삭제 확인 다이얼로그 (선택적)'
-          status: pending
+          status: completed
       acceptance_criteria:
         - '우클릭 메뉴에서 Delete 선택 가능'
         - '삭제 후 TreeView 갱신'
@@ -420,7 +420,7 @@ phase_2:
     - id: 'T2.4'
       title: '북마크 이름 변경'
       priority: P1
-      status: pending
+      status: completed
       estimated_hours: 3
       fr_refs: ['FR-005']
       depends_on: ['T2.1']
@@ -429,16 +429,16 @@ phase_2:
       subtasks:
         - id: 'T2.4.1'
           title: 'filemarks.renameBookmark 커맨드 구현'
-          status: pending
+          status: completed
         - id: 'T2.4.2'
           title: 'InputBox로 새 이름 입력 받기'
-          status: pending
+          status: completed
         - id: 'T2.4.3'
           title: 'BookmarkStore.renameBookmark(id, label) 구현'
-          status: pending
+          status: completed
         - id: 'T2.4.4'
           title: 'TreeView에 라벨 표시'
-          status: pending
+          status: completed
       acceptance_criteria:
         - '우클릭 → Rename 가능'
         - '라벨이 TreeView에 표시됨'

@@ -22,7 +22,38 @@
   ],
   "main": "./dist/extension.js",
   "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "filemarks",
+          "title": "Filemarks",
+          "icon": "$(bookmark)"
+        }
+      ]
+    },
+    "views": {
+      "filemarks": [
+        {
+          "id": "filemarks.treeView",
+          "name": "Bookmarks"
+        }
+      ]
+    },
     "commands": [
+      {
+        "command": "filemarks.goToBookmark",
+        "title": "Filemarks: Go to Bookmark"
+      },
+      {
+        "command": "filemarks.deleteBookmark",
+        "title": "Filemarks: Delete Bookmark",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "filemarks.renameBookmark",
+        "title": "Filemarks: Rename Bookmark",
+        "icon": "$(edit)"
+      },
       {
         "command": "filemarks.toggleBookmark0",
         "title": "Filemarks: Toggle Bookmark 0"
@@ -241,6 +272,25 @@
           "description": "Gutter icon number color"
         }
       }
+    },
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "filemarks.goToBookmark",
+          "when": "view == filemarks.treeView && viewItem == bookmark",
+          "group": "navigation"
+        },
+        {
+          "command": "filemarks.renameBookmark",
+          "when": "view == filemarks.treeView && viewItem == bookmark",
+          "group": "edit@1"
+        },
+        {
+          "command": "filemarks.deleteBookmark",
+          "when": "view == filemarks.treeView && viewItem == bookmark",
+          "group": "edit@2"
+        }
+      ]
     }
   },
   "scripts": {

@@ -148,6 +148,33 @@ export class BookmarkStore {
     removeFromTree(this.state.items);
   }
 
+  async deleteBookmark(id: string): Promise<void> {
+    this.removeBookmarkNode(id);
+    await this.save();
+  }
+
+  async renameBookmark(id: string, label: string): Promise<void> {
+    const findNode = (nodes: TreeNode[]): BookmarkNode | undefined => {
+      for (const node of nodes) {
+        if (node.type === 'bookmark' && node.id === id) {
+          return node;
+        }
+        if (node.type === 'folder') {
+          const found = findNode(node.children);
+          if (found) return found;
+        }
+      }
+      return undefined;
+    };
+
+    const bookmark = findNode(this.state.items);
+    if (bookmark) {
+      bookmark.label = label || undefined;
+      bookmark.updatedAt = new Date().toISOString();
+      await this.save();
+    }
+  }
+
   private async save(): Promise<void> {
     await this.storage.save(this.state);
     this._onDidChangeBookmarks.fire();
