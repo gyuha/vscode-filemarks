@@ -6,6 +6,8 @@ import type { FilemarkState } from './types';
 export class StorageService {
   private readonly STORAGE_FILE = 'filemarks.json';
   private workspacePath: string;
+  private saveTimeout: NodeJS.Timeout | undefined;
+  private readonly DEBOUNCE_DELAY = 500;
 
   constructor(_context: vscode.ExtensionContext) {
     const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
@@ -34,16 +36,25 @@ export class StorageService {
   }
 
   async save(state: FilemarkState): Promise<void> {
-    try {
-      const storagePath = this.getStoragePath();
-      const dirPath = path.dirname(storagePath);
-
-      await fs.mkdir(dirPath, { recursive: true });
-      await fs.writeFile(storagePath, JSON.stringify(state, null, 2), 'utf-8');
-    } catch (error) {
-      vscode.window.showErrorMessage(`Failed to save bookmarks: ${error}`);
-      throw error;
+    if (this.saveTimeout) {
+      clearTimeout(this.saveTimeout);
     }
+
+    return new Promise((resolve, reject) => {
+      this.saveTimeout = setTimeout(async () => {
+        try {
+          const storagePath = this.getStoragePath();
+          const dirPath = path.dirname(storagePath);
+
+          await fs.mkdir(dirPath, { recursive: true });
+          await fs.writeFile(storagePath, JSON.stringify(state, null, 2), 'utf-8');
+          resolve();
+        } catch (error) {
+          vscode.window.showErrorMessage(`Failed to save bookmarks: ${error}`);
+          reject(error);
+        }
+      }, this.DEBOUNCE_DELAY);
+    });
   }
 
   private getDefaultState(): FilemarkState {

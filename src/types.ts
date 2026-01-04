@@ -24,3 +24,11 @@ export interface FilemarkState {
   version: string;
   items: TreeNode[];
 }
+
+export function isFolderNode(node: TreeNode): node is FolderNode {
+  return node.type === 'folder';
+}
+
+export function isBookmarkNode(node: TreeNode): node is BookmarkNode {
+  return node.type === 'bookmark';
+}

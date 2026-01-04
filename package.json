@@ -225,7 +225,23 @@
         "mac": "cmd+9",
         "when": "editorTextFocus"
       }
-    ]
+    ],
+    "configuration": {
+      "type": "object",
+      "title": "Filemarks",
+      "properties": {
+        "filemarks.gutterIconFillColor": {
+          "type": "string",
+          "default": "#157EFB",
+          "description": "Gutter icon fill color"
+        },
+        "filemarks.gutterIconNumberColor": {
+          "type": "string",
+          "default": "#FFFFFF",
+          "description": "Gutter icon number color"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",

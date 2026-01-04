@@ -1,8 +1,10 @@
 import * as vscode from 'vscode';
 import { StorageService } from './storage';
 import { BookmarkStore } from './bookmarkStore';
+import { GutterDecorationProvider } from './decorations';
 
 let bookmarkStore: BookmarkStore | undefined;
+let decorationProvider: GutterDecorationProvider | undefined;
 
 export async function activate(context: vscode.ExtensionContext) {
   if (!vscode.workspace.workspaceFolders) {
@@ -14,6 +16,9 @@ export async function activate(context: vscode.ExtensionContext) {
     const storage = new StorageService(context);
     bookmarkStore = new BookmarkStore(context, storage);
     await bookmarkStore.initialize();
+
+    decorationProvider = new GutterDecorationProvider(context, bookmarkStore);
+    context.subscriptions.push(decorationProvider);
 
     for (let i = 0; i <= 9; i++) {
       const num = i;
@@ -82,10 +87,7 @@ async function handleJumpToBookmark(num: number): Promise<void> {
 
     const position = new vscode.Position(line, 0);
     editor.selection = new vscode.Selection(position, position);
-    editor.revealRange(
-      new vscode.Range(position, position),
-      vscode.TextEditorRevealType.InCenter
-    );
+    editor.revealRange(new vscode.Range(position, position), vscode.TextEditorRevealType.InCenter);
 
     vscode.window.showInformationMessage(
       `Jumped to bookmark ${num}: ${bookmark.filePath}:${line + 1}`
@@ -97,4 +99,5 @@ async function handleJumpToBookmark(num: number): Promise<void> {
 
 export function deactivate() {
   bookmarkStore = undefined;
+  decorationProvider = undefined;
 }
