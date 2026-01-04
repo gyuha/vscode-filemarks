@@ -16,6 +16,50 @@ export class BookmarkStore {
 
   async initialize(): Promise<void> {
     this.state = await this.storage.load();
+    this.setupStickyBookmarks();
+  }
+
+  private setupStickyBookmarks(): void {
+    vscode.workspace.onDidChangeTextDocument(event => {
+      this.handleTextDocumentChange(event);
+    });
+  }
+
+  private handleTextDocumentChange(event: vscode.TextDocumentChangeEvent): void {
+    if (event.contentChanges.length === 0) return;
+
+    const filePath = vscode.workspace.asRelativePath(event.document.uri.fsPath);
+    const bookmark = this.findBookmarkByFilePath(filePath);
+    if (!bookmark) return;
+
+    let hasChanges = false;
+
+    for (const change of event.contentChanges) {
+      const startLine = change.range.start.line;
+      const endLine = change.range.end.line;
+      const lineDelta = change.text.split('\n').length - 1 - (endLine - startLine);
+
+      if (lineDelta === 0) continue;
+
+      for (const [num, line] of Object.entries(bookmark.numbers)) {
+        const bookmarkLine = Number(line);
+
+        if (bookmarkLine > startLine) {
+          const newLine = bookmarkLine + lineDelta;
+          if (newLine < 0) {
+            delete bookmark.numbers[Number(num)];
+          } else {
+            bookmark.numbers[Number(num)] = newLine;
+          }
+          hasChanges = true;
+        }
+      }
+    }
+
+    if (hasChanges) {
+      bookmark.updatedAt = new Date().toISOString();
+      this.save();
+    }
   }
 
   getState(): FilemarkState {
@@ -173,6 +217,117 @@ export class BookmarkStore {
       bookmark.updatedAt = new Date().toISOString();
       await this.save();
     }
+  }
+
+  async createFolder(name: string, parentId?: string): Promise<void> {
+    const now = new Date().toISOString();
+    const folder: TreeNode = {
+      type: 'folder',
+      id: uuidv4(),
+      name,
+      children: [],
+      expanded: true,
+      createdAt: now,
+      updatedAt: now,
+    };
+
+    if (parentId) {
+      const parent = this.findFolderById(parentId);
+      if (parent) {
+        parent.children.push(folder);
+      }
+    } else {
+      this.state.items.push(folder);
+    }
+
+    await this.save();
+  }
+
+  async deleteFolder(id: string): Promise<void> {
+    this.removeNode(id);
+    await this.save();
+  }
+
+  async renameFolder(id: string, name: string): Promise<void> {
+    const folder = this.findFolderById(id);
+    if (folder) {
+      folder.name = name;
+      folder.updatedAt = new Date().toISOString();
+      await this.save();
+    }
+  }
+
+  async moveNode(nodeId: string, targetFolderId: string | null): Promise<void> {
+    const node = this.removeAndGetNode(nodeId);
+    if (!node) return;
+
+    if (targetFolderId === null) {
+      this.state.items.push(node);
+    } else {
+      const targetFolder = this.findFolderById(targetFolderId);
+      if (targetFolder) {
+        targetFolder.children.push(node);
+      } else {
+        this.state.items.push(node);
+      }
+    }
+
+    await this.save();
+  }
+
+  private findFolderById(id: string): (TreeNode & { type: 'folder' }) | undefined {
+    const traverse = (nodes: TreeNode[]): (TreeNode & { type: 'folder' }) | undefined => {
+      for (const node of nodes) {
+        if (node.type === 'folder' && node.id === id) {
+          return node;
+        }
+        if (node.type === 'folder') {
+          const found = traverse(node.children);
+          if (found) return found;
+        }
+      }
+      return undefined;
+    };
+
+    return traverse(this.state.items);
+  }
+
+  private removeNode(id: string): void {
+    const removeFromTree = (nodes: TreeNode[]): boolean => {
+      for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        if (node.id === id) {
+          nodes.splice(i, 1);
+          return true;
+        }
+        if (node.type === 'folder') {
+          if (removeFromTree(node.children)) {
+            return true;
+          }
+        }
+      }
+      return false;
+    };
+
+    removeFromTree(this.state.items);
+  }
+
+  private removeAndGetNode(id: string): TreeNode | undefined {
+    const removeFromTree = (nodes: TreeNode[]): TreeNode | undefined => {
+      for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        if (node.id === id) {
+          return nodes.splice(i, 1)[0];
+        }
+        if (node.type === 'folder') {
+          const found = removeFromTree(node.children);
+          if (found) return found;
+        }
+      }
+      return undefined;
+    };
+
+    return removeFromTree(this.state.items);
   }
 
   private async save(): Promise<void> {

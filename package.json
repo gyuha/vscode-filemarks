@@ -55,6 +55,34 @@
         "icon": "$(edit)"
       },
       {
+        "command": "filemarks.list",
+        "title": "Filemarks: List Bookmarks in Current File"
+      },
+      {
+        "command": "filemarks.listAll",
+        "title": "Filemarks: List All Bookmarks"
+      },
+      {
+        "command": "filemarks.createFolder",
+        "title": "Filemarks: Create Folder",
+        "icon": "$(new-folder)"
+      },
+      {
+        "command": "filemarks.deleteFolder",
+        "title": "Filemarks: Delete Folder",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "filemarks.renameFolder",
+        "title": "Filemarks: Rename Folder",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "filemarks.moveToFolder",
+        "title": "Filemarks: Move to Folder",
+        "icon": "$(folder)"
+      },
+      {
         "command": "filemarks.toggleBookmark0",
         "title": "Filemarks: Toggle Bookmark 0"
       },
@@ -274,6 +302,13 @@
       }
     },
     "menus": {
+      "view/title": [
+        {
+          "command": "filemarks.createFolder",
+          "when": "view == filemarks.treeView",
+          "group": "navigation"
+        }
+      ],
       "view/item/context": [
         {
           "command": "filemarks.goToBookmark",
@@ -286,8 +321,23 @@
           "group": "edit@1"
         },
         {
+          "command": "filemarks.moveToFolder",
+          "when": "view == filemarks.treeView && viewItem == bookmark",
+          "group": "edit@2"
+        },
+        {
           "command": "filemarks.deleteBookmark",
           "when": "view == filemarks.treeView && viewItem == bookmark",
+          "group": "edit@3"
+        },
+        {
+          "command": "filemarks.renameFolder",
+          "when": "view == filemarks.treeView && viewItem == folder",
+          "group": "edit@1"
+        },
+        {
+          "command": "filemarks.deleteFolder",
+          "when": "view == filemarks.treeView && viewItem == folder",
           "group": "edit@2"
         }
       ]

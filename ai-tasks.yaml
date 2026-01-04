@@ -460,7 +460,7 @@ phase_3:
     - id: 'T3.1'
       title: '폴더/그룹 기능'
       priority: P1
-      status: pending
+      status: completed
       estimated_hours: 6
       fr_refs: ['FR-006']
       depends_on: ['T2.1']
@@ -469,19 +469,19 @@ phase_3:
       subtasks:
         - id: 'T3.1.1'
           title: 'filemarks.createFolder 커맨드 구현'
-          status: pending
+          status: completed
         - id: 'T3.1.2'
           title: 'filemarks.deleteFolder 커맨드 구현'
-          status: pending
+          status: completed
         - id: 'T3.1.3'
           title: 'filemarks.renameFolder 커맨드 구현'
-          status: pending
+          status: completed
         - id: 'T3.1.4'
           title: 'BookmarkStore에 폴더 CRUD 메서드 추가'
-          status: pending
+          status: completed
         - id: 'T3.1.5'
           title: '폴더 내 북마크 일괄 삭제'
-          status: pending
+          status: completed
       acceptance_criteria:
         - '폴더 생성/삭제/이름변경 가능'
         - '폴더 삭제 시 하위 항목도 삭제'
@@ -493,7 +493,7 @@ phase_3:
     - id: 'T3.2'
       title: '북마크를 폴더로 이동'
       priority: P1
-      status: pending
+      status: completed
       estimated_hours: 4
       fr_refs: ['FR-006']
       depends_on: ['T3.1']
@@ -502,13 +502,13 @@ phase_3:
       subtasks:
         - id: 'T3.2.1'
           title: 'filemarks.moveToFolder 커맨드 구현'
-          status: pending
+          status: completed
         - id: 'T3.2.2'
           title: 'QuickPick으로 대상 폴더 선택'
-          status: pending
+          status: completed
         - id: 'T3.2.3'
           title: 'BookmarkStore.moveNode(nodeId, targetFolderId) 구현'
-          status: pending
+          status: completed
       acceptance_criteria:
         - '우클릭 → Move to Folder 가능'
         - '폴더 목록에서 선택'
@@ -550,7 +550,7 @@ phase_3:
     - id: 'T3.4'
       title: '북마크 목록 커맨드'
       priority: P2
-      status: pending
+      status: completed
       estimated_hours: 3
       fr_refs: ['FR-008']
       depends_on: ['T1.3']
@@ -559,16 +559,16 @@ phase_3:
       subtasks:
         - id: 'T3.4.1'
           title: 'filemarks.list 커맨드 구현 (현재 파일)'
-          status: pending
+          status: completed
         - id: 'T3.4.2'
           title: 'filemarks.listAll 커맨드 구현 (모든 파일)'
-          status: pending
+          status: completed
         - id: 'T3.4.3'
           title: 'QuickPick으로 북마크 목록 표시'
-          status: pending
+          status: completed
         - id: 'T3.4.4'
           title: '선택 시 해당 위치로 점프'
-          status: pending
+          status: completed
       acceptance_criteria:
         - 'Cmd+Shift+P → Filemarks: List 동작'
         - '파일명, 라인번호, 라벨 표시'
@@ -580,7 +580,7 @@ phase_3:
     - id: 'T3.5'
       title: 'Sticky 북마크 (라인 추적)'
       priority: P1
-      status: pending
+      status: completed
       estimated_hours: 8
       fr_refs: ['FR-003']
       depends_on: ['T1.3']
@@ -589,16 +589,16 @@ phase_3:
       subtasks:
         - id: 'T3.5.1'
           title: 'onDidChangeTextDocument 이벤트 리스너'
-          status: pending
+          status: completed
         - id: 'T3.5.2'
           title: '라인 추가/삭제 감지'
-          status: pending
+          status: completed
         - id: 'T3.5.3'
           title: '영향받는 북마크 라인 번호 조정'
-          status: pending
+          status: completed
         - id: 'T3.5.4'
           title: '북마크된 라인 삭제 시 처리 (삭제 또는 다음 라인으로 이동)'
-          status: pending
+          status: completed
       acceptance_criteria:
         - '북마크 위에 라인 추가 시 북마크 라인 +1'
         - '북마크 위에 라인 삭제 시 북마크 라인 -1'
