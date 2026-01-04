@@ -83,6 +83,14 @@
         "icon": "$(folder)"
       },
       {
+        "command": "filemarks.clear",
+        "title": "Filemarks: Clear Bookmarks in Current File"
+      },
+      {
+        "command": "filemarks.clearAll",
+        "title": "Filemarks: Clear All Bookmarks"
+      },
+      {
         "command": "filemarks.toggleBookmark0",
         "title": "Filemarks: Toggle Bookmark 0"
       },

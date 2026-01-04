@@ -33,13 +33,52 @@ export class StorageService {
     try {
       const storagePath = this.getStoragePath();
       const content = await fs.readFile(storagePath, 'utf-8');
-      return JSON.parse(content) as FilemarkState;
+      const parsed = JSON.parse(content) as FilemarkState;
+
+      if (!parsed.version || !Array.isArray(parsed.items)) {
+        vscode.window.showWarningMessage(
+          'Corrupted bookmarks file detected, attempting recovery...'
+        );
+        return this.recoverOrDefault(parsed);
+      }
+
+      return parsed;
     } catch (error) {
       if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
         return this.getDefaultState();
       }
+
+      if (error instanceof SyntaxError) {
+        vscode.window.showErrorMessage(
+          'Failed to parse bookmarks file (corrupted JSON). Creating backup and starting fresh.'
+        );
+        await this.createBackup();
+        return this.getDefaultState();
+      }
+
       vscode.window.showErrorMessage(`Failed to load bookmarks: ${error}`);
       return this.getDefaultState();
+    }
+  }
+
+  private recoverOrDefault(data: unknown): FilemarkState {
+    if (typeof data === 'object' && data !== null) {
+      const obj = data as Record<string, unknown>;
+      return {
+        version: typeof obj.version === 'string' ? obj.version : '1.0',
+        items: Array.isArray(obj.items) ? obj.items : [],
+      };
+    }
+    return this.getDefaultState();
+  }
+
+  private async createBackup(): Promise<void> {
+    try {
+      const storagePath = this.getStoragePath();
+      const backupPath = storagePath.replace('.json', `.backup.${Date.now()}.json`);
+      await fs.copyFile(storagePath, backupPath);
+    } catch {
+      // Ignore backup errors
     }
   }
 

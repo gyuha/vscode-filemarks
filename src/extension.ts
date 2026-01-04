@@ -86,6 +86,18 @@ export async function activate(context: vscode.ExtensionContext) {
       })
     );
 
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.clear', async () => {
+        await handleClear();
+      })
+    );
+
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.clearAll', async () => {
+        await handleClearAll();
+      })
+    );
+
     for (let i = 0; i <= 9; i++) {
       const num = i;
 
@@ -385,4 +397,49 @@ function collectAllFolders(nodes: TreeNode[]): Array<TreeNode & { type: 'folder'
     }
   }
   return folders;
+}
+
+async function handleClear(): Promise<void> {
+  if (!bookmarkStore) return;
+
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showWarningMessage('No active editor');
+    return;
+  }
+
+  const filePath = vscode.workspace.asRelativePath(editor.document.uri.fsPath);
+  const confirm = await vscode.window.showWarningMessage(
+    `Delete all bookmarks in ${path.basename(filePath)}?`,
+    { modal: true },
+    'Delete'
+  );
+
+  if (confirm !== 'Delete') return;
+
+  try {
+    await bookmarkStore.clearBookmarksInFile(filePath);
+    vscode.window.showInformationMessage('Bookmarks cleared in current file');
+  } catch (error) {
+    vscode.window.showErrorMessage(`Failed to clear bookmarks: ${error}`);
+  }
+}
+
+async function handleClearAll(): Promise<void> {
+  if (!bookmarkStore) return;
+
+  const confirm = await vscode.window.showWarningMessage(
+    'Delete ALL bookmarks in ALL files? This cannot be undone.',
+    { modal: true },
+    'Delete All'
+  );
+
+  if (confirm !== 'Delete All') return;
+
+  try {
+    await bookmarkStore.clearAllBookmarks();
+    vscode.window.showInformationMessage('All bookmarks cleared');
+  } catch (error) {
+    vscode.window.showErrorMessage(`Failed to clear all bookmarks: ${error}`);
+  }
 }

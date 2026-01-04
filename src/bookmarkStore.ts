@@ -8,15 +8,66 @@ export class BookmarkStore {
   private storage: StorageService;
   private readonly _onDidChangeBookmarks = new vscode.EventEmitter<void>();
   readonly onDidChangeBookmarks = this._onDidChangeBookmarks.event;
+  private outputChannel: vscode.OutputChannel;
 
   constructor(context: vscode.ExtensionContext, storage: StorageService) {
     this.storage = storage;
     this.state = { version: '1.0', items: [] };
+    this.outputChannel = vscode.window.createOutputChannel('Filemarks');
+    context.subscriptions.push(this.outputChannel);
   }
 
   async initialize(): Promise<void> {
     this.state = await this.storage.load();
     this.setupStickyBookmarks();
+    this.setupFileWatchers();
+  }
+
+  private setupFileWatchers(): void {
+    const watcher = vscode.workspace.createFileSystemWatcher('**/*');
+
+    watcher.onDidDelete(uri => {
+      this.handleFileDelete(uri);
+    });
+
+    watcher.onDidCreate(async uri => {
+      const renames = await this.detectFileRename();
+      if (renames) {
+        this.handleFileRename(renames.oldUri, renames.newUri);
+      }
+    });
+  }
+
+  private async detectFileRename(): Promise<{ oldUri: vscode.Uri; newUri: vscode.Uri } | null> {
+    return null;
+  }
+
+  private handleFileDelete(uri: vscode.Uri): void {
+    const relativePath = vscode.workspace.asRelativePath(uri.fsPath);
+    const bookmark = this.findBookmarkByFilePath(relativePath);
+
+    if (bookmark) {
+      this.removeBookmarkNode(bookmark.id);
+      this.save();
+      this.outputChannel.appendLine(
+        `File deleted: ${relativePath}, removed bookmark ${bookmark.id}`
+      );
+      vscode.window.showInformationMessage(`Bookmarks removed for deleted file: ${relativePath}`);
+    }
+  }
+
+  private handleFileRename(oldUri: vscode.Uri, newUri: vscode.Uri): void {
+    const oldPath = vscode.workspace.asRelativePath(oldUri.fsPath);
+    const newPath = vscode.workspace.asRelativePath(newUri.fsPath);
+    const bookmark = this.findBookmarkByFilePath(oldPath);
+
+    if (bookmark) {
+      bookmark.filePath = newPath;
+      bookmark.updatedAt = new Date().toISOString();
+      this.save();
+      this.outputChannel.appendLine(`File renamed: ${oldPath} -> ${newPath}`);
+      vscode.window.showInformationMessage('Bookmarks updated for renamed file');
+    }
   }
 
   private setupStickyBookmarks(): void {
@@ -333,5 +384,18 @@ export class BookmarkStore {
   private async save(): Promise<void> {
     await this.storage.save(this.state);
     this._onDidChangeBookmarks.fire();
+  }
+
+  async clearBookmarksInFile(filePath: string): Promise<void> {
+    const bookmark = this.findBookmarkByFilePath(filePath);
+    if (bookmark) {
+      this.removeBookmarkNode(bookmark.id);
+      await this.save();
+    }
+  }
+
+  async clearAllBookmarks(): Promise<void> {
+    this.state.items = [];
+    await this.save();
   }
 }
