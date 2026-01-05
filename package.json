@@ -106,7 +106,8 @@
       },
       {
         "command": "filemarks.clearAll",
-        "title": "Filemarks: Clear All Bookmarks"
+        "title": "Filemarks: Clear All Bookmarks",
+        "icon": "$(trash)"
       },
       {
         "command": "filemarks.toggleBookmark0",
@@ -360,7 +361,12 @@
         {
           "command": "filemarks.createFolder",
           "when": "view == filemarks.treeView",
-          "group": "navigation"
+          "group": "navigation@1"
+        },
+        {
+          "command": "filemarks.clearAll",
+          "when": "view == filemarks.treeView",
+          "group": "navigation@2"
         }
       ],
       "view/item/context": [
