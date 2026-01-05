@@ -120,6 +120,10 @@
         "icon": "$(collapse-all)"
       },
       {
+        "command": "filemarks.focusSidebar",
+        "title": "Filemarks: Focus Sidebar"
+      },
+      {
         "command": "filemarks.toggleBookmark0",
         "title": "Filemarks: Toggle Bookmark 0"
       },
@@ -320,6 +324,11 @@
         "key": "ctrl+9",
         "mac": "cmd+9",
         "when": "editorTextFocus"
+      },
+      {
+        "command": "filemarks.focusSidebar",
+        "key": "ctrl+shift+b",
+        "mac": "cmd+shift+b"
       }
     ],
     "configuration": {

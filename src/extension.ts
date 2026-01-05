@@ -117,6 +117,12 @@ export async function activate(context: vscode.ExtensionContext) {
       })
     );
 
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.focusSidebar', async () => {
+        await vscode.commands.executeCommand('filemarks.treeView.focus');
+      })
+    );
+
     for (let i = 0; i <= 9; i++) {
       const num = i;
 

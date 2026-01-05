@@ -16,6 +16,7 @@
   "commands.clearAll.title": "Filemarks: Clear All Bookmarks",
   "commands.expandAllFolders.title": "Filemarks: Expand All Folders",
   "commands.collapseAllFolders.title": "Filemarks: Collapse All Folders",
+  "commands.focusSidebar.title": "Filemarks: Focus Sidebar",
   "commands.toggleBookmark0.title": "Filemarks: Toggle Bookmark 0",
   "commands.toggleBookmark1.title": "Filemarks: Toggle Bookmark 1",
   "commands.toggleBookmark2.title": "Filemarks: Toggle Bookmark 2",

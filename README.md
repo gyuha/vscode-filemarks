@@ -6,7 +6,7 @@
 
 Filemarks is a powerful bookmark extension that lets you quickly navigate your code using numbered shortcuts (0-9) with visual gutter icons and organize bookmarks into folders.
 
-![Filemarks Demo](images/demo.gif)
+![Filemarks Screen](images/screen.png)
 
 ## Features
 
