@@ -19,8 +19,6 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 | Toggle Bookmark  | `Ctrl+Shift+[0-9]` | `Cmd+Shift+[0-9]` |
 | Jump to Bookmark | `Ctrl+[0-9]`       | `Cmd+[0-9]`       |
 
-![Gutter Icons](images/gutter-icons.png)
-
 ### 🔖 Visual Gutter Icons
 
 - Bookmark-shaped icons with numbers displayed in the editor gutter
