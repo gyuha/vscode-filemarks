@@ -19,8 +19,39 @@ export class BookmarkStore {
 
   async initialize(): Promise<void> {
     this.state = await this.storage.load();
+    await this.removeNonExistentFileBookmarks();
     this.setupStickyBookmarks();
     this.setupFileWatchers();
+  }
+
+  private async removeNonExistentFileBookmarks(): Promise<void> {
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    if (!workspaceFolder) return;
+
+    const removeFromTree = async (nodes: TreeNode[]): Promise<boolean> => {
+      let changed = false;
+      for (let i = nodes.length - 1; i >= 0; i--) {
+        const node = nodes[i];
+        if (node.type === 'bookmark') {
+          const absolutePath = vscode.Uri.joinPath(workspaceFolder.uri, node.filePath);
+          try {
+            await vscode.workspace.fs.stat(absolutePath);
+          } catch {
+            nodes.splice(i, 1);
+            changed = true;
+          }
+        } else if (node.type === 'folder') {
+          const folderChanged = await removeFromTree(node.children);
+          if (folderChanged) changed = true;
+        }
+      }
+      return changed;
+    };
+
+    const changed = await removeFromTree(this.state.items);
+    if (changed) {
+      this.save();
+    }
   }
 
   private setupFileWatchers(): void {
