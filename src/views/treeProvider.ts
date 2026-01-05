@@ -34,11 +34,28 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   private readonly _onDidChangeTreeData = new vscode.EventEmitter<TreeNode | undefined | null>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
   readonly dragAndDropController: vscode.TreeDragAndDropController<TreeNode>;
+  private treeView: vscode.TreeView<TreeNode> | undefined;
 
   constructor(private store: BookmarkStore) {
     this.dragAndDropController = new TreeDragAndDropController(store);
     this.store.onDidChangeBookmarks(() => {
       this.refresh();
+    });
+  }
+
+  setTreeView(treeView: vscode.TreeView<TreeNode>): void {
+    this.treeView = treeView;
+
+    treeView.onDidExpandElement(e => {
+      if (isFolderNode(e.element)) {
+        this.store.setFolderExpanded(e.element.id, true);
+      }
+    });
+
+    treeView.onDidCollapseElement(e => {
+      if (isFolderNode(e.element)) {
+        this.store.setFolderExpanded(e.element.id, false);
+      }
     });
   }
 
@@ -65,6 +82,31 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     return [];
   }
 
+  getParent(element: TreeNode): TreeNode | undefined {
+    const findParent = (nodes: TreeNode[], parent?: TreeNode): TreeNode | undefined => {
+      for (const node of nodes) {
+        if (node.id === element.id) {
+          return parent;
+        }
+        if (isFolderNode(node)) {
+          const found = findParent(node.children, node);
+          if (found !== undefined) return found;
+        }
+      }
+      return undefined;
+    };
+
+    return findParent(this.store.getState().items);
+  }
+
+  async expandAllFolders(): Promise<void> {
+    this.store.setAllFoldersExpanded(true);
+  }
+
+  async collapseAllFolders(): Promise<void> {
+    this.store.setAllFoldersExpanded(false);
+  }
+
   private createFolderTreeItem(folder: FolderNode): vscode.TreeItem {
     const item = new vscode.TreeItem(
       folder.name,
@@ -72,6 +114,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
         ? vscode.TreeItemCollapsibleState.Expanded
         : vscode.TreeItemCollapsibleState.Collapsed
     );
+    item.id = folder.id;
     item.contextValue = 'folder';
     item.iconPath = new vscode.ThemeIcon(folder.expanded ? 'folder-opened' : 'folder');
     item.tooltip = '';
@@ -88,6 +131,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     const description = `[${numbersStr}]`;
 
     const item = new vscode.TreeItem(label, vscode.TreeItemCollapsibleState.None);
+    item.id = bookmark.id;
     item.description = description;
     item.contextValue = 'bookmark';
     item.tooltip = this.createTooltip(bookmark);

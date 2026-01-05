@@ -30,6 +30,7 @@ export async function activate(context: vscode.ExtensionContext) {
       treeDataProvider: treeProvider,
       dragAndDropController: treeProvider.dragAndDropController,
     });
+    treeProvider.setTreeView(treeView);
     context.subscriptions.push(treeView);
 
     context.subscriptions.push(
@@ -101,6 +102,18 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
       vscode.commands.registerCommand('filemarks.clearAll', async () => {
         await handleClearAll();
+      })
+    );
+
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.expandAllFolders', async () => {
+        await handleExpandAllFolders();
+      })
+    );
+
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.collapseAllFolders', async () => {
+        await handleCollapseAllFolders();
       })
     );
 
@@ -444,4 +457,14 @@ async function handleClearAll(): Promise<void> {
 
   bookmarkStore.clearAllBookmarks();
   vscode.window.showInformationMessage(vscode.l10n.t('All bookmarks cleared'));
+}
+
+async function handleExpandAllFolders(): Promise<void> {
+  if (!treeProvider) return;
+  await treeProvider.expandAllFolders();
+}
+
+async function handleCollapseAllFolders(): Promise<void> {
+  if (!treeProvider) return;
+  await treeProvider.collapseAllFolders();
 }

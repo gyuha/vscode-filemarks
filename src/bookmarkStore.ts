@@ -435,6 +435,28 @@ export class BookmarkStore {
     this.save();
   }
 
+  setAllFoldersExpanded(expanded: boolean): void {
+    const setExpanded = (nodes: TreeNode[]): void => {
+      for (const node of nodes) {
+        if (node.type === 'folder') {
+          node.expanded = expanded;
+          setExpanded(node.children);
+        }
+      }
+    };
+
+    setExpanded(this.state.items);
+    this.save();
+  }
+
+  setFolderExpanded(folderId: string, expanded: boolean): void {
+    const folder = this.findFolderById(folderId);
+    if (folder) {
+      folder.expanded = expanded;
+      this.save();
+    }
+  }
+
   removeInvalidBookmarks(filePath: string, maxLine: number): void {
     const bookmark = this.findBookmarkByFilePath(filePath);
     if (!bookmark) return;

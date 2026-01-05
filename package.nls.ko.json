@@ -14,6 +14,8 @@
   "commands.moveToFolder.title": "파일마크: 폴더로 이동",
   "commands.clear.title": "파일마크: 현재 파일 북마크 지우기",
   "commands.clearAll.title": "파일마크: 전체 북마크 지우기",
+  "commands.expandAllFolders.title": "파일마크: 모든 폴더 펼치기",
+  "commands.collapseAllFolders.title": "파일마크: 모든 폴더 접기",
   "commands.toggleBookmark0.title": "파일마크: 북마크 0 토글",
   "commands.toggleBookmark1.title": "파일마크: 북마크 1 토글",
   "commands.toggleBookmark2.title": "파일마크: 북마크 2 토글",

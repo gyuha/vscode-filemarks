@@ -110,6 +110,16 @@
         "icon": "$(trash)"
       },
       {
+        "command": "filemarks.expandAllFolders",
+        "title": "Filemarks: Expand All Folders",
+        "icon": "$(expand-all)"
+      },
+      {
+        "command": "filemarks.collapseAllFolders",
+        "title": "Filemarks: Collapse All Folders",
+        "icon": "$(collapse-all)"
+      },
+      {
         "command": "filemarks.toggleBookmark0",
         "title": "Filemarks: Toggle Bookmark 0"
       },
@@ -364,9 +374,19 @@
           "group": "navigation@1"
         },
         {
-          "command": "filemarks.clearAll",
+          "command": "filemarks.expandAllFolders",
           "when": "view == filemarks.treeView",
           "group": "navigation@2"
+        },
+        {
+          "command": "filemarks.collapseAllFolders",
+          "when": "view == filemarks.treeView",
+          "group": "navigation@3"
+        },
+        {
+          "command": "filemarks.clearAll",
+          "when": "view == filemarks.treeView",
+          "group": "navigation@4"
         }
       ],
       "view/item/context": [
