@@ -75,6 +75,12 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.createFolderIn', async (node?: TreeNode) => {
+        await handleCreateFolderIn(node);
+      })
+    );
+
+    context.subscriptions.push(
       vscode.commands.registerCommand('filemarks.renameFolder', async node => {
         await handleRenameFolder(node);
       })
@@ -307,6 +313,25 @@ async function handleCreateFolder(): Promise<void> {
 
   bookmarkStore.createFolder(name);
   vscode.window.showInformationMessage(vscode.l10n.t('folder.created', name));
+}
+
+async function handleCreateFolderIn(node?: TreeNode): Promise<void> {
+  if (!bookmarkStore) return;
+
+  const name = await vscode.window.showInputBox({
+    prompt: vscode.l10n.t('input.enterFolderName'),
+    placeHolder: vscode.l10n.t('input.folderName'),
+  });
+
+  if (!name) return;
+
+  if (node && isFolderNode(node)) {
+    bookmarkStore.createFolder(name, node.id);
+    vscode.window.showInformationMessage(vscode.l10n.t('folder.createdIn', node.name));
+  } else {
+    bookmarkStore.createFolder(name);
+    vscode.window.showInformationMessage(vscode.l10n.t('folder.created', name));
+  }
 }
 
 async function handleDeleteFolder(node: TreeNode): Promise<void> {

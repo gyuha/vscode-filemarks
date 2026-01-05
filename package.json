@@ -371,6 +371,11 @@
       ],
       "view/item/context": [
         {
+          "command": "filemarks.createFolder",
+          "when": "view == filemarks.treeView && viewItem == folder",
+          "group": "navigation"
+        },
+        {
           "command": "filemarks.goToBookmark",
           "when": "view == filemarks.treeView && viewItem == bookmark",
           "group": "navigation"
