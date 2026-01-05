@@ -154,7 +154,7 @@ export class BookmarkStore {
     return traverse(this.state.items);
   }
 
-  async toggleBookmark(filePath: string, num: number, line: number): Promise<void> {
+  toggleBookmark(filePath: string, num: number, line: number): void {
     let bookmark = this.findBookmarkByFilePath(filePath);
 
     if (!bookmark) {
@@ -183,10 +183,10 @@ export class BookmarkStore {
       }
     }
 
-    await this.save();
+    this.save();
   }
 
-  async addBookmark(filePath: string, num: number, line: number): Promise<void> {
+  addBookmark(filePath: string, num: number, line: number): void {
     let bookmark = this.findBookmarkByFilePath(filePath);
 
     if (!bookmark) {
@@ -205,10 +205,10 @@ export class BookmarkStore {
       bookmark.updatedAt = new Date().toISOString();
     }
 
-    await this.save();
+    this.save();
   }
 
-  async removeBookmarkNumber(filePath: string, num: number): Promise<void> {
+  removeBookmarkNumber(filePath: string, num: number): void {
     const bookmark = this.findBookmarkByFilePath(filePath);
     if (!bookmark) return;
 
@@ -220,7 +220,7 @@ export class BookmarkStore {
       bookmark.updatedAt = new Date().toISOString();
     }
 
-    await this.save();
+    this.save();
   }
 
   private removeBookmarkNode(id: string): void {
@@ -243,12 +243,12 @@ export class BookmarkStore {
     removeFromTree(this.state.items);
   }
 
-  async deleteBookmark(id: string): Promise<void> {
+  deleteBookmark(id: string): void {
     this.removeBookmarkNode(id);
-    await this.save();
+    this.save();
   }
 
-  async renameBookmark(id: string, label: string): Promise<void> {
+  renameBookmark(id: string, label: string): void {
     const findNode = (nodes: TreeNode[]): BookmarkNode | undefined => {
       for (const node of nodes) {
         if (node.type === 'bookmark' && node.id === id) {
@@ -266,11 +266,11 @@ export class BookmarkStore {
     if (bookmark) {
       bookmark.label = label || undefined;
       bookmark.updatedAt = new Date().toISOString();
-      await this.save();
+      this.save();
     }
   }
 
-  async createFolder(name: string, parentId?: string): Promise<void> {
+  createFolder(name: string, parentId?: string): void {
     const now = new Date().toISOString();
     const folder: TreeNode = {
       type: 'folder',
@@ -291,24 +291,24 @@ export class BookmarkStore {
       this.state.items.push(folder);
     }
 
-    await this.save();
+    this.save();
   }
 
-  async deleteFolder(id: string): Promise<void> {
+  deleteFolder(id: string): void {
     this.removeNode(id);
-    await this.save();
+    this.save();
   }
 
-  async renameFolder(id: string, name: string): Promise<void> {
+  renameFolder(id: string, name: string): void {
     const folder = this.findFolderById(id);
     if (folder) {
       folder.name = name;
       folder.updatedAt = new Date().toISOString();
-      await this.save();
+      this.save();
     }
   }
 
-  async moveNode(nodeId: string, targetFolderId: string | null): Promise<void> {
+  moveNode(nodeId: string, targetFolderId: string | null): void {
     const node = this.removeAndGetNode(nodeId);
     if (!node) return;
 
@@ -323,7 +323,7 @@ export class BookmarkStore {
       }
     }
 
-    await this.save();
+    this.save();
   }
 
   private findFolderById(id: string): (TreeNode & { type: 'folder' }) | undefined {
@@ -381,21 +381,21 @@ export class BookmarkStore {
     return removeFromTree(this.state.items);
   }
 
-  private async save(): Promise<void> {
-    await this.storage.save(this.state);
+  private save(): void {
+    this.storage.save(this.state);
     this._onDidChangeBookmarks.fire();
   }
 
-  async clearBookmarksInFile(filePath: string): Promise<void> {
+  clearBookmarksInFile(filePath: string): void {
     const bookmark = this.findBookmarkByFilePath(filePath);
     if (bookmark) {
       this.removeBookmarkNode(bookmark.id);
-      await this.save();
+      this.save();
     }
   }
 
-  async clearAllBookmarks(): Promise<void> {
+  clearAllBookmarks(): void {
     this.state.items = [];
-    await this.save();
+    this.save();
   }
 }

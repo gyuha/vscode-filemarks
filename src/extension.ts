@@ -124,7 +124,7 @@ export async function activate(context: vscode.ExtensionContext) {
   }
 }
 
-async function handleToggleBookmark(num: number): Promise<void> {
+function handleToggleBookmark(num: number): void {
   if (!bookmarkStore) return;
 
   const editor = vscode.window.activeTextEditor;
@@ -136,12 +136,8 @@ async function handleToggleBookmark(num: number): Promise<void> {
   const filePath = vscode.workspace.asRelativePath(editor.document.uri.fsPath);
   const line = editor.selection.active.line;
 
-  try {
-    await bookmarkStore.toggleBookmark(filePath, num, line);
-    vscode.window.showInformationMessage(vscode.l10n.t('bookmark.toggled', num, line + 1));
-  } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToToggle', String(error)));
-  }
+  bookmarkStore.toggleBookmark(filePath, num, line);
+  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.toggled', num, line + 1));
 }
 
 async function handleJumpToBookmark(num: number): Promise<void> {
@@ -218,15 +214,11 @@ async function handleGoToBookmark(bookmark: BookmarkNode, line: number): Promise
   }
 }
 
-async function handleDeleteBookmark(node: BookmarkNode): Promise<void> {
+function handleDeleteBookmark(node: BookmarkNode): void {
   if (!bookmarkStore) return;
 
-  try {
-    await bookmarkStore.deleteBookmark(node.id);
-    vscode.window.showInformationMessage(vscode.l10n.t('bookmark.deleted'));
-  } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToDelete', String(error)));
-  }
+  bookmarkStore.deleteBookmark(node.id);
+  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.deleted'));
 }
 
 async function handleRenameBookmark(node: BookmarkNode): Promise<void> {
@@ -240,12 +232,8 @@ async function handleRenameBookmark(node: BookmarkNode): Promise<void> {
 
   if (newLabel === undefined) return;
 
-  try {
-    await bookmarkStore.renameBookmark(node.id, newLabel);
-    vscode.window.showInformationMessage(vscode.l10n.t('bookmark.renamed'));
-  } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToRename', String(error)));
-  }
+  bookmarkStore.renameBookmark(node.id, newLabel);
+  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.renamed'));
 }
 
 async function handleListBookmarks(showAll: boolean): Promise<void> {
@@ -317,12 +305,8 @@ async function handleCreateFolder(): Promise<void> {
 
   if (!name) return;
 
-  try {
-    await bookmarkStore.createFolder(name);
-    vscode.window.showInformationMessage(vscode.l10n.t('folder.created', name));
-  } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToCreateFolder', String(error)));
-  }
+  bookmarkStore.createFolder(name);
+  vscode.window.showInformationMessage(vscode.l10n.t('folder.created', name));
 }
 
 async function handleDeleteFolder(node: TreeNode): Promise<void> {
@@ -336,12 +320,8 @@ async function handleDeleteFolder(node: TreeNode): Promise<void> {
 
   if (confirm !== vscode.l10n.t('folder.deleteButton')) return;
 
-  try {
-    await bookmarkStore.deleteFolder(node.id);
-    vscode.window.showInformationMessage(vscode.l10n.t('folder.deleted'));
-  } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToDeleteFolder', String(error)));
-  }
+  bookmarkStore.deleteFolder(node.id);
+  vscode.window.showInformationMessage(vscode.l10n.t('folder.deleted'));
 }
 
 async function handleRenameFolder(node: TreeNode): Promise<void> {
@@ -355,12 +335,8 @@ async function handleRenameFolder(node: TreeNode): Promise<void> {
 
   if (!newName) return;
 
-  try {
-    await bookmarkStore.renameFolder(node.id, newName);
-    vscode.window.showInformationMessage(vscode.l10n.t('folder.renamed'));
-  } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToRenameFolder', String(error)));
-  }
+  bookmarkStore.renameFolder(node.id, newName);
+  vscode.window.showInformationMessage(vscode.l10n.t('folder.renamed'));
 }
 
 async function handleMoveToFolder(node: BookmarkNode): Promise<void> {
@@ -386,12 +362,8 @@ async function handleMoveToFolder(node: BookmarkNode): Promise<void> {
 
   if (!selected) return;
 
-  try {
-    await bookmarkStore.moveNode(node.id, selected.id);
-    vscode.window.showInformationMessage(vscode.l10n.t('bookmark.moved'));
-  } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToMove', String(error)));
-  }
+  bookmarkStore.moveNode(node.id, selected.id);
+  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.moved'));
 }
 
 function collectAllFolders(nodes: TreeNode[]): Array<TreeNode & { type: 'folder' }> {
@@ -423,12 +395,8 @@ async function handleClear(): Promise<void> {
 
   if (confirm !== vscode.l10n.t('clear.deleteButton')) return;
 
-  try {
-    await bookmarkStore.clearBookmarksInFile(filePath);
-    vscode.window.showInformationMessage(vscode.l10n.t('bookmark.clearedInFile'));
-  } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToClear', String(error)));
-  }
+  bookmarkStore.clearBookmarksInFile(filePath);
+  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.clearedInFile'));
 }
 
 async function handleClearAll(): Promise<void> {
@@ -442,10 +410,6 @@ async function handleClearAll(): Promise<void> {
 
   if (confirm !== vscode.l10n.t('clear.deleteAllButton')) return;
 
-  try {
-    await bookmarkStore.clearAllBookmarks();
-    vscode.window.showInformationMessage(vscode.l10n.t('bookmark.clearedAll'));
-  } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToClearAll', String(error)));
-  }
+  bookmarkStore.clearAllBookmarks();
+  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.clearedAll'));
 }
