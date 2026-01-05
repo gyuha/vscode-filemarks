@@ -1,0 +1,41 @@
+{
+  "Filemarks extension activated!": "Filemarks 확장이 활성화되었습니다!",
+  "Filemarks requires an open workspace": "Filemarks는 열린 워크스페이스가 필요합니다",
+  "Failed to activate Filemarks: {0}": "Filemarks 활성화 실패: {0}",
+
+  "Bookmark {0} toggled at line {1}": "북마크 {0}이(가) {1}번 줄에 토글됨",
+  "Bookmark {0} is not defined": "북마크 {0}이(가) 정의되지 않음",
+  "Bookmark deleted": "북마크가 삭제되었습니다",
+  "Bookmark renamed": "북마크 이름이 변경되었습니다",
+  "Bookmark moved": "북마크가 이동되었습니다",
+  "Bookmarks cleared in current file": "현재 파일의 북마크가 삭제되었습니다",
+  "All bookmarks cleared": "모든 북마크가 삭제되었습니다",
+
+  "Folder \"{0}\" created": "폴더 \"{0}\"이(가) 생성되었습니다",
+  "Folder created in \"{0}\"": "폴더가 \"{0}\" 안에 생성되었습니다",
+  "Folder deleted": "폴더가 삭제되었습니다",
+  "Folder renamed": "폴더 이름이 변경되었습니다",
+  "Delete folder \"{0}\" and all its contents?": "폴더 \"{0}\"과(와) 모든 내용을 삭제하시겠습니까?",
+  "Delete": "삭제",
+
+  "No bookmarks found": "북마크가 없습니다",
+  "No bookmarks in current file": "현재 파일에 북마크가 없습니다",
+  "Select a bookmark": "북마크를 선택하세요",
+  "Select a bookmark in current file": "현재 파일에서 북마크를 선택하세요",
+
+  "Delete all bookmarks in {0}?": "{0}의 모든 북마크를 삭제하시겠습니까?",
+  "Delete ALL bookmarks in ALL files? This cannot be undone.": "모든 파일의 모든 북마크를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
+  "Delete All": "전체 삭제",
+
+  "No active editor": "활성화된 편집기가 없습니다",
+  "Folder name": "폴더 이름",
+  "Enter folder name": "폴더 이름을 입력하세요",
+  "Enter new folder name": "새 폴더 이름을 입력하세요",
+  "Bookmark name (optional)": "북마크 이름 (선택사항)",
+  "Enter new bookmark name": "새 북마크 이름을 입력하세요",
+  "Select target folder": "대상 폴더를 선택하세요",
+  "Root": "루트",
+  "Move to root level": "루트 레벨로 이동",
+
+  "Failed to go to bookmark: {0}": "북마크로 이동 실패: {0}"
+}

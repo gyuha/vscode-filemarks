@@ -13,7 +13,7 @@ let treeProvider: FilemarkTreeProvider | undefined;
 
 export async function activate(context: vscode.ExtensionContext) {
   if (!vscode.workspace.workspaceFolders) {
-    vscode.window.showWarningMessage(vscode.l10n.t('extension.requiresWorkspace'));
+    vscode.window.showWarningMessage(vscode.l10n.t('Filemarks requires an open workspace'));
     return;
   }
 
@@ -132,9 +132,11 @@ export async function activate(context: vscode.ExtensionContext) {
       })
     );
 
-    vscode.window.showInformationMessage(vscode.l10n.t('extension.activated'));
+    vscode.window.showInformationMessage(vscode.l10n.t('Filemarks extension activated!'));
   } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('extension.activationFailed', String(error)));
+    vscode.window.showErrorMessage(
+      vscode.l10n.t('Failed to activate Filemarks: {0}', String(error))
+    );
   }
 }
 
@@ -143,7 +145,7 @@ function handleToggleBookmark(num: number): void {
 
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showWarningMessage(vscode.l10n.t('input.noActiveEditor'));
+    vscode.window.showWarningMessage(vscode.l10n.t('No active editor'));
     return;
   }
 
@@ -151,7 +153,9 @@ function handleToggleBookmark(num: number): void {
   const line = editor.selection.active.line;
 
   bookmarkStore.toggleBookmark(filePath, num, line);
-  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.toggled', num, line + 1));
+  vscode.window.showInformationMessage(
+    vscode.l10n.t('Bookmark {0} toggled at line {1}', num, line + 1)
+  );
 }
 
 function handleJumpToBookmark(num: number): void {
@@ -159,7 +163,7 @@ function handleJumpToBookmark(num: number): void {
 
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showWarningMessage(vscode.l10n.t('input.noActiveEditor'));
+    vscode.window.showWarningMessage(vscode.l10n.t('No active editor'));
     return;
   }
 
@@ -171,7 +175,7 @@ function handleJumpToBookmark(num: number): void {
 
   if (!bookmark || bookmark.numbers[num] === undefined) {
     if (showWarning) {
-      vscode.window.showWarningMessage(vscode.l10n.t('bookmark.notDefined', num));
+      vscode.window.showWarningMessage(vscode.l10n.t('Bookmark {0} is not defined', num));
     }
     return;
   }
@@ -216,7 +220,7 @@ async function handleGoToBookmark(bookmark: BookmarkNode, line: number): Promise
     editor.selection = new vscode.Selection(position, position);
     editor.revealRange(new vscode.Range(position, position), revealType);
   } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToGoTo', String(error)));
+    vscode.window.showErrorMessage(vscode.l10n.t('Failed to go to bookmark: {0}', String(error)));
   }
 }
 
@@ -224,22 +228,22 @@ function handleDeleteBookmark(node: BookmarkNode): void {
   if (!bookmarkStore) return;
 
   bookmarkStore.deleteBookmark(node.id);
-  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.deleted'));
+  vscode.window.showInformationMessage(vscode.l10n.t('Bookmark deleted'));
 }
 
 async function handleRenameBookmark(node: BookmarkNode): Promise<void> {
   if (!bookmarkStore) return;
 
   const newLabel = await vscode.window.showInputBox({
-    prompt: vscode.l10n.t('input.enterBookmarkName'),
+    prompt: vscode.l10n.t('Enter new bookmark name'),
     value: node.label || '',
-    placeHolder: vscode.l10n.t('input.bookmarkName'),
+    placeHolder: vscode.l10n.t('Bookmark name (optional)'),
   });
 
   if (newLabel === undefined) return;
 
   bookmarkStore.renameBookmark(node.id, newLabel);
-  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.renamed'));
+  vscode.window.showInformationMessage(vscode.l10n.t('Bookmark renamed'));
 }
 
 async function handleListBookmarks(showAll: boolean): Promise<void> {
@@ -261,7 +265,7 @@ async function handleListBookmarks(showAll: boolean): Promise<void> {
 
   if (bookmarks.length === 0) {
     vscode.window.showInformationMessage(
-      showAll ? vscode.l10n.t('list.noBookmarks') : vscode.l10n.t('list.noBookmarksInFile')
+      showAll ? vscode.l10n.t('No bookmarks found') : vscode.l10n.t('No bookmarks in current file')
     );
     return;
   }
@@ -280,8 +284,8 @@ async function handleListBookmarks(showAll: boolean): Promise<void> {
 
   const selected = await vscode.window.showQuickPick(items, {
     placeHolder: showAll
-      ? vscode.l10n.t('list.selectBookmark')
-      : vscode.l10n.t('list.selectBookmarkInFile'),
+      ? vscode.l10n.t('Select a bookmark')
+      : vscode.l10n.t('Select a bookmark in current file'),
   });
 
   if (selected) {
@@ -305,63 +309,64 @@ async function handleCreateFolder(): Promise<void> {
   if (!bookmarkStore) return;
 
   const name = await vscode.window.showInputBox({
-    prompt: vscode.l10n.t('input.enterFolderName'),
-    placeHolder: vscode.l10n.t('input.folderName'),
+    prompt: vscode.l10n.t('Enter folder name'),
+    placeHolder: vscode.l10n.t('Folder name'),
   });
 
   if (!name) return;
 
   bookmarkStore.createFolder(name);
-  vscode.window.showInformationMessage(vscode.l10n.t('folder.created', name));
+  vscode.window.showInformationMessage(vscode.l10n.t('Folder "{0}" created', name));
 }
 
 async function handleCreateFolderIn(node?: TreeNode): Promise<void> {
   if (!bookmarkStore) return;
 
   const name = await vscode.window.showInputBox({
-    prompt: vscode.l10n.t('input.enterFolderName'),
-    placeHolder: vscode.l10n.t('input.folderName'),
+    prompt: vscode.l10n.t('Enter folder name'),
+    placeHolder: vscode.l10n.t('Folder name'),
   });
 
   if (!name) return;
 
   if (node && isFolderNode(node)) {
     bookmarkStore.createFolder(name, node.id);
-    vscode.window.showInformationMessage(vscode.l10n.t('folder.createdIn', node.name));
+    vscode.window.showInformationMessage(vscode.l10n.t('Folder created in "{0}"', node.name));
   } else {
     bookmarkStore.createFolder(name);
-    vscode.window.showInformationMessage(vscode.l10n.t('folder.created', name));
+    vscode.window.showInformationMessage(vscode.l10n.t('Folder "{0}" created', name));
   }
 }
 
 async function handleDeleteFolder(node: TreeNode): Promise<void> {
   if (!bookmarkStore) return;
 
+  const deleteButton = vscode.l10n.t('Delete');
   const confirm = await vscode.window.showWarningMessage(
-    vscode.l10n.t('folder.deleteConfirm', isFolderNode(node) ? node.name : ''),
+    vscode.l10n.t('Delete folder "{0}" and all its contents?', isFolderNode(node) ? node.name : ''),
     { modal: true },
-    vscode.l10n.t('folder.deleteButton')
+    deleteButton
   );
 
-  if (confirm !== vscode.l10n.t('folder.deleteButton')) return;
+  if (confirm !== deleteButton) return;
 
   bookmarkStore.deleteFolder(node.id);
-  vscode.window.showInformationMessage(vscode.l10n.t('folder.deleted'));
+  vscode.window.showInformationMessage(vscode.l10n.t('Folder deleted'));
 }
 
 async function handleRenameFolder(node: TreeNode): Promise<void> {
   if (!bookmarkStore || !isFolderNode(node)) return;
 
   const newName = await vscode.window.showInputBox({
-    prompt: vscode.l10n.t('input.enterNewFolderName'),
+    prompt: vscode.l10n.t('Enter new folder name'),
     value: node.name,
-    placeHolder: vscode.l10n.t('input.folderName'),
+    placeHolder: vscode.l10n.t('Folder name'),
   });
 
   if (!newName) return;
 
   bookmarkStore.renameFolder(node.id, newName);
-  vscode.window.showInformationMessage(vscode.l10n.t('folder.renamed'));
+  vscode.window.showInformationMessage(vscode.l10n.t('Folder renamed'));
 }
 
 async function handleMoveToFolder(node: BookmarkNode): Promise<void> {
@@ -370,8 +375,8 @@ async function handleMoveToFolder(node: BookmarkNode): Promise<void> {
   const folders = collectAllFolders(bookmarkStore.getState().items);
   const items = [
     {
-      label: `$(root-folder) ${vscode.l10n.t('input.moveToRoot')}`,
-      description: vscode.l10n.t('input.moveToRootDescription'),
+      label: `$(root-folder) ${vscode.l10n.t('Root')}`,
+      description: vscode.l10n.t('Move to root level'),
       id: null,
     },
     ...folders.map(folder => ({
@@ -382,13 +387,13 @@ async function handleMoveToFolder(node: BookmarkNode): Promise<void> {
   ];
 
   const selected = await vscode.window.showQuickPick(items, {
-    placeHolder: vscode.l10n.t('input.selectTargetFolder'),
+    placeHolder: vscode.l10n.t('Select target folder'),
   });
 
   if (!selected) return;
 
   bookmarkStore.moveNode(node.id, selected.id);
-  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.moved'));
+  vscode.window.showInformationMessage(vscode.l10n.t('Bookmark moved'));
 }
 
 function collectAllFolders(nodes: TreeNode[]): Array<TreeNode & { type: 'folder' }> {
@@ -407,34 +412,36 @@ async function handleClear(): Promise<void> {
 
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
-    vscode.window.showWarningMessage(vscode.l10n.t('input.noActiveEditor'));
+    vscode.window.showWarningMessage(vscode.l10n.t('No active editor'));
     return;
   }
 
   const filePath = vscode.workspace.asRelativePath(editor.document.uri.fsPath);
+  const deleteButton = vscode.l10n.t('Delete');
   const confirm = await vscode.window.showWarningMessage(
-    vscode.l10n.t('clear.confirm', path.basename(filePath)),
+    vscode.l10n.t('Delete all bookmarks in {0}?', path.basename(filePath)),
     { modal: true },
-    vscode.l10n.t('clear.deleteButton')
+    deleteButton
   );
 
-  if (confirm !== vscode.l10n.t('clear.deleteButton')) return;
+  if (confirm !== deleteButton) return;
 
   bookmarkStore.clearBookmarksInFile(filePath);
-  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.clearedInFile'));
+  vscode.window.showInformationMessage(vscode.l10n.t('Bookmarks cleared in current file'));
 }
 
 async function handleClearAll(): Promise<void> {
   if (!bookmarkStore) return;
 
+  const deleteAllButton = vscode.l10n.t('Delete All');
   const confirm = await vscode.window.showWarningMessage(
-    vscode.l10n.t('clear.confirmAll'),
+    vscode.l10n.t('Delete ALL bookmarks in ALL files? This cannot be undone.'),
     { modal: true },
-    vscode.l10n.t('clear.deleteAllButton')
+    deleteAllButton
   );
 
-  if (confirm !== vscode.l10n.t('clear.deleteAllButton')) return;
+  if (confirm !== deleteAllButton) return;
 
   bookmarkStore.clearAllBookmarks();
-  vscode.window.showInformationMessage(vscode.l10n.t('bookmark.clearedAll'));
+  vscode.window.showInformationMessage(vscode.l10n.t('All bookmarks cleared'));
 }
