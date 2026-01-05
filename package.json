@@ -375,6 +375,12 @@
       "workbench.tree.indent": 16,
       "workbench.hover.delay": 50
     },
+    "viewsWelcome": [
+      {
+        "view": "filemarks.treeView",
+        "contents": "No bookmarks yet.\n\nQuick Start:\n• Toggle bookmark: `Ctrl+Shift+[0-9]` (Mac: `Cmd+Shift+[0-9]`)\n• Jump to bookmark: `Ctrl+[0-9]` (Mac: `Cmd+[0-9]`)\n• Focus sidebar: `Ctrl+Shift+B` (Mac: `Cmd+Shift+B`)\n\n[Create Folder](command:filemarks.createFolder)\n[Learn More](https://github.com/gyuha/vscode-filemarks#readme)"
+      }
+    ],
     "menus": {
       "view/title": [
         {
