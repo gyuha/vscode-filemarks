@@ -3,10 +3,10 @@
   "displayName": "Filemarks",
   "description": "Advanced bookmark management with numbered shortcuts and folder organization",
   "version": "0.3.0",
-  "publisher": "gyuha",
+  "publisher": "nicegyu",
   "author": {
     "name": "Gyuha",
-    "url": "https://github.com/gyuha"
+    "url": "https://gyuha.com"
   },
   "license": "MIT",
   "repository": {
