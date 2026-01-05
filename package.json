@@ -51,6 +51,7 @@
     "views": {
       "filemarks": [
         {
+          "icon": "./images/icon.png",
           "id": "filemarks.treeView",
           "name": "Bookmarks"
         }
