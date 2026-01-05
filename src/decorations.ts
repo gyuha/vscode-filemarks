@@ -1,29 +1,18 @@
 import * as vscode from 'vscode';
-import * as path from 'node:path';
-import * as fs from 'node:fs';
 import type { BookmarkStore } from './bookmarkStore';
 
 export class GutterDecorationProvider {
   private decorationTypes: Map<number, vscode.TextEditorDecorationType> = new Map();
   private store: BookmarkStore;
-  private context: vscode.ExtensionContext;
   private disposables: vscode.Disposable[] = [];
 
-  constructor(context: vscode.ExtensionContext, store: BookmarkStore) {
-    this.context = context;
+  constructor(_context: vscode.ExtensionContext, store: BookmarkStore) {
     this.store = store;
     this.initialize();
   }
 
   private initialize(): void {
-    for (let i = 0; i <= 9; i++) {
-      const iconPath = this.createSvgIcon(i);
-      const decorationType = vscode.window.createTextEditorDecorationType({
-        gutterIconPath: iconPath,
-        gutterIconSize: 'contain',
-      });
-      this.decorationTypes.set(i, decorationType);
-    }
+    this.createDecorationTypes();
 
     this.disposables.push(
       vscode.window.onDidChangeActiveTextEditor(editor => {
@@ -51,33 +40,55 @@ export class GutterDecorationProvider {
       })
     );
 
+    this.disposables.push(
+      vscode.workspace.onDidChangeConfiguration(event => {
+        if (
+          event.affectsConfiguration('filemarks.gutterIconFillColor') ||
+          event.affectsConfiguration('filemarks.gutterIconNumberColor')
+        ) {
+          this.recreateDecorationTypes();
+        }
+      })
+    );
+
     const editor = vscode.window.activeTextEditor;
     if (editor) {
       this.updateDecorations(editor);
     }
   }
 
-  private createSvgIcon(number: number): vscode.Uri {
+  private createDecorationTypes(): void {
+    for (let i = 0; i <= 9; i++) {
+      const iconUri = this.createSvgIconUri(i);
+      const decorationType = vscode.window.createTextEditorDecorationType({
+        gutterIconPath: iconUri,
+        gutterIconSize: 'contain',
+      });
+      this.decorationTypes.set(i, decorationType);
+    }
+  }
+
+  private recreateDecorationTypes(): void {
+    for (const decorationType of this.decorationTypes.values()) {
+      decorationType.dispose();
+    }
+    this.decorationTypes.clear();
+    this.createDecorationTypes();
+
+    const editor = vscode.window.activeTextEditor;
+    if (editor) {
+      this.updateDecorations(editor);
+    }
+  }
+
+  private createSvgIconUri(num: number): vscode.Uri {
     const config = vscode.workspace.getConfiguration('filemarks');
-    const fillColor = config.get<string>('gutterIconFillColor', '#157EFB');
+    const fillColor = config.get<string>('gutterIconFillColor', '#E74C3C');
     const numberColor = config.get<string>('gutterIconNumberColor', '#FFFFFF');
 
-    const svgContent = `<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="8" cy="8" r="7" fill="${fillColor}" stroke="${fillColor}" stroke-width="1"/>
-  <text x="8" y="12" font-family="Arial, sans-serif" font-size="11" font-weight="bold" 
-        fill="${numberColor}" text-anchor="middle">${number}</text>
-</svg>`;
+    const svg = `<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><rect x="1" y="1" width="14" height="14" rx="2" ry="2" fill="${fillColor}"/><text x="8" y="12" font-family="Arial,sans-serif" font-size="11" font-weight="bold" fill="${numberColor}" text-anchor="middle">${num}</text></svg>`;
 
-    const iconsDir = path.join(this.context.extensionPath, '.icons');
-    if (!fs.existsSync(iconsDir)) {
-      fs.mkdirSync(iconsDir, { recursive: true });
-    }
-
-    const iconPath = path.join(iconsDir, `bookmark-${number}.svg`);
-    fs.writeFileSync(iconPath, svgContent, 'utf-8');
-
-    return vscode.Uri.file(iconPath);
+    return vscode.Uri.parse(`data:image/svg+xml,${encodeURIComponent(svg)}`);
   }
 
   private updateDecorations(editor: vscode.TextEditor): void {

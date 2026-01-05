@@ -340,7 +340,7 @@
         },
         "filemarks.gutterIconFillColor": {
           "type": "string",
-          "default": "#157EFB",
+          "default": "#E74C3C",
           "description": "Gutter icon fill color"
         },
         "filemarks.gutterIconNumberColor": {
