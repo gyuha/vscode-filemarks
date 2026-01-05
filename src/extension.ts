@@ -140,46 +140,38 @@ function handleToggleBookmark(num: number): void {
   vscode.window.showInformationMessage(vscode.l10n.t('bookmark.toggled', num, line + 1));
 }
 
-async function handleJumpToBookmark(num: number): Promise<void> {
+function handleJumpToBookmark(num: number): void {
   if (!bookmarkStore) return;
+
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showWarningMessage(vscode.l10n.t('input.noActiveEditor'));
+    return;
+  }
 
   const config = vscode.workspace.getConfiguration('filemarks');
   const showWarning = config.get<boolean>('showBookmarkNotDefinedWarning', true);
 
-  const result = bookmarkStore.findBookmarkByNumber(num);
-  if (!result) {
+  const filePath = vscode.workspace.asRelativePath(editor.document.uri.fsPath);
+  const bookmark = bookmarkStore.findBookmarkByFilePath(filePath);
+
+  if (!bookmark || bookmark.numbers[num] === undefined) {
     if (showWarning) {
       vscode.window.showWarningMessage(vscode.l10n.t('bookmark.notDefined', num));
     }
     return;
   }
 
-  const { bookmark, line } = result;
+  const line = bookmark.numbers[num];
+  const revealLocation = config.get<string>('revealLocation', 'center');
+  const revealType =
+    revealLocation === 'top'
+      ? vscode.TextEditorRevealType.AtTop
+      : vscode.TextEditorRevealType.InCenter;
 
-  try {
-    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
-    if (!workspaceFolder) return;
-
-    const absolutePath = vscode.Uri.joinPath(workspaceFolder.uri, bookmark.filePath);
-    const document = await vscode.workspace.openTextDocument(absolutePath);
-    const editor = await vscode.window.showTextDocument(document);
-
-    const revealLocation = config.get<string>('revealLocation', 'center');
-    const revealType =
-      revealLocation === 'top'
-        ? vscode.TextEditorRevealType.AtTop
-        : vscode.TextEditorRevealType.InCenter;
-
-    const position = new vscode.Position(line, 0);
-    editor.selection = new vscode.Selection(position, position);
-    editor.revealRange(new vscode.Range(position, position), revealType);
-
-    vscode.window.showInformationMessage(
-      vscode.l10n.t('bookmark.jumpedTo', num, bookmark.filePath, line + 1)
-    );
-  } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.failedToJump', String(error)));
-  }
+  const position = new vscode.Position(line, 0);
+  editor.selection = new vscode.Selection(position, position);
+  editor.revealRange(new vscode.Range(position, position), revealType);
 }
 
 export function deactivate() {
