@@ -74,6 +74,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     );
     item.contextValue = 'folder';
     item.iconPath = new vscode.ThemeIcon('folder');
+    item.tooltip = '';
     return item;
   }
 
