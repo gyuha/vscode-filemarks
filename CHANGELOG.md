@@ -2,6 +2,16 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.4.0] - 2025-01-05
+
+### Changed
+
+- **Marker Color**: Updated default gutter icon colors for better visibility
+  - Fill color changed from `#E74C3C` (red) to `#FBC74F` (yellow/gold)
+  - Number color changed from `#FFFFFF` (white) to `#A05A14` (brown)
+
+---
+
 ## [0.3.0] - 2025-01-05
 
 ### Initial Release
@@ -102,4 +112,5 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.4.0** - 2025-01-05 - Changed marker colors
 - **0.3.0** - 2025-01-05 - Initial release

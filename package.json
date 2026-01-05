@@ -2,7 +2,7 @@
   "name": "filemarks",
   "displayName": "Filemarks",
   "description": "Advanced bookmark management with numbered shortcuts and folder organization",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "nicegyuha",
   "author": {
     "name": "Gyuha",
@@ -361,12 +361,12 @@
         },
         "filemarks.gutterIconFillColor": {
           "type": "string",
-          "default": "#E74C3C",
+          "default": "#FBC74F",
           "description": "Gutter icon fill color"
         },
         "filemarks.gutterIconNumberColor": {
           "type": "string",
-          "default": "#FFFFFF",
+          "default": "#A05A14",
           "description": "Gutter icon number color"
         }
       }
