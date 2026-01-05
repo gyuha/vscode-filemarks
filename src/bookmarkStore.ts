@@ -403,4 +403,24 @@ export class BookmarkStore {
     this.state.items = [];
     this.save();
   }
+
+  removeInvalidBookmarks(filePath: string, maxLine: number): void {
+    const bookmark = this.findBookmarkByFilePath(filePath);
+    if (!bookmark) return;
+
+    let changed = false;
+    for (const [num, line] of Object.entries(bookmark.numbers)) {
+      if (line >= maxLine) {
+        delete bookmark.numbers[Number(num)];
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      if (Object.keys(bookmark.numbers).length === 0) {
+        this.removeBookmarkNode(bookmark.id);
+      }
+      this.save();
+    }
+  }
 }

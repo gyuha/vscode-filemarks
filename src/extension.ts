@@ -118,6 +118,14 @@ export async function activate(context: vscode.ExtensionContext) {
       context.subscriptions.push(jumpDisposable);
     }
 
+    context.subscriptions.push(
+      vscode.workspace.onDidSaveTextDocument(document => {
+        if (!bookmarkStore) return;
+        const filePath = vscode.workspace.asRelativePath(document.uri.fsPath);
+        bookmarkStore.removeInvalidBookmarks(filePath, document.lineCount);
+      })
+    );
+
     vscode.window.showInformationMessage(vscode.l10n.t('extension.activated'));
   } catch (error) {
     vscode.window.showErrorMessage(vscode.l10n.t('extension.activationFailed', String(error)));
