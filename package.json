@@ -33,7 +33,7 @@
     "folder organization",
     "productivity"
   ],
-  "icon": "icon.png",
+  "icon": "images/icon.png",
   "activationEvents": [
     "onStartupFinished"
   ],
