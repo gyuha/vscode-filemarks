@@ -86,7 +86,7 @@ export class GutterDecorationProvider {
     const fillColor = config.get<string>('gutterIconFillColor', '#E74C3C');
     const numberColor = config.get<string>('gutterIconNumberColor', '#FFFFFF');
 
-    const svg = `<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="8" height="8" rx="1.5" ry="1.5" fill="${fillColor}"/><text x="8" y="10.5" font-family="Arial,sans-serif" font-size="7" font-weight="bold" fill="${numberColor}" text-anchor="middle">${num}</text></svg>`;
+    const svg = `<svg width="16" height="16" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M5 3h6a0.8 0.8 0 0 1 0.8 0.8v8.4l-3.8-2.2-3.8 2.2V3.8A0.8 0.8 0 0 1 5 3z" fill="${fillColor}"/><text x="8" y="8.5" font-family="Arial,sans-serif" font-size="5.5" font-weight="bold" fill="${numberColor}" text-anchor="middle">${num}</text></svg>`;
 
     return vscode.Uri.parse(`data:image/svg+xml,${encodeURIComponent(svg)}`);
   }
