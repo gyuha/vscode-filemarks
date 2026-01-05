@@ -30,17 +30,30 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 - Create folders to organize your bookmarks
 - Drag and drop bookmarks between folders
 - Hierarchical structure for complex projects
+- Create subfolders within folders (right-click folder)
 
 ![Folder Organization](images/folders.png)
 
+### 🎛️ Sidebar Controls
+
+Quick access buttons in the sidebar title bar:
+
+| Button        | Icon | Description          |
+| ------------- | ---- | -------------------- |
+| Create Folder | `+`  | Create a new folder  |
+| Expand All    | `⊞`  | Expand all folders   |
+| Collapse All  | `⊟`  | Collapse all folders |
+| Clear All     | `🗑` | Delete all bookmarks |
+
 ### 🔄 Smart Features
 
-| Feature                   | Description                                  |
-| ------------------------- | -------------------------------------------- |
-| **Sticky Bookmarks**      | Line numbers auto-adjust when you edit code  |
-| **Auto-cleanup**          | Bookmarks removed when files are deleted     |
-| **Invalid Line Removal**  | Bookmarks removed when lines no longer exist |
-| **Per-workspace Storage** | Each project has its own bookmarks           |
+| Feature                      | Description                                        |
+| ---------------------------- | -------------------------------------------------- |
+| **Sticky Bookmarks**         | Line numbers auto-adjust when you edit code        |
+| **Auto-cleanup**             | Bookmarks removed when files are deleted           |
+| **Invalid Line Removal**     | Bookmarks removed when lines no longer exist       |
+| **Per-workspace Storage**    | Each project has its own bookmarks                 |
+| **Folder State Persistence** | Folder expand/collapse state is saved and restored |
 
 ### 🌍 Internationalization
 
@@ -58,7 +71,8 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 
 1. **Set a bookmark**: Place cursor on a line, press `Ctrl+Shift+1`
 2. **Jump to bookmark**: Press `Ctrl+1` to jump back
-3. **Organize**: Right-click bookmark in sidebar → "Move to Folder"
+3. **Focus sidebar**: Press `Ctrl+Shift+B` to focus the Filemarks sidebar
+4. **Organize**: Right-click bookmark in sidebar → "Move to Folder"
 
 ## Commands
 
@@ -69,6 +83,9 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 | `Filemarks: List Bookmarks in Current File`  | Show all bookmarks in file      |
 | `Filemarks: List All Bookmarks`              | Show all bookmarks in workspace |
 | `Filemarks: Create Folder`                   | Create organization folder      |
+| `Filemarks: Expand All Folders`              | Expand all folders in sidebar   |
+| `Filemarks: Collapse All Folders`            | Collapse all folders in sidebar |
+| `Filemarks: Focus Sidebar`                   | Focus the Filemarks sidebar     |
 | `Filemarks: Clear Bookmarks in Current File` | Remove all bookmarks from file  |
 | `Filemarks: Clear All Bookmarks`             | Remove all bookmarks            |
 
@@ -109,22 +126,25 @@ Access the Filemarks view from the Activity Bar:
 - 🖱️ Click to jump to bookmark
 - 🔀 Drag & drop to organize
 - 📋 Right-click for context menu
+- 🔄 Folder icons change when expanded/collapsed
 
 ## Keyboard Shortcuts Summary
 
 ### Windows / Linux
 
-| Shortcut                        | Action               |
-| ------------------------------- | -------------------- |
-| `Ctrl+Shift+0` ~ `Ctrl+Shift+9` | Toggle bookmark 0-9  |
-| `Ctrl+0` ~ `Ctrl+9`             | Jump to bookmark 0-9 |
+| Shortcut                        | Action                  |
+| ------------------------------- | ----------------------- |
+| `Ctrl+Shift+0` ~ `Ctrl+Shift+9` | Toggle bookmark 0-9     |
+| `Ctrl+0` ~ `Ctrl+9`             | Jump to bookmark 0-9    |
+| `Ctrl+Shift+B`                  | Focus Filemarks sidebar |
 
 ### macOS
 
-| Shortcut                      | Action               |
-| ----------------------------- | -------------------- |
-| `Cmd+Shift+0` ~ `Cmd+Shift+9` | Toggle bookmark 0-9  |
-| `Cmd+0` ~ `Cmd+9`             | Jump to bookmark 0-9 |
+| Shortcut                      | Action                  |
+| ----------------------------- | ----------------------- |
+| `Cmd+Shift+0` ~ `Cmd+Shift+9` | Toggle bookmark 0-9     |
+| `Cmd+0` ~ `Cmd+9`             | Jump to bookmark 0-9    |
+| `Cmd+Shift+B`                 | Focus Filemarks sidebar |
 
 ## Requirements
 
