@@ -178,6 +178,11 @@ export class BookmarkStore {
           this.removeBookmarkNode(bookmark.id);
         }
       } else {
+        const existingNumAtLine = Object.entries(bookmark.numbers).find(([, l]) => l === line);
+        if (existingNumAtLine) {
+          delete bookmark.numbers[Number(existingNumAtLine[0])];
+        }
+
         bookmark.numbers[num] = line;
         bookmark.updatedAt = new Date().toISOString();
       }
