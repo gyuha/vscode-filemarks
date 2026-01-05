@@ -350,6 +350,9 @@
         }
       }
     },
+    "configurationDefaults": {
+      "workbench.tree.indent": 16
+    },
     "menus": {
       "view/title": [
         {
