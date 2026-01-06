@@ -90,6 +90,32 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
         this.store.setFolderExpanded(e.element.id, false);
       }
     });
+
+    treeView.onDidChangeSelection(e => {
+      if (e.selection.length > 0) {
+        this.updateLastUsedFolderFromNode(e.selection[0]);
+      }
+    });
+  }
+
+  private updateLastUsedFolderFromNode(node: TreeNode): void {
+    if (isFolderNode(node)) {
+      this.store.setLastUsedFolderId(node.id);
+    } else {
+      const parentFolder = this.store.findParentFolder(node.id);
+      this.store.setLastUsedFolderId(parentFolder?.id ?? null);
+    }
+  }
+
+  recordCurrentFolder(node?: TreeNode): void {
+    if (node) {
+      this.updateLastUsedFolderFromNode(node);
+    } else {
+      const selection = this.treeView?.selection;
+      if (selection && selection.length > 0) {
+        this.updateLastUsedFolderFromNode(selection[0]);
+      }
+    }
   }
 
   refresh(): void {

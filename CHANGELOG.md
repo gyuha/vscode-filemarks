@@ -2,6 +2,22 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.8.0] - 2025-01-07
+
+### Added
+
+- **Smart Folder Memory**: New bookmarks are automatically added to the last used folder
+  - Clicking a folder or bookmark in sidebar records the current folder context
+  - Drag & drop operations update the last used folder
+  - New bookmarks created via keyboard shortcuts are placed in the remembered folder
+- **Context-Aware Folder Creation**: Right-click "Create Folder" on a folder now creates a subfolder inside it
+
+### Changed
+
+- **Title Bar Create Folder**: Creates folder in the last selected folder location (instead of always at root)
+
+---
+
 ## [0.7.0] - 2025-01-07
 
 ### Changed
@@ -153,6 +169,8 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.8.0** - 2025-01-07 - Smart folder memory, context-aware folder creation
+- **0.7.0** - 2025-01-07 - Custom activity bar icon, cleaner context menu
 - **0.6.0** - 2025-01-06 - Drag to editor, file icons, drop on bookmark, navigation default change
 - **0.5.0** - 2025-01-06 - Added welcome message, cross-file bookmark navigation
 - **0.4.0** - 2025-01-05 - Changed marker colors

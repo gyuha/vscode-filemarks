@@ -9,6 +9,7 @@ export class BookmarkStore {
   private readonly _onDidChangeBookmarks = new vscode.EventEmitter<void>();
   readonly onDidChangeBookmarks = this._onDidChangeBookmarks.event;
   private outputChannel: vscode.OutputChannel;
+  private lastUsedFolderId: string | null = null;
 
   constructor(context: vscode.ExtensionContext, storage: StorageService) {
     this.storage = storage;
@@ -276,7 +277,7 @@ export class BookmarkStore {
         createdAt: now,
         updatedAt: now,
       };
-      this.state.items.push(bookmark);
+      this.addBookmarkToLastUsedFolder(bookmark);
     } else {
       const existingLine = bookmark.numbers[num];
 
@@ -313,13 +314,32 @@ export class BookmarkStore {
         createdAt: now,
         updatedAt: now,
       };
-      this.state.items.push(bookmark);
+      this.addBookmarkToLastUsedFolder(bookmark);
     } else {
       bookmark.numbers[num] = line;
       bookmark.updatedAt = new Date().toISOString();
     }
 
     this.save();
+  }
+
+  private addBookmarkToLastUsedFolder(bookmark: BookmarkNode): void {
+    if (this.lastUsedFolderId) {
+      const folder = this.findFolderById(this.lastUsedFolderId);
+      if (folder) {
+        folder.children.push(bookmark);
+        return;
+      }
+    }
+    this.state.items.push(bookmark);
+  }
+
+  setLastUsedFolderId(folderId: string | null): void {
+    this.lastUsedFolderId = folderId;
+  }
+
+  getLastUsedFolderId(): string | null {
+    return this.lastUsedFolderId;
   }
 
   removeBookmarkNumber(filePath: string, num: number): void {
@@ -400,9 +420,11 @@ export class BookmarkStore {
       const parent = this.findFolderById(parentId);
       if (parent) {
         parent.children.push(folder);
+        this.lastUsedFolderId = folder.id;
       }
     } else {
       this.state.items.push(folder);
+      this.lastUsedFolderId = folder.id;
     }
 
     this.save();
@@ -428,10 +450,12 @@ export class BookmarkStore {
 
     if (targetFolderId === null) {
       this.state.items.push(node);
+      this.lastUsedFolderId = null;
     } else {
       const targetFolder = this.findFolderById(targetFolderId);
       if (targetFolder) {
         targetFolder.children.push(node);
+        this.lastUsedFolderId = targetFolderId;
       } else {
         this.state.items.push(node);
       }

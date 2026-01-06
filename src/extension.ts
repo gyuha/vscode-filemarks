@@ -405,8 +405,14 @@ async function handleCreateFolder(): Promise<void> {
 
   if (!name) return;
 
-  bookmarkStore.createFolder(name);
-  vscode.window.showInformationMessage(vscode.l10n.t('Folder "{0}" created', name));
+  const lastUsedFolderId = bookmarkStore.getLastUsedFolderId();
+  bookmarkStore.createFolder(name, lastUsedFolderId ?? undefined);
+
+  if (lastUsedFolderId) {
+    vscode.window.showInformationMessage(vscode.l10n.t('Folder created in selected folder'));
+  } else {
+    vscode.window.showInformationMessage(vscode.l10n.t('Folder "{0}" created', name));
+  }
 }
 
 async function handleCreateFolderIn(node?: TreeNode): Promise<void> {
