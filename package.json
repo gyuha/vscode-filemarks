@@ -44,7 +44,7 @@
         {
           "id": "filemarks",
           "title": "Filemarks",
-          "icon": "$(bookmark)"
+          "icon": "images/sidebar-icon.svg"
         }
       ]
     },
