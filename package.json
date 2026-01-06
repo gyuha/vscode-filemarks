@@ -392,8 +392,8 @@
       }
     },
     "configurationDefaults": {
-      "workbench.tree.indent": 16,
-      "workbench.hover.delay": 50
+      "workbench.tree.indent": 8,
+      "workbench.hover.delay": 75
     },
     "viewsWelcome": [
       {
