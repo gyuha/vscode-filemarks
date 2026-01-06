@@ -31,6 +31,7 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 
 - Create folders to organize your bookmarks
 - Drag and drop bookmarks between folders
+- Drop bookmark onto another bookmark to move to same folder
 - Hierarchical structure for complex projects
 - Create subfolders within folders (right-click folder)
 
@@ -47,6 +48,12 @@ Quick access buttons in the sidebar title bar:
 | Collapse All  | `⊟`  | Collapse all folders |
 | Clear All     | `🗑` | Delete all bookmarks |
 
+### 📂 File Icons
+
+- Sidebar displays file-type icons from your VS Code icon theme
+- Easily identify file types at a glance
+- Drag bookmarks to editor area to open files
+
 ### 🔄 Smart Features
 
 | Feature                      | Description                                        |
@@ -56,6 +63,7 @@ Quick access buttons in the sidebar title bar:
 | **Invalid Line Removal**     | Bookmarks removed when lines no longer exist       |
 | **Per-workspace Storage**    | Each project has its own bookmarks                 |
 | **Folder State Persistence** | Folder expand/collapse state is saved and restored |
+| **Drag to Editor**           | Drag bookmark from sidebar to editor to open file  |
 
 ### 🌍 Internationalization
 
@@ -66,15 +74,16 @@ Quick access buttons in the sidebar title bar:
 
 1. Open VS Code
 2. Press `Ctrl+P` / `Cmd+P`
-3. Type `ext install gyuha.filemarks`
+3. Type `ext install nicegyuha.filemarks`
 4. Press Enter
 
 ## Quick Start
 
 1. **Set a bookmark**: Place cursor on a line, press `Ctrl+Shift+1`
 2. **Jump to bookmark**: Press `Ctrl+1` to jump back
-3. **Focus sidebar**: Press `Ctrl+Shift+B` to focus the Filemarks sidebar
-4. **Organize**: Right-click bookmark in sidebar → "Move to Folder"
+3. **Navigate bookmarks**: Press `Ctrl+Alt+]` for next, `Ctrl+Alt+[` for previous
+4. **Focus sidebar**: Press `Ctrl+Shift+B` to focus the Filemarks sidebar
+5. **Organize**: Drag and drop bookmarks into folders, or right-click → "Move to Folder"
 
 ## Commands
 
@@ -95,14 +104,14 @@ Quick access buttons in the sidebar title bar:
 
 ## Configuration
 
-| Setting                                   | Default     | Description                                              |
-| ----------------------------------------- | ----------- | -------------------------------------------------------- |
-| `filemarks.saveBookmarksInProject`        | `true`      | Save in `.vscode/filemarks.json`                         |
-| `filemarks.navigateThroughAllFiles`       | `true`      | Navigate through bookmarks across all files when jumping |
-| `filemarks.showBookmarkNotDefinedWarning` | `true`      | Show warning for undefined bookmarks                     |
-| `filemarks.revealLocation`                | `"center"`  | Cursor position after jump (`"center"` or `"top"`)       |
-| `filemarks.gutterIconFillColor`           | `"#FBC74F"` | Bookmark icon background color                           |
-| `filemarks.gutterIconNumberColor`         | `"#A05A14"` | Bookmark icon number color                               |
+| Setting                                   | Default     | Description                                                                  |
+| ----------------------------------------- | ----------- | ---------------------------------------------------------------------------- |
+| `filemarks.saveBookmarksInProject`        | `true`      | Save in `.vscode/filemarks.json`                                             |
+| `filemarks.navigateThroughAllFiles`       | `false`     | Navigate within current file (false) or across all files (true) when jumping |
+| `filemarks.showBookmarkNotDefinedWarning` | `true`      | Show warning for undefined bookmarks                                         |
+| `filemarks.revealLocation`                | `"center"`  | Cursor position after jump (`"center"` or `"top"`)                           |
+| `filemarks.gutterIconFillColor`           | `"#FBC74F"` | Bookmark icon background color                                               |
+| `filemarks.gutterIconNumberColor`         | `"#A05A14"` | Bookmark icon number color                                                   |
 
 ### Custom Colors Example
 
@@ -127,9 +136,10 @@ Set `filemarks.saveBookmarksInProject` to `false` for global storage.
 
 Access the Filemarks view from the Activity Bar:
 
-- 📁 Hierarchical folder structure
+- 📁 Hierarchical folder structure with file-type icons
 - 🖱️ Click to jump to bookmark
-- 🔀 Drag & drop to organize
+- 🔀 Drag & drop to organize (onto folders or other bookmarks)
+- 📂 Drag to editor area to open file
 - 📋 Right-click for context menu
 - 🔄 Folder icons change when expanded/collapsed
 
