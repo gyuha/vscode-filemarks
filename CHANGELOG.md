@@ -2,6 +2,19 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.5.0] - 2025-01-06
+
+### Added
+
+- **Welcome Message**: TreeView now displays helpful quick start instructions when no bookmarks exist
+- **Navigate Between Bookmarks**: New commands to jump to previous/next bookmark across all files
+  - `Ctrl+Alt+[` (Windows/Linux) or `Cmd+Alt+[` (macOS) - Jump to previous bookmark
+  - `Ctrl+Alt+]` (Windows/Linux) or `Cmd+Alt+]` (macOS) - Jump to next bookmark
+- **Cross-File Navigation**: New setting `navigateThroughAllFiles` to enable jumping to bookmarks across all files (default: true)
+- **Auto-Initialize**: Creates `.vscode/filemarks.json` automatically when extension activates
+
+---
+
 ## [0.4.0] - 2025-01-05
 
 ### Changed
@@ -112,5 +125,6 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.5.0** - 2025-01-06 - Added welcome message, cross-file bookmark navigation
 - **0.4.0** - 2025-01-05 - Changed marker colors
 - **0.3.0** - 2025-01-05 - Initial release

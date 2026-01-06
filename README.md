@@ -14,15 +14,17 @@ Filemarks is a powerful bookmark extension that lets you quickly navigate your c
 
 Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 
-| Action           | Windows/Linux      | macOS             |
-| ---------------- | ------------------ | ----------------- |
-| Toggle Bookmark  | `Ctrl+Shift+[0-9]` | `Cmd+Shift+[0-9]` |
-| Jump to Bookmark | `Ctrl+[0-9]`       | `Cmd+[0-9]`       |
+| Action            | Windows/Linux      | macOS             |
+| ----------------- | ------------------ | ----------------- |
+| Toggle Bookmark   | `Ctrl+Shift+[0-9]` | `Cmd+Shift+[0-9]` |
+| Jump to Bookmark  | `Ctrl+[0-9]`       | `Cmd+[0-9]`       |
+| Previous Bookmark | `Ctrl+Alt+[`       | `Cmd+Alt+[`       |
+| Next Bookmark     | `Ctrl+Alt+]`       | `Cmd+Alt+]`       |
 
 ### 🔖 Visual Gutter Icons
 
 - Bookmark-shaped icons with numbers displayed in the editor gutter
-- Customizable colors (default: red background, white number)
+- Customizable colors (default: yellow/gold background, brown number)
 - Instantly see which lines are bookmarked
 
 ### 📁 Folder Organization
@@ -80,6 +82,8 @@ Quick access buttons in the sidebar title bar:
 | -------------------------------------------- | ------------------------------- |
 | `Filemarks: Toggle Bookmark [0-9]`           | Set/unset numbered bookmark     |
 | `Filemarks: Jump to Bookmark [0-9]`          | Navigate to bookmark            |
+| `Filemarks: Jump to Previous Bookmark`       | Navigate to previous bookmark   |
+| `Filemarks: Jump to Next Bookmark`           | Navigate to next bookmark       |
 | `Filemarks: List Bookmarks in Current File`  | Show all bookmarks in file      |
 | `Filemarks: List All Bookmarks`              | Show all bookmarks in workspace |
 | `Filemarks: Create Folder`                   | Create organization folder      |
@@ -91,13 +95,14 @@ Quick access buttons in the sidebar title bar:
 
 ## Configuration
 
-| Setting                                   | Default     | Description                                        |
-| ----------------------------------------- | ----------- | -------------------------------------------------- |
-| `filemarks.saveBookmarksInProject`        | `true`      | Save in `.vscode/filemarks.json`                   |
-| `filemarks.showBookmarkNotDefinedWarning` | `true`      | Show warning for undefined bookmarks               |
-| `filemarks.revealLocation`                | `"center"`  | Cursor position after jump (`"center"` or `"top"`) |
-| `filemarks.gutterIconFillColor`           | `"#E74C3C"` | Bookmark icon background color                     |
-| `filemarks.gutterIconNumberColor`         | `"#FFFFFF"` | Bookmark icon number color                         |
+| Setting                                   | Default     | Description                                              |
+| ----------------------------------------- | ----------- | -------------------------------------------------------- |
+| `filemarks.saveBookmarksInProject`        | `true`      | Save in `.vscode/filemarks.json`                         |
+| `filemarks.navigateThroughAllFiles`       | `true`      | Navigate through bookmarks across all files when jumping |
+| `filemarks.showBookmarkNotDefinedWarning` | `true`      | Show warning for undefined bookmarks                     |
+| `filemarks.revealLocation`                | `"center"`  | Cursor position after jump (`"center"` or `"top"`)       |
+| `filemarks.gutterIconFillColor`           | `"#FBC74F"` | Bookmark icon background color                           |
+| `filemarks.gutterIconNumberColor`         | `"#A05A14"` | Bookmark icon number color                               |
 
 ### Custom Colors Example
 
@@ -136,6 +141,8 @@ Access the Filemarks view from the Activity Bar:
 | ------------------------------- | ----------------------- |
 | `Ctrl+Shift+0` ~ `Ctrl+Shift+9` | Toggle bookmark 0-9     |
 | `Ctrl+0` ~ `Ctrl+9`             | Jump to bookmark 0-9    |
+| `Ctrl+Alt+[`                    | Previous bookmark       |
+| `Ctrl+Alt+]`                    | Next bookmark           |
 | `Ctrl+Shift+B`                  | Focus Filemarks sidebar |
 
 ### macOS
@@ -144,6 +151,8 @@ Access the Filemarks view from the Activity Bar:
 | ----------------------------- | ----------------------- |
 | `Cmd+Shift+0` ~ `Cmd+Shift+9` | Toggle bookmark 0-9     |
 | `Cmd+0` ~ `Cmd+9`             | Jump to bookmark 0-9    |
+| `Cmd+Alt+[`                   | Previous bookmark       |
+| `Cmd+Alt+]`                   | Next bookmark           |
 | `Cmd+Shift+B`                 | Focus Filemarks sidebar |
 
 ## Requirements

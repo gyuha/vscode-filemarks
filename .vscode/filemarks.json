@@ -1,4 +1,17 @@
 {
   "version": "1.0",
-  "items": []
+  "items": [
+    {
+      "type": "bookmark",
+      "id": "a63f0912-fcdf-4180-b675-5c96a3f778bd",
+      "filePath": "package.json",
+      "numbers": {
+        "1": 11,
+        "2": 24,
+        "5": 36
+      },
+      "createdAt": "2026-01-05T15:02:02.767Z",
+      "updatedAt": "2026-01-05T15:05:02.361Z"
+    }
+  ]
 }

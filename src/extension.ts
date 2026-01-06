@@ -123,6 +123,18 @@ export async function activate(context: vscode.ExtensionContext) {
       })
     );
 
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.jumpToPreviousBookmark', async () => {
+        await handleJumpToAdjacentBookmark('previous');
+      })
+    );
+
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.jumpToNextBookmark', async () => {
+        await handleJumpToAdjacentBookmark('next');
+      })
+    );
+
     for (let i = 0; i <= 9; i++) {
       const num = i;
 
@@ -209,6 +221,65 @@ function handleJumpToBookmark(num: number): void {
   const position = new vscode.Position(line, 0);
   editor.selection = new vscode.Selection(position, position);
   editor.revealRange(new vscode.Range(position, position), revealType);
+}
+
+async function handleJumpToAdjacentBookmark(direction: 'previous' | 'next'): Promise<void> {
+  if (!bookmarkStore) return;
+
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showWarningMessage(vscode.l10n.t('No active editor'));
+    return;
+  }
+
+  const config = vscode.workspace.getConfiguration('filemarks');
+  const navigateThroughAllFiles = config.get<boolean>('navigateThroughAllFiles', true);
+  const filePath = vscode.workspace.asRelativePath(editor.document.uri.fsPath);
+
+  const currentBookmark = bookmarkStore.findBookmarkByFilePath(filePath);
+  const currentLine = editor.selection.active.line;
+
+  let currentNum = -1;
+  if (currentBookmark) {
+    const entry = Object.entries(currentBookmark.numbers).find(([, line]) => line === currentLine);
+    if (entry) {
+      currentNum = Number(entry[0]);
+    } else {
+      const numbers = Object.keys(currentBookmark.numbers)
+        .map(Number)
+        .sort((a, b) => a - b);
+      if (direction === 'next') {
+        currentNum = -1;
+      } else {
+        currentNum = 10;
+      }
+    }
+  }
+
+  if (navigateThroughAllFiles) {
+    const result = bookmarkStore.getAdjacentBookmarkGlobal(currentNum, direction);
+    if (!result) {
+      vscode.window.showWarningMessage(vscode.l10n.t('No bookmarks found'));
+      return;
+    }
+    await handleGoToBookmark(result.bookmark, result.line);
+  } else {
+    const result = bookmarkStore.getAdjacentBookmarkInFile(filePath, currentNum, direction);
+    if (!result) {
+      vscode.window.showWarningMessage(vscode.l10n.t('No bookmarks in current file'));
+      return;
+    }
+
+    const revealLocation = config.get<string>('revealLocation', 'center');
+    const revealType =
+      revealLocation === 'top'
+        ? vscode.TextEditorRevealType.AtTop
+        : vscode.TextEditorRevealType.InCenter;
+
+    const position = new vscode.Position(result.line, 0);
+    editor.selection = new vscode.Selection(position, position);
+    editor.revealRange(new vscode.Range(position, position), revealType);
+  }
 }
 
 export function deactivate() {

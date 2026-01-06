@@ -185,6 +185,84 @@ export class BookmarkStore {
     return traverse(this.state.items);
   }
 
+  getBookmarkNumbersInFile(filePath: string): number[] {
+    const bookmark = this.findBookmarkByFilePath(filePath);
+    if (!bookmark) return [];
+
+    return Object.keys(bookmark.numbers)
+      .map(n => Number(n))
+      .sort((a, b) => a - b);
+  }
+
+  getAllBookmarkEntries(): Array<{ num: number; bookmark: BookmarkNode; line: number }> {
+    const entries: Array<{ num: number; bookmark: BookmarkNode; line: number }> = [];
+
+    const traverse = (nodes: TreeNode[]): void => {
+      for (const node of nodes) {
+        if (node.type === 'bookmark') {
+          for (const [num, line] of Object.entries(node.numbers)) {
+            entries.push({ num: Number(num), bookmark: node, line });
+          }
+        }
+        if (node.type === 'folder') {
+          traverse(node.children);
+        }
+      }
+    };
+
+    traverse(this.state.items);
+    return entries.sort((a, b) => a.num - b.num);
+  }
+
+  getAdjacentBookmarkInFile(
+    filePath: string,
+    currentNum: number,
+    direction: 'previous' | 'next'
+  ): { num: number; line: number } | undefined {
+    const numbers = this.getBookmarkNumbersInFile(filePath);
+    if (numbers.length === 0) return undefined;
+
+    const bookmark = this.findBookmarkByFilePath(filePath);
+    if (!bookmark) return undefined;
+
+    if (direction === 'next') {
+      const nextNum = numbers.find(n => n > currentNum);
+      if (nextNum !== undefined) {
+        return { num: nextNum, line: bookmark.numbers[nextNum] };
+      }
+      const firstNum = numbers[0];
+      return { num: firstNum, line: bookmark.numbers[firstNum] };
+    }
+
+    const prevNums = numbers.filter(n => n < currentNum);
+    if (prevNums.length > 0) {
+      const prevNum = prevNums[prevNums.length - 1];
+      return { num: prevNum, line: bookmark.numbers[prevNum] };
+    }
+    const lastNum = numbers[numbers.length - 1];
+    return { num: lastNum, line: bookmark.numbers[lastNum] };
+  }
+
+  getAdjacentBookmarkGlobal(
+    currentNum: number,
+    direction: 'previous' | 'next'
+  ): { num: number; bookmark: BookmarkNode; line: number } | undefined {
+    const entries = this.getAllBookmarkEntries();
+    if (entries.length === 0) return undefined;
+
+    if (direction === 'next') {
+      const nextEntry = entries.find(e => e.num > currentNum);
+      if (nextEntry) return nextEntry;
+      return entries[0];
+    }
+
+    const prevEntries = entries.filter(e => e.num < currentNum);
+    if (prevEntries.length > 0) {
+      return prevEntries[prevEntries.length - 1];
+    }
+    return entries[entries.length - 1];
+  }
+
   toggleBookmark(filePath: string, num: number, line: number): void {
     let bookmark = this.findBookmarkByFilePath(filePath);
 
