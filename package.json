@@ -60,156 +60,192 @@
     "commands": [
       {
         "command": "filemarks.goToBookmark",
-        "title": "Filemarks: Go to Bookmark"
+        "title": "Go to Bookmark",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.deleteBookmark",
-        "title": "Filemarks: Delete Bookmark",
+        "title": "Delete Bookmark",
+        "category": "Filemarks",
         "icon": "$(trash)"
       },
       {
         "command": "filemarks.renameBookmark",
-        "title": "Filemarks: Rename Bookmark",
+        "title": "Rename Bookmark",
+        "category": "Filemarks",
         "icon": "$(edit)"
       },
       {
         "command": "filemarks.list",
-        "title": "Filemarks: List Bookmarks in Current File"
+        "title": "List Bookmarks in Current File",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.listAll",
-        "title": "Filemarks: List All Bookmarks"
+        "title": "List All Bookmarks",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.createFolder",
-        "title": "Filemarks: Create Folder",
+        "title": "Create Folder",
+        "category": "Filemarks",
         "icon": "$(new-folder)"
       },
       {
         "command": "filemarks.deleteFolder",
-        "title": "Filemarks: Delete Folder",
+        "title": "Delete Folder",
+        "category": "Filemarks",
         "icon": "$(trash)"
       },
       {
         "command": "filemarks.renameFolder",
-        "title": "Filemarks: Rename Folder",
+        "title": "Rename Folder",
+        "category": "Filemarks",
         "icon": "$(edit)"
       },
       {
         "command": "filemarks.moveToFolder",
-        "title": "Filemarks: Move to Folder",
+        "title": "Move to Folder",
+        "category": "Filemarks",
         "icon": "$(folder)"
       },
       {
         "command": "filemarks.clear",
-        "title": "Filemarks: Clear Bookmarks in Current File"
+        "title": "Clear Bookmarks in Current File",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.clearAll",
-        "title": "Filemarks: Clear All Bookmarks",
+        "title": "Clear All Bookmarks",
+        "category": "Filemarks",
         "icon": "$(trash)"
       },
       {
         "command": "filemarks.expandAllFolders",
-        "title": "Filemarks: Expand All Folders",
+        "title": "Expand All Folders",
+        "category": "Filemarks",
         "icon": "$(expand-all)"
       },
       {
         "command": "filemarks.collapseAllFolders",
-        "title": "Filemarks: Collapse All Folders",
+        "title": "Collapse All Folders",
+        "category": "Filemarks",
         "icon": "$(collapse-all)"
       },
       {
         "command": "filemarks.focusSidebar",
-        "title": "Filemarks: Focus Sidebar"
+        "title": "Focus Sidebar",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.toggleBookmark0",
-        "title": "Filemarks: Toggle Bookmark 0"
+        "title": "Toggle Bookmark 0",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.toggleBookmark1",
-        "title": "Filemarks: Toggle Bookmark 1"
+        "title": "Toggle Bookmark 1",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.toggleBookmark2",
-        "title": "Filemarks: Toggle Bookmark 2"
+        "title": "Toggle Bookmark 2",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.toggleBookmark3",
-        "title": "Filemarks: Toggle Bookmark 3"
+        "title": "Toggle Bookmark 3",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.toggleBookmark4",
-        "title": "Filemarks: Toggle Bookmark 4"
+        "title": "Toggle Bookmark 4",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.toggleBookmark5",
-        "title": "Filemarks: Toggle Bookmark 5"
+        "title": "Toggle Bookmark 5",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.toggleBookmark6",
-        "title": "Filemarks: Toggle Bookmark 6"
+        "title": "Toggle Bookmark 6",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.toggleBookmark7",
-        "title": "Filemarks: Toggle Bookmark 7"
+        "title": "Toggle Bookmark 7",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.toggleBookmark8",
-        "title": "Filemarks: Toggle Bookmark 8"
+        "title": "Toggle Bookmark 8",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.toggleBookmark9",
-        "title": "Filemarks: Toggle Bookmark 9"
+        "title": "Toggle Bookmark 9",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToBookmark0",
-        "title": "Filemarks: Jump to Bookmark 0"
+        "title": "Jump to Bookmark 0",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToBookmark1",
-        "title": "Filemarks: Jump to Bookmark 1"
+        "title": "Jump to Bookmark 1",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToBookmark2",
-        "title": "Filemarks: Jump to Bookmark 2"
+        "title": "Jump to Bookmark 2",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToBookmark3",
-        "title": "Filemarks: Jump to Bookmark 3"
+        "title": "Jump to Bookmark 3",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToBookmark4",
-        "title": "Filemarks: Jump to Bookmark 4"
+        "title": "Jump to Bookmark 4",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToBookmark5",
-        "title": "Filemarks: Jump to Bookmark 5"
+        "title": "Jump to Bookmark 5",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToBookmark6",
-        "title": "Filemarks: Jump to Bookmark 6"
+        "title": "Jump to Bookmark 6",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToBookmark7",
-        "title": "Filemarks: Jump to Bookmark 7"
+        "title": "Jump to Bookmark 7",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToBookmark8",
-        "title": "Filemarks: Jump to Bookmark 8"
+        "title": "Jump to Bookmark 8",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToBookmark9",
-        "title": "Filemarks: Jump to Bookmark 9"
+        "title": "Jump to Bookmark 9",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToPreviousBookmark",
-        "title": "Filemarks: Jump to Previous Bookmark"
+        "title": "Jump to Previous Bookmark",
+        "category": "Filemarks"
       },
       {
         "command": "filemarks.jumpToNextBookmark",
-        "title": "Filemarks: Jump to Next Bookmark"
+        "title": "Jump to Next Bookmark",
+        "category": "Filemarks"
       }
     ],
     "keybindings": [
