@@ -2,6 +2,15 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.7.0] - 2025-01-07
+
+### Changed
+
+- **Activity Bar Icon**: New custom bookmark icon with `#` symbol for better recognition
+- **Context Menu**: Removed "Filemarks:" prefix from context menu items for cleaner display (Command Palette still shows "Filemarks: ..." via category)
+
+---
+
 ## [0.6.0] - 2025-01-06
 
 ### Added
