@@ -2,6 +2,25 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.6.0] - 2025-01-06
+
+### Added
+
+- **Drag to Editor**: Drag bookmarks from sidebar to editor area to open files
+- **Drop on Bookmark**: Drop a bookmark onto another bookmark to move it to the same folder
+
+### Changed
+
+- **File Icons**: Sidebar now displays file-type icons from your VS Code icon theme instead of generic bookmark icons
+- **Tree Indent**: Reduced tree view indentation from 16px to 8px for a more compact layout
+- **Navigation Default**: Changed `navigateThroughAllFiles` default to `false` - Previous/Next bookmark now navigates within current file by default
+
+### Fixed
+
+- **Consistent Indentation**: Fixed inconsistent left margin for files in the same folder
+
+---
+
 ## [0.5.0] - 2025-01-06
 
 ### Added
@@ -125,6 +144,7 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.6.0** - 2025-01-06 - Drag to editor, file icons, drop on bookmark, navigation default change
 - **0.5.0** - 2025-01-06 - Added welcome message, cross-file bookmark navigation
 - **0.4.0** - 2025-01-05 - Changed marker colors
 - **0.3.0** - 2025-01-05 - Initial release
