@@ -159,7 +159,10 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     item.description = description;
     item.contextValue = 'bookmark';
     item.tooltip = this.createTooltip(bookmark);
-    item.iconPath = new vscode.ThemeIcon('bookmark');
+
+    if (workspaceFolder) {
+      item.resourceUri = vscode.Uri.joinPath(workspaceFolder.uri, bookmark.filePath);
+    }
 
     if (workspaceFolder && numbers.length > 0) {
       const firstNumber = Number(numbers[0]);
