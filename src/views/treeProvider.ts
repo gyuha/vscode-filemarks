@@ -46,7 +46,16 @@ class TreeDragAndDropController implements vscode.TreeDragAndDropController<Tree
     if (!source || source.length === 0) return;
 
     const sourceNode = source[0];
-    const targetFolderId = target && isFolderNode(target) ? target.id : null;
+
+    let targetFolderId: string | null = null;
+    if (target) {
+      if (isFolderNode(target)) {
+        targetFolderId = target.id;
+      } else {
+        const parentFolder = this.store.findParentFolder(target.id);
+        targetFolderId = parentFolder?.id ?? null;
+      }
+    }
 
     if (sourceNode.id === targetFolderId) return;
 

@@ -457,6 +457,26 @@ export class BookmarkStore {
     return traverse(this.state.items);
   }
 
+  findParentFolder(nodeId: string): (TreeNode & { type: 'folder' }) | undefined {
+    const traverse = (
+      nodes: TreeNode[],
+      parent?: TreeNode & { type: 'folder' }
+    ): (TreeNode & { type: 'folder' }) | undefined => {
+      for (const node of nodes) {
+        if (node.id === nodeId) {
+          return parent;
+        }
+        if (node.type === 'folder') {
+          const found = traverse(node.children, node);
+          if (found !== undefined) return found;
+        }
+      }
+      return undefined;
+    };
+
+    return traverse(this.state.items);
+  }
+
   private removeNode(id: string): void {
     const removeFromTree = (nodes: TreeNode[]): boolean => {
       for (let i = 0; i < nodes.length; i++) {
