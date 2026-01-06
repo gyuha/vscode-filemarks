@@ -362,7 +362,7 @@
         },
         "filemarks.navigateThroughAllFiles": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Navigate through bookmarks across all files when jumping (true) or only within current file (false)"
         },
         "filemarks.showBookmarkNotDefinedWarning": {
