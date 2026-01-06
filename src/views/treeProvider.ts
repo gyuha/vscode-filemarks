@@ -5,17 +5,41 @@ import type { TreeNode, BookmarkNode, FolderNode } from '../types';
 import { isFolderNode } from '../types';
 
 class TreeDragAndDropController implements vscode.TreeDragAndDropController<TreeNode> {
-  dropMimeTypes = ['application/vnd.code.tree.filemarks'];
-  dragMimeTypes = ['application/vnd.code.tree.filemarks'];
+  private static readonly TREE_MIME_TYPE = 'application/vnd.code.tree.filemarks';
+  private static readonly URI_LIST_MIME_TYPE = 'text/uri-list';
+
+  dropMimeTypes = [TreeDragAndDropController.TREE_MIME_TYPE];
+  dragMimeTypes = [
+    TreeDragAndDropController.TREE_MIME_TYPE,
+    TreeDragAndDropController.URI_LIST_MIME_TYPE,
+  ];
 
   constructor(private store: BookmarkStore) {}
 
   async handleDrag(source: TreeNode[], dataTransfer: vscode.DataTransfer): Promise<void> {
-    dataTransfer.set('application/vnd.code.tree.filemarks', new vscode.DataTransferItem(source));
+    dataTransfer.set(TreeDragAndDropController.TREE_MIME_TYPE, new vscode.DataTransferItem(source));
+    this.setUriListForEditorDrop(source, dataTransfer);
+  }
+
+  private setUriListForEditorDrop(source: TreeNode[], dataTransfer: vscode.DataTransfer): void {
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    if (!workspaceFolder) return;
+
+    const uriList = source
+      .filter((node): node is BookmarkNode => node.type === 'bookmark')
+      .map(bookmark => vscode.Uri.joinPath(workspaceFolder.uri, bookmark.filePath).toString())
+      .join('\r\n');
+
+    if (uriList) {
+      dataTransfer.set(
+        TreeDragAndDropController.URI_LIST_MIME_TYPE,
+        new vscode.DataTransferItem(uriList)
+      );
+    }
   }
 
   async handleDrop(target: TreeNode | undefined, dataTransfer: vscode.DataTransfer): Promise<void> {
-    const transferItem = dataTransfer.get('application/vnd.code.tree.filemarks');
+    const transferItem = dataTransfer.get(TreeDragAndDropController.TREE_MIME_TYPE);
     if (!transferItem) return;
 
     const source = transferItem.value as TreeNode[];
