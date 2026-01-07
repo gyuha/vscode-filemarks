@@ -24,7 +24,7 @@ All notable changes to the "filemarks" extension will be documented in this file
   - "No matching bookmarks found" message when filter returns no results
 - **Clear Search Button**: Appears in title bar when filter is active (search-stop icon)
 - **Auto Bookmark**: Automatically assigns next available bookmark number (0-9)
-  - Shortcut: `Ctrl+Alt+3` (Windows/Linux) or `Cmd+Alt+3` (macOS)
+  - Shortcut: `Ctrl+Alt+P` (Windows/Linux) or `Cmd+Alt+P` (macOS)
   - Finds smallest unused number in current file
   - Falls back to 0 if all numbers are used
 

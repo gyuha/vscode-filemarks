@@ -18,7 +18,7 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 | ----------------- | ------------------ | ----------------- |
 | Toggle Bookmark   | `Ctrl+Shift+[0-9]` | `Cmd+Shift+[0-9]` |
 | Jump to Bookmark  | `Ctrl+[0-9]`       | `Cmd+[0-9]`       |
-| Auto Bookmark     | `Ctrl+Alt+3`       | `Cmd+Alt+3`       |
+| Auto Bookmark     | `Ctrl+Alt+P`       | `Cmd+Alt+P`       |
 | Previous Bookmark | `Ctrl+Alt+[`       | `Cmd+Alt+[`       |
 | Next Bookmark     | `Ctrl+Alt+]`       | `Cmd+Alt+]`       |
 
@@ -91,7 +91,7 @@ Quick access buttons in the sidebar title bar:
 ## Quick Start
 
 1. **Set a bookmark**: Place cursor on a line, press `Ctrl+Shift+1`
-2. **Auto bookmark**: Press `Ctrl+Alt+3` to auto-assign next available number
+2. **Auto bookmark**: Press `Ctrl+Alt+P` to auto-assign next available number
 3. **Jump to bookmark**: Press `Ctrl+1` to jump back
 4. **Navigate bookmarks**: Press `Ctrl+Alt+]` for next, `Ctrl+Alt+[` for previous
 5. **Search bookmarks**: Click the search icon in sidebar to filter bookmarks
@@ -122,7 +122,7 @@ Quick access buttons in the sidebar title bar:
 
 | Setting                                   | Default     | Description                                                                  |
 | ----------------------------------------- | ----------- | ---------------------------------------------------------------------------- |
-| `filemarks.saveBookmarksInProject`        | `true`      | Save in `.vscode/filemarks.json`                                             |
+| `filemarks.saveBookmarksInProject`        | `false`     | Save in `.vscode/filemarks.json`                                             |
 | `filemarks.navigateThroughAllFiles`       | `false`     | Navigate within current file (false) or across all files (true) when jumping |
 | `filemarks.showBookmarkNotDefinedWarning` | `true`      | Show warning for undefined bookmarks                                         |
 | `filemarks.revealLocation`                | `"center"`  | Cursor position after jump (`"center"` or `"top"`)                           |
@@ -168,7 +168,7 @@ Access the Filemarks view from the Activity Bar:
 | ------------------------------- | ----------------------- |
 | `Ctrl+Shift+0` ~ `Ctrl+Shift+9` | Toggle bookmark 0-9     |
 | `Ctrl+0` ~ `Ctrl+9`             | Jump to bookmark 0-9    |
-| `Ctrl+Alt+3`                    | Auto bookmark           |
+| `Ctrl+Alt+P`                    | Auto bookmark           |
 | `Ctrl+Alt+[`                    | Previous bookmark       |
 | `Ctrl+Alt+]`                    | Next bookmark           |
 | `Ctrl+Shift+B`                  | Focus Filemarks sidebar |
@@ -179,7 +179,7 @@ Access the Filemarks view from the Activity Bar:
 | ----------------------------- | ----------------------- |
 | `Cmd+Shift+0` ~ `Cmd+Shift+9` | Toggle bookmark 0-9     |
 | `Cmd+0` ~ `Cmd+9`             | Jump to bookmark 0-9    |
-| `Cmd+Alt+3`                   | Auto bookmark           |
+| `Cmd+Alt+P`                   | Auto bookmark           |
 | `Cmd+Alt+[`                   | Previous bookmark       |
 | `Cmd+Alt+]`                   | Next bookmark           |
 | `Cmd+Shift+B`                 | Focus Filemarks sidebar |

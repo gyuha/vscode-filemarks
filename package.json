@@ -2,7 +2,7 @@
   "name": "filemarks",
   "displayName": "Filemarks",
   "description": "Advanced bookmark management with numbered shortcuts and folder organization",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "publisher": "nicegyuha",
   "author": {
     "name": "Gyuha",
@@ -410,8 +410,8 @@
       },
       {
         "command": "filemarks.autoBookmark",
-        "key": "ctrl+alt+3",
-        "mac": "cmd+alt+3",
+        "key": "ctrl+alt+p",
+        "mac": "cmd+alt+p",
         "when": "editorTextFocus"
       }
     ],
@@ -421,7 +421,7 @@
       "properties": {
         "filemarks.saveBookmarksInProject": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Save bookmarks in project's .vscode folder (true) or global storage (false)"
         },
         "filemarks.navigateThroughAllFiles": {
