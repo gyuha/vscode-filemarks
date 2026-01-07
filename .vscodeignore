@@ -17,3 +17,5 @@ TEST_GUIDE.md
 .github/**
 reference/**
 images/filemarks.png
+images/*.af
+images/*.af~lock~

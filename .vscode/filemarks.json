@@ -12,6 +12,17 @@
       },
       "createdAt": "2026-01-05T15:02:02.767Z",
       "updatedAt": "2026-01-05T15:05:02.361Z"
+    },
+    {
+      "type": "bookmark",
+      "id": "21e4d4f0-a17c-4a0b-9923-5affa037e558",
+      "filePath": "src/bookmarkStore.ts",
+      "numbers": {
+        "0": 384,
+        "1": 325
+      },
+      "createdAt": "2026-01-07T12:58:56.639Z",
+      "updatedAt": "2026-01-07T12:58:59.684Z"
     }
   ]
 }
