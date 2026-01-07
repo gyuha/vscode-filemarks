@@ -152,7 +152,7 @@
         "command": "filemarks.clearSearch",
         "title": "Clear Search",
         "category": "Filemarks",
-        "icon": "$(close)"
+        "icon": "$(search-stop)"
       },
       {
         "command": "filemarks.toggleBookmark0",
@@ -462,24 +462,29 @@
           "group": "navigation@0"
         },
         {
-          "command": "filemarks.createFolder",
-          "when": "view == filemarks.treeView",
+          "command": "filemarks.clearSearch",
+          "when": "view == filemarks.treeView && filemarks.hasFilter",
           "group": "navigation@1"
         },
         {
-          "command": "filemarks.expandAllFolders",
+          "command": "filemarks.createFolder",
           "when": "view == filemarks.treeView",
           "group": "navigation@2"
         },
         {
-          "command": "filemarks.collapseAllFolders",
+          "command": "filemarks.expandAllFolders",
           "when": "view == filemarks.treeView",
           "group": "navigation@3"
         },
         {
-          "command": "filemarks.clearAll",
+          "command": "filemarks.collapseAllFolders",
           "when": "view == filemarks.treeView",
           "group": "navigation@4"
+        },
+        {
+          "command": "filemarks.clearAll",
+          "when": "view == filemarks.treeView",
+          "group": "navigation@5"
         }
       ],
       "view/item/context": [

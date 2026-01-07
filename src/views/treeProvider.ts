@@ -138,6 +138,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   setFilter(text: string): void {
     this.filterText = text;
+    this.updateFilterContext();
     this.updateTreeViewTitle();
     this.refresh();
   }
@@ -148,8 +149,13 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   clearFilter(): void {
     this.filterText = '';
+    this.updateFilterContext();
     this.updateTreeViewTitle();
     this.refresh();
+  }
+
+  private updateFilterContext(): void {
+    vscode.commands.executeCommand('setContext', 'filemarks.hasFilter', !!this.filterText);
   }
 
   private updateTreeViewTitle(): void {
