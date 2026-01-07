@@ -18,6 +18,7 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 | ----------------- | ------------------ | ----------------- |
 | Toggle Bookmark   | `Ctrl+Shift+[0-9]` | `Cmd+Shift+[0-9]` |
 | Jump to Bookmark  | `Ctrl+[0-9]`       | `Cmd+[0-9]`       |
+| Auto Bookmark     | `Ctrl+Alt+3`       | `Cmd+Alt+3`       |
 | Previous Bookmark | `Ctrl+Alt+[`       | `Cmd+Alt+[`       |
 | Next Bookmark     | `Ctrl+Alt+]`       | `Cmd+Alt+]`       |
 
@@ -26,6 +27,13 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 - Bookmark-shaped icons with numbers displayed in the editor gutter
 - Customizable colors (default: yellow/gold background, brown number)
 - Instantly see which lines are bookmarked
+
+### 🔍 Search & Filter
+
+- Real-time fuzzy search across all bookmarks
+- Filter by bookmark name or file path
+- Search results update as you type
+- Visual indicator when filter is active
 
 ### 📁 Folder Organization
 
@@ -41,12 +49,14 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 
 Quick access buttons in the sidebar title bar:
 
-| Button        | Icon | Description          |
-| ------------- | ---- | -------------------- |
-| Create Folder | `+`  | Create a new folder  |
-| Expand All    | `⊞`  | Expand all folders   |
-| Collapse All  | `⊟`  | Collapse all folders |
-| Clear All     | `🗑` | Delete all bookmarks |
+| Button        | Icon | Description                               |
+| ------------- | ---- | ----------------------------------------- |
+| Search        | 🔍   | Open search input for filtering           |
+| Clear Search  | ⊗    | Clear active filter (visible when active) |
+| Create Folder | `+`  | Create a new folder                       |
+| Expand All    | `⊞`  | Expand all folders                        |
+| Collapse All  | `⊟`  | Collapse all folders                      |
+| Clear All     | 🗑   | Delete all bookmarks                      |
 
 ### 📂 File Icons
 
@@ -58,6 +68,7 @@ Quick access buttons in the sidebar title bar:
 
 | Feature                      | Description                                        |
 | ---------------------------- | -------------------------------------------------- |
+| **Auto Bookmark**            | Automatically assigns next available number (0-9)  |
 | **Sticky Bookmarks**         | Line numbers auto-adjust when you edit code        |
 | **Auto-cleanup**             | Bookmarks removed when files are deleted           |
 | **Invalid Line Removal**     | Bookmarks removed when lines no longer exist       |
@@ -80,27 +91,32 @@ Quick access buttons in the sidebar title bar:
 ## Quick Start
 
 1. **Set a bookmark**: Place cursor on a line, press `Ctrl+Shift+1`
-2. **Jump to bookmark**: Press `Ctrl+1` to jump back
-3. **Navigate bookmarks**: Press `Ctrl+Alt+]` for next, `Ctrl+Alt+[` for previous
-4. **Focus sidebar**: Press `Ctrl+Shift+B` to focus the Filemarks sidebar
-5. **Organize**: Drag and drop bookmarks into folders, or right-click → "Move to Folder"
+2. **Auto bookmark**: Press `Ctrl+Alt+3` to auto-assign next available number
+3. **Jump to bookmark**: Press `Ctrl+1` to jump back
+4. **Navigate bookmarks**: Press `Ctrl+Alt+]` for next, `Ctrl+Alt+[` for previous
+5. **Search bookmarks**: Click the search icon in sidebar to filter bookmarks
+6. **Focus sidebar**: Press `Ctrl+Shift+B` to focus the Filemarks sidebar
+7. **Organize**: Drag and drop bookmarks into folders, or right-click → "Move to Folder"
 
 ## Commands
 
-| Command                                      | Description                     |
-| -------------------------------------------- | ------------------------------- |
-| `Filemarks: Toggle Bookmark [0-9]`           | Set/unset numbered bookmark     |
-| `Filemarks: Jump to Bookmark [0-9]`          | Navigate to bookmark            |
-| `Filemarks: Jump to Previous Bookmark`       | Navigate to previous bookmark   |
-| `Filemarks: Jump to Next Bookmark`           | Navigate to next bookmark       |
-| `Filemarks: List Bookmarks in Current File`  | Show all bookmarks in file      |
-| `Filemarks: List All Bookmarks`              | Show all bookmarks in workspace |
-| `Filemarks: Create Folder`                   | Create organization folder      |
-| `Filemarks: Expand All Folders`              | Expand all folders in sidebar   |
-| `Filemarks: Collapse All Folders`            | Collapse all folders in sidebar |
-| `Filemarks: Focus Sidebar`                   | Focus the Filemarks sidebar     |
-| `Filemarks: Clear Bookmarks in Current File` | Remove all bookmarks from file  |
-| `Filemarks: Clear All Bookmarks`             | Remove all bookmarks            |
+| Command                                      | Description                                |
+| -------------------------------------------- | ------------------------------------------ |
+| `Filemarks: Toggle Bookmark [0-9]`           | Set/unset numbered bookmark                |
+| `Filemarks: Jump to Bookmark [0-9]`          | Navigate to bookmark                       |
+| `Filemarks: Auto Bookmark`                   | Create bookmark with next available number |
+| `Filemarks: Jump to Previous Bookmark`       | Navigate to previous bookmark              |
+| `Filemarks: Jump to Next Bookmark`           | Navigate to next bookmark                  |
+| `Filemarks: Search Bookmarks`                | Open search input to filter bookmarks      |
+| `Filemarks: Clear Search`                    | Clear active search filter                 |
+| `Filemarks: List Bookmarks in Current File`  | Show all bookmarks in file                 |
+| `Filemarks: List All Bookmarks`              | Show all bookmarks in workspace            |
+| `Filemarks: Create Folder`                   | Create organization folder                 |
+| `Filemarks: Expand All Folders`              | Expand all folders in sidebar              |
+| `Filemarks: Collapse All Folders`            | Collapse all folders in sidebar            |
+| `Filemarks: Focus Sidebar`                   | Focus the Filemarks sidebar                |
+| `Filemarks: Clear Bookmarks in Current File` | Remove all bookmarks from file             |
+| `Filemarks: Clear All Bookmarks`             | Remove all bookmarks                       |
 
 ## Configuration
 
@@ -136,6 +152,7 @@ Set `filemarks.saveBookmarksInProject` to `false` for global storage.
 
 Access the Filemarks view from the Activity Bar:
 
+- 🔍 Search and filter bookmarks in real-time
 - 📁 Hierarchical folder structure with file-type icons
 - 🖱️ Click to jump to bookmark
 - 🔀 Drag & drop to organize (onto folders or other bookmarks)
@@ -151,6 +168,7 @@ Access the Filemarks view from the Activity Bar:
 | ------------------------------- | ----------------------- |
 | `Ctrl+Shift+0` ~ `Ctrl+Shift+9` | Toggle bookmark 0-9     |
 | `Ctrl+0` ~ `Ctrl+9`             | Jump to bookmark 0-9    |
+| `Ctrl+Alt+3`                    | Auto bookmark           |
 | `Ctrl+Alt+[`                    | Previous bookmark       |
 | `Ctrl+Alt+]`                    | Next bookmark           |
 | `Ctrl+Shift+B`                  | Focus Filemarks sidebar |
@@ -161,6 +179,7 @@ Access the Filemarks view from the Activity Bar:
 | ----------------------------- | ----------------------- |
 | `Cmd+Shift+0` ~ `Cmd+Shift+9` | Toggle bookmark 0-9     |
 | `Cmd+0` ~ `Cmd+9`             | Jump to bookmark 0-9    |
+| `Cmd+Alt+3`                   | Auto bookmark           |
 | `Cmd+Alt+[`                   | Previous bookmark       |
 | `Cmd+Alt+]`                   | Next bookmark           |
 | `Cmd+Shift+B`                 | Focus Filemarks sidebar |
