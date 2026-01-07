@@ -2,6 +2,15 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.9.2] - 2025-01-08
+
+### Changed
+
+- **Auto Bookmark Shortcut**: Changed from `Ctrl+Alt+3` to `Ctrl+Alt+P` (macOS: `Cmd+Alt+P`)
+- **Storage Default**: Changed `saveBookmarksInProject` default from `true` to `false` (now saves to global storage by default)
+
+---
+
 ## [0.9.1] - 2025-01-08
 
 ### Fixed
@@ -202,6 +211,7 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.9.2** - 2025-01-08 - Changed auto bookmark shortcut to Ctrl+Alt+P, storage default to global
 - **0.9.1** - 2025-01-08 - Fixed TreeView item shift when folders collapse/expand
 - **0.9.0** - 2025-01-08 - Search & filter, auto bookmark, simplified sidebar title
 - **0.8.0** - 2025-01-07 - Smart folder memory, context-aware folder creation
