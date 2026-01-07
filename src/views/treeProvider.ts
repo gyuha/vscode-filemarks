@@ -2,7 +2,20 @@ import * as vscode from 'vscode';
 import * as path from 'node:path';
 import type { BookmarkStore } from '../bookmarkStore';
 import type { TreeNode, BookmarkNode, FolderNode } from '../types';
-import { isFolderNode } from '../types';
+import { isFolderNode, isBookmarkNode } from '../types';
+
+function fuzzyMatch(pattern: string, text: string): boolean {
+  const patternLower = pattern.toLowerCase();
+  const textLower = text.toLowerCase();
+
+  let patternIdx = 0;
+  for (let i = 0; i < textLower.length && patternIdx < patternLower.length; i++) {
+    if (textLower[i] === patternLower[patternIdx]) {
+      patternIdx++;
+    }
+  }
+  return patternIdx === patternLower.length;
+}
 
 class TreeDragAndDropController implements vscode.TreeDragAndDropController<TreeNode> {
   private static readonly TREE_MIME_TYPE = 'application/vnd.code.tree.filemarks';
@@ -68,6 +81,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
   readonly dragAndDropController: vscode.TreeDragAndDropController<TreeNode>;
   private treeView: vscode.TreeView<TreeNode> | undefined;
+  private filterText = '';
 
   constructor(private store: BookmarkStore) {
     this.dragAndDropController = new TreeDragAndDropController(store);
@@ -122,6 +136,46 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     this._onDidChangeTreeData.fire(undefined);
   }
 
+  setFilter(text: string): void {
+    this.filterText = text;
+    this.refresh();
+  }
+
+  getFilter(): string {
+    return this.filterText;
+  }
+
+  clearFilter(): void {
+    this.filterText = '';
+    this.refresh();
+  }
+
+  private filterNodes(nodes: TreeNode[]): TreeNode[] {
+    if (!this.filterText) return nodes;
+
+    const result: TreeNode[] = [];
+    for (const node of nodes) {
+      if (isFolderNode(node)) {
+        const filteredChildren = this.filterNodes(node.children);
+        const folderMatches = fuzzyMatch(this.filterText, node.name);
+        if (filteredChildren.length > 0 || folderMatches) {
+          result.push({
+            ...node,
+            children: filteredChildren.length > 0 ? filteredChildren : node.children,
+            expanded: true,
+          });
+        }
+      } else if (isBookmarkNode(node)) {
+        const fileName = path.basename(node.filePath);
+        const searchText = node.label || fileName;
+        if (fuzzyMatch(this.filterText, searchText) || fuzzyMatch(this.filterText, node.filePath)) {
+          result.push(node);
+        }
+      }
+    }
+    return result;
+  }
+
   getTreeItem(element: TreeNode): vscode.TreeItem {
     if (isFolderNode(element)) {
       return this.createFolderTreeItem(element);
@@ -131,11 +185,12 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   getChildren(element?: TreeNode): TreeNode[] {
     if (!element) {
-      return this.store.getState().items;
+      const items = this.store.getState().items;
+      return this.filterNodes(items);
     }
 
     if (isFolderNode(element)) {
-      return element.children;
+      return this.filterText ? this.filterNodes(element.children) : element.children;
     }
 
     return [];

@@ -51,7 +51,6 @@
     "views": {
       "filemarks": [
         {
-          "icon": "images/icon.png",
           "id": "filemarks.treeView",
           "name": "Bookmarks"
         }
@@ -142,6 +141,18 @@
         "command": "filemarks.focusSidebar",
         "title": "Focus Sidebar",
         "category": "Filemarks"
+      },
+      {
+        "command": "filemarks.search",
+        "title": "Search Bookmarks",
+        "category": "Filemarks",
+        "icon": "$(search)"
+      },
+      {
+        "command": "filemarks.clearSearch",
+        "title": "Clear Search",
+        "category": "Filemarks",
+        "icon": "$(close)"
       },
       {
         "command": "filemarks.toggleBookmark0",
@@ -445,6 +456,11 @@
     ],
     "menus": {
       "view/title": [
+        {
+          "command": "filemarks.search",
+          "when": "view == filemarks.treeView",
+          "group": "navigation@0"
+        },
         {
           "command": "filemarks.createFolder",
           "when": "view == filemarks.treeView",

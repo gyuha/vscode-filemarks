@@ -135,6 +135,18 @@ export async function activate(context: vscode.ExtensionContext) {
       })
     );
 
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.search', async () => {
+        await handleSearch();
+      })
+    );
+
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.clearSearch', () => {
+        handleClearSearch();
+      })
+    );
+
     for (let i = 0; i <= 9; i++) {
       const num = i;
 
@@ -245,9 +257,6 @@ async function handleJumpToAdjacentBookmark(direction: 'previous' | 'next'): Pro
     if (entry) {
       currentNum = Number(entry[0]);
     } else {
-      const numbers = Object.keys(currentBookmark.numbers)
-        .map(Number)
-        .sort((a, b) => a - b);
       if (direction === 'next') {
         currentNum = -1;
       } else {
@@ -550,4 +559,27 @@ async function handleExpandAllFolders(): Promise<void> {
 async function handleCollapseAllFolders(): Promise<void> {
   if (!treeProvider) return;
   await treeProvider.collapseAllFolders();
+}
+
+async function handleSearch(): Promise<void> {
+  if (!treeProvider) return;
+
+  const currentFilter = treeProvider.getFilter();
+  const input = await vscode.window.showInputBox({
+    prompt: vscode.l10n.t('Search bookmarks'),
+    placeHolder: vscode.l10n.t('Enter search text (fuzzy match)'),
+    value: currentFilter,
+  });
+
+  if (input === undefined) return;
+
+  treeProvider.setFilter(input);
+  if (input) {
+    await vscode.commands.executeCommand('filemarks.treeView.focus');
+  }
+}
+
+function handleClearSearch(): void {
+  if (!treeProvider) return;
+  treeProvider.clearFilter();
 }
