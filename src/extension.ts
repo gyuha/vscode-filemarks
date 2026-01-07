@@ -10,6 +10,7 @@ import { isBookmarkNode, isFolderNode } from './types';
 let bookmarkStore: BookmarkStore | undefined;
 let decorationProvider: GutterDecorationProvider | undefined;
 let treeProvider: FilemarkTreeProvider | undefined;
+let searchInputBox: vscode.InputBox | undefined;
 
 export async function activate(context: vscode.ExtensionContext) {
   if (!vscode.workspace.workspaceFolders) {
@@ -292,6 +293,8 @@ async function handleJumpToAdjacentBookmark(direction: 'previous' | 'next'): Pro
 }
 
 export function deactivate() {
+  searchInputBox?.dispose();
+  searchInputBox = undefined;
   bookmarkStore = undefined;
   decorationProvider = undefined;
   treeProvider = undefined;
@@ -564,22 +567,36 @@ async function handleCollapseAllFolders(): Promise<void> {
 async function handleSearch(): Promise<void> {
   if (!treeProvider) return;
 
-  const currentFilter = treeProvider.getFilter();
-  const input = await vscode.window.showInputBox({
-    prompt: vscode.l10n.t('Search bookmarks'),
-    placeHolder: vscode.l10n.t('Enter search text (fuzzy match)'),
-    value: currentFilter,
+  if (searchInputBox) {
+    searchInputBox.show();
+    return;
+  }
+
+  searchInputBox = vscode.window.createInputBox();
+  searchInputBox.placeholder = vscode.l10n.t('Search bookmarks (fuzzy match)');
+  searchInputBox.value = treeProvider.getFilter();
+
+  searchInputBox.onDidChangeValue(value => {
+    if (treeProvider) {
+      treeProvider.setFilter(value);
+    }
   });
 
-  if (input === undefined) return;
+  searchInputBox.onDidAccept(() => {
+    searchInputBox?.hide();
+  });
 
-  treeProvider.setFilter(input);
-  if (input) {
-    await vscode.commands.executeCommand('filemarks.treeView.focus');
-  }
+  searchInputBox.onDidHide(() => {
+    // Intentionally keep filter active when hidden
+  });
+
+  searchInputBox.show();
 }
 
 function handleClearSearch(): void {
   if (!treeProvider) return;
   treeProvider.clearFilter();
+  if (searchInputBox) {
+    searchInputBox.value = '';
+  }
 }
