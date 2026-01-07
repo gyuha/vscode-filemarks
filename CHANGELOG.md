@@ -2,6 +2,29 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.9.0] - 2025-01-08
+
+### Added
+
+- **Search & Filter**: Real-time fuzzy search for bookmarks
+  - Click search icon in sidebar title bar to open search input
+  - Live filtering as you type (fuzzy match on bookmark name and file path)
+  - Filter persists when search input is closed
+  - Visual indicator in title bar shows active filter text
+  - "No matching bookmarks found" message when filter returns no results
+- **Clear Search Button**: Appears in title bar when filter is active (search-stop icon)
+- **Auto Bookmark**: Automatically assigns next available bookmark number (0-9)
+  - Shortcut: `Ctrl+Alt+3` (Windows/Linux) or `Cmd+Alt+3` (macOS)
+  - Finds smallest unused number in current file
+  - Falls back to 0 if all numbers are used
+
+### Changed
+
+- **Simplified Sidebar Title**: Removed "BOOKMARKS" subtitle, now shows only "FILEMARKS"
+- **Welcome Message**: Only shows when no filter is active
+
+---
+
 ## [0.8.0] - 2025-01-07
 
 ### Added
@@ -169,6 +192,7 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.9.0** - 2025-01-08 - Search & filter, auto bookmark, simplified sidebar title
 - **0.8.0** - 2025-01-07 - Smart folder memory, context-aware folder creation
 - **0.7.0** - 2025-01-07 - Custom activity bar icon, cleaner context menu
 - **0.6.0** - 2025-01-06 - Drag to editor, file icons, drop on bookmark, navigation default change
