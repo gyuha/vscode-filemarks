@@ -2,6 +2,16 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.9.1] - 2025-01-08
+
+### Fixed
+
+- **TreeView Stability**: Files no longer shift position when collapsing/expanding folders
+  - Fixed folder item ID to be stable regardless of expanded state
+  - Folder expand/collapse now saves state without triggering full tree refresh
+
+---
+
 ## [0.9.0] - 2025-01-08
 
 ### Added
@@ -192,6 +202,7 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.9.1** - 2025-01-08 - Fixed TreeView item shift when folders collapse/expand
 - **0.9.0** - 2025-01-08 - Search & filter, auto bookmark, simplified sidebar title
 - **0.8.0** - 2025-01-07 - Smart folder memory, context-aware folder creation
 - **0.7.0** - 2025-01-07 - Custom activity bar icon, cleaner context menu
