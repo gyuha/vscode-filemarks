@@ -582,7 +582,7 @@ export class BookmarkStore {
     const folder = this.findFolderById(folderId);
     if (folder) {
       folder.expanded = expanded;
-      this.save();
+      this.storage.save(this.state);
     }
   }
 
