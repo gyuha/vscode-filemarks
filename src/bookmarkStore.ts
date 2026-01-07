@@ -421,6 +421,9 @@ export class BookmarkStore {
       if (parent) {
         parent.children.push(folder);
         this.lastUsedFolderId = folder.id;
+      } else {
+        this.state.items.push(folder);
+        this.lastUsedFolderId = folder.id;
       }
     } else {
       this.state.items.push(folder);
@@ -431,6 +434,9 @@ export class BookmarkStore {
   }
 
   deleteFolder(id: string): void {
+    if (this.lastUsedFolderId === id) {
+      this.lastUsedFolderId = null;
+    }
     this.removeNode(id);
     this.save();
   }
@@ -554,6 +560,7 @@ export class BookmarkStore {
 
   clearAllBookmarks(): void {
     this.state.items = [];
+    this.lastUsedFolderId = null;
     this.save();
   }
 
