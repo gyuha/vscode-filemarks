@@ -82,7 +82,6 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   readonly dragAndDropController: vscode.TreeDragAndDropController<TreeNode>;
   private treeView: vscode.TreeView<TreeNode> | undefined;
   private filterText = '';
-  private readonly defaultTitle = 'Bookmarks';
 
   constructor(private store: BookmarkStore) {
     this.dragAndDropController = new TreeDragAndDropController(store);
@@ -156,9 +155,9 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   private updateTreeViewTitle(): void {
     if (!this.treeView) return;
     if (this.filterText) {
-      this.treeView.title = `${this.defaultTitle} (${vscode.l10n.t('filtered')}: "${this.filterText}")`;
+      this.treeView.title = `${vscode.l10n.t('filtered')}: "${this.filterText}"`;
     } else {
-      this.treeView.title = this.defaultTitle;
+      this.treeView.title = undefined;
     }
   }
 
