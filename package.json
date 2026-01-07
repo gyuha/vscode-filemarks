@@ -263,6 +263,11 @@
         "command": "filemarks.jumpToNextBookmark",
         "title": "Jump to Next Bookmark",
         "category": "Filemarks"
+      },
+      {
+        "command": "filemarks.autoBookmark",
+        "title": "Auto Bookmark",
+        "category": "Filemarks"
       }
     ],
     "keybindings": [
@@ -401,6 +406,12 @@
         "command": "filemarks.jumpToNextBookmark",
         "key": "ctrl+alt+]",
         "mac": "cmd+alt+]",
+        "when": "editorTextFocus"
+      },
+      {
+        "command": "filemarks.autoBookmark",
+        "key": "ctrl+alt+3",
+        "mac": "cmd+alt+3",
         "when": "editorTextFocus"
       }
     ],

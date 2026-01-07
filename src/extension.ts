@@ -148,6 +148,12 @@ export async function activate(context: vscode.ExtensionContext) {
       })
     );
 
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.autoBookmark', () => {
+        handleAutoBookmark();
+      })
+    );
+
     for (let i = 0; i <= 9; i++) {
       const num = i;
 
@@ -199,6 +205,34 @@ function handleToggleBookmark(num: number): void {
   bookmarkStore.toggleBookmark(filePath, num, line);
   vscode.window.showInformationMessage(
     vscode.l10n.t('Bookmark {0} toggled at line {1}', num, line + 1)
+  );
+}
+
+function handleAutoBookmark(): void {
+  if (!bookmarkStore) return;
+
+  const editor = vscode.window.activeTextEditor;
+  if (!editor) {
+    vscode.window.showWarningMessage(vscode.l10n.t('No active editor'));
+    return;
+  }
+
+  const filePath = vscode.workspace.asRelativePath(editor.document.uri.fsPath);
+  const line = editor.selection.active.line;
+  const bookmark = bookmarkStore.findBookmarkByFilePath(filePath);
+
+  const usedNumbers = new Set(bookmark ? Object.keys(bookmark.numbers).map(Number) : []);
+  let targetNum = 0;
+  for (let i = 0; i <= 9; i++) {
+    if (!usedNumbers.has(i)) {
+      targetNum = i;
+      break;
+    }
+  }
+
+  bookmarkStore.toggleBookmark(filePath, targetNum, line);
+  vscode.window.showInformationMessage(
+    vscode.l10n.t('Bookmark {0} created at line {1}', targetNum, line + 1)
   );
 }
 
