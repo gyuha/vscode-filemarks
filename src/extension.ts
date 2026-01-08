@@ -221,6 +221,20 @@ function handleAutoBookmark(): void {
   const line = editor.selection.active.line;
   const bookmark = bookmarkStore.findBookmarkByFilePath(filePath);
 
+  // Check if there's already a bookmark at the current line
+  if (bookmark) {
+    const existingNum = Object.entries(bookmark.numbers).find(([, l]) => l === line);
+    if (existingNum) {
+      const num = Number(existingNum[0]);
+      bookmarkStore.removeBookmarkNumber(filePath, num);
+      vscode.window.showInformationMessage(
+        vscode.l10n.t('Bookmark {0} removed from line {1}', num, line + 1)
+      );
+      return;
+    }
+  }
+
+  // No bookmark at current line, create new one with next available number
   const usedNumbers = new Set(bookmark ? Object.keys(bookmark.numbers).map(Number) : []);
   let targetNum = 0;
   for (let i = 0; i <= 9; i++) {
