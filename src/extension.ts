@@ -707,81 +707,10 @@ function handleToggleBookmarkFromGutter(lineNumber?: number): void {
   );
 }
 
-const BINARY_EXTENSIONS = new Set([
-  '.png',
-  '.jpg',
-  '.jpeg',
-  '.gif',
-  '.bmp',
-  '.ico',
-  '.webp',
-  '.svg',
-  '.tiff',
-  '.tif',
-  '.pdf',
-  '.doc',
-  '.docx',
-  '.xls',
-  '.xlsx',
-  '.ppt',
-  '.pptx',
-  '.zip',
-  '.rar',
-  '.7z',
-  '.tar',
-  '.gz',
-  '.bz2',
-  '.xz',
-  '.exe',
-  '.dll',
-  '.so',
-  '.dylib',
-  '.bin',
-  '.dat',
-  '.mp3',
-  '.mp4',
-  '.wav',
-  '.avi',
-  '.mov',
-  '.mkv',
-  '.flv',
-  '.wmv',
-  '.webm',
-  '.ttf',
-  '.otf',
-  '.woff',
-  '.woff2',
-  '.eot',
-  '.class',
-  '.pyc',
-  '.o',
-  '.obj',
-  '.lib',
-  '.a',
-  '.db',
-  '.sqlite',
-  '.sqlite3',
-  '.iso',
-  '.img',
-  '.dmg',
-]);
-
-function isBinaryFile(filePath: string): boolean {
-  const ext = path.extname(filePath).toLowerCase();
-  return BINARY_EXTENSIONS.has(ext);
-}
-
 async function handleAddBookmarkFromExplorer(uri: vscode.Uri): Promise<void> {
   if (!bookmarkStore) return;
 
   const filePath = vscode.workspace.asRelativePath(uri.fsPath);
-
-  if (isBinaryFile(filePath)) {
-    vscode.window.showWarningMessage(
-      vscode.l10n.t('Cannot add bookmark to binary file: {0}', path.basename(filePath))
-    );
-    return;
-  }
 
   const existingBookmark = bookmarkStore.findBookmarkByFilePath(filePath);
   if (existingBookmark && existingBookmark.numbers[0] !== undefined) {
