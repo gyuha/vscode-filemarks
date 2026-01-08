@@ -2,6 +2,22 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.9.3] - 2025-01-09
+
+### Added
+
+- **Add Bookmark from Explorer**: Right-click any file in Explorer to add a bookmark
+  - Adds bookmark at line 1 with number 0
+  - Available via context menu: "Add Bookmark"
+
+### Changed
+
+- **Consistent File Icons**: Switched from file-type icons to unified `file-code` icon
+  - Fixes inconsistent indentation caused by different icon sizes from VS Code themes
+  - All bookmarks now display with the same icon for visual consistency
+
+---
+
 ## [0.9.2] - 2025-01-08
 
 ### Changed
@@ -211,6 +227,7 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.9.3** - 2025-01-09 - Add bookmark from Explorer, consistent file icons
 - **0.9.2** - 2025-01-08 - Changed auto bookmark shortcut to Ctrl+Alt+P, storage default to global
 - **0.9.1** - 2025-01-08 - Fixed TreeView item shift when folders collapse/expand
 - **0.9.0** - 2025-01-08 - Search & filter, auto bookmark, simplified sidebar title

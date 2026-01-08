@@ -60,9 +60,10 @@ Quick access buttons in the sidebar title bar:
 
 ### 📂 File Icons
 
-- Sidebar displays file-type icons from your VS Code icon theme
-- Easily identify file types at a glance
+- Sidebar displays consistent file icons for all bookmarks
+- Easily identify bookmarked files at a glance
 - Drag bookmarks to editor area to open files
+- Right-click files in Explorer to add bookmarks
 
 ### 🔄 Smart Features
 
@@ -97,6 +98,7 @@ Quick access buttons in the sidebar title bar:
 5. **Search bookmarks**: Click the search icon in sidebar to filter bookmarks
 6. **Focus sidebar**: Press `Ctrl+Shift+B` to focus the Filemarks sidebar
 7. **Organize**: Drag and drop bookmarks into folders, or right-click → "Move to Folder"
+8. **Add from Explorer**: Right-click any file in Explorer → "Add Bookmark"
 
 ## Commands
 
@@ -117,6 +119,7 @@ Quick access buttons in the sidebar title bar:
 | `Filemarks: Focus Sidebar`                   | Focus the Filemarks sidebar                |
 | `Filemarks: Clear Bookmarks in Current File` | Remove all bookmarks from file             |
 | `Filemarks: Clear All Bookmarks`             | Remove all bookmarks                       |
+| `Filemarks: Add Bookmark from Explorer`      | Add bookmark to file from Explorer         |
 
 ## Configuration
 
@@ -158,7 +161,7 @@ Access the Filemarks view from the Activity Bar:
 - 🔀 Drag & drop to organize (onto folders or other bookmarks)
 - 📂 Drag to editor area to open file
 - 📋 Right-click for context menu
-- 🔄 Folder icons change when expanded/collapsed
+- ➕ Add bookmarks directly from Explorer context menu
 
 ## Keyboard Shortcuts Summary
 
