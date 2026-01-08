@@ -163,6 +163,15 @@ export async function activate(context: vscode.ExtensionContext) {
       )
     );
 
+    context.subscriptions.push(
+      vscode.commands.registerCommand(
+        'filemarks.addBookmarkFromExplorer',
+        async (uri: vscode.Uri) => {
+          await handleAddBookmarkFromExplorer(uri);
+        }
+      )
+    );
+
     for (let i = 0; i <= 9; i++) {
       const num = i;
 
@@ -695,5 +704,95 @@ function handleToggleBookmarkFromGutter(lineNumber?: number): void {
   bookmarkStore.toggleBookmark(filePath, targetNum, line);
   vscode.window.showInformationMessage(
     vscode.l10n.t('Bookmark {0} created at line {1}', targetNum, line + 1)
+  );
+}
+
+const BINARY_EXTENSIONS = new Set([
+  '.png',
+  '.jpg',
+  '.jpeg',
+  '.gif',
+  '.bmp',
+  '.ico',
+  '.webp',
+  '.svg',
+  '.tiff',
+  '.tif',
+  '.pdf',
+  '.doc',
+  '.docx',
+  '.xls',
+  '.xlsx',
+  '.ppt',
+  '.pptx',
+  '.zip',
+  '.rar',
+  '.7z',
+  '.tar',
+  '.gz',
+  '.bz2',
+  '.xz',
+  '.exe',
+  '.dll',
+  '.so',
+  '.dylib',
+  '.bin',
+  '.dat',
+  '.mp3',
+  '.mp4',
+  '.wav',
+  '.avi',
+  '.mov',
+  '.mkv',
+  '.flv',
+  '.wmv',
+  '.webm',
+  '.ttf',
+  '.otf',
+  '.woff',
+  '.woff2',
+  '.eot',
+  '.class',
+  '.pyc',
+  '.o',
+  '.obj',
+  '.lib',
+  '.a',
+  '.db',
+  '.sqlite',
+  '.sqlite3',
+  '.iso',
+  '.img',
+  '.dmg',
+]);
+
+function isBinaryFile(filePath: string): boolean {
+  const ext = path.extname(filePath).toLowerCase();
+  return BINARY_EXTENSIONS.has(ext);
+}
+
+async function handleAddBookmarkFromExplorer(uri: vscode.Uri): Promise<void> {
+  if (!bookmarkStore) return;
+
+  const filePath = vscode.workspace.asRelativePath(uri.fsPath);
+
+  if (isBinaryFile(filePath)) {
+    vscode.window.showWarningMessage(
+      vscode.l10n.t('Cannot add bookmark to binary file: {0}', path.basename(filePath))
+    );
+    return;
+  }
+
+  const existingBookmark = bookmarkStore.findBookmarkByFilePath(filePath);
+  if (existingBookmark && existingBookmark.numbers[0] !== undefined) {
+    vscode.window.showInformationMessage(
+      vscode.l10n.t('Bookmark already exists for {0}', path.basename(filePath))
+    );
+    return;
+  }
+
+  bookmarkStore.toggleBookmark(filePath, 0, 0);
+  vscode.window.showInformationMessage(
+    vscode.l10n.t('Bookmark 0 added to {0}', path.basename(filePath))
   );
 }

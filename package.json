@@ -275,6 +275,12 @@
         "title": "Toggle Bookmark",
         "category": "Filemarks",
         "icon": "$(bookmark)"
+      },
+      {
+        "command": "filemarks.addBookmarkFromExplorer",
+        "title": "Add Bookmark",
+        "category": "Filemarks",
+        "icon": "$(bookmark)"
       }
     ],
     "keybindings": [
@@ -551,6 +557,13 @@
       "editor/lineNumber/context": [
         {
           "command": "filemarks.toggleBookmarkFromGutter",
+          "group": "filemarks"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "filemarks.addBookmarkFromExplorer",
+          "when": "!explorerResourceIsFolder",
           "group": "filemarks"
         }
       ]
