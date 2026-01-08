@@ -250,15 +250,10 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     const lastUsedFolderId = this.store.getLastUsedFolderId();
     const isSelected = folder.id === lastUsedFolderId;
 
-    const item = new vscode.TreeItem(
-      folder.name,
-      folder.expanded
-        ? vscode.TreeItemCollapsibleState.Expanded
-        : vscode.TreeItemCollapsibleState.Collapsed
-    );
+    const item = new vscode.TreeItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed);
     item.id = folder.id;
     item.contextValue = 'folder';
-    item.iconPath = new vscode.ThemeIcon(folder.expanded ? 'folder-opened' : 'folder');
+    item.iconPath = new vscode.ThemeIcon('folder');
     item.tooltip = '';
 
     if (isSelected) {
