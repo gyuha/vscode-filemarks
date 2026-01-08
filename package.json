@@ -269,6 +269,12 @@
         "command": "filemarks.autoBookmark",
         "title": "Auto Bookmark",
         "category": "Filemarks"
+      },
+      {
+        "command": "filemarks.toggleBookmarkFromGutter",
+        "title": "Toggle Bookmark",
+        "category": "Filemarks",
+        "icon": "$(bookmark)"
       }
     ],
     "keybindings": [
@@ -540,6 +546,12 @@
           "command": "filemarks.deleteFolder",
           "when": "view == filemarks.treeView && viewItem == folder",
           "group": "edit@2"
+        }
+      ],
+      "editor/lineNumber/context": [
+        {
+          "command": "filemarks.toggleBookmarkFromGutter",
+          "group": "filemarks"
         }
       ]
     }
