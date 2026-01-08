@@ -113,11 +113,19 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 
   private updateLastUsedFolderFromNode(node: TreeNode): void {
+    const previousFolderId = this.store.getLastUsedFolderId();
+    let newFolderId: string | null;
+
     if (isFolderNode(node)) {
-      this.store.setLastUsedFolderId(node.id);
+      newFolderId = node.id;
     } else {
       const parentFolder = this.store.findParentFolder(node.id);
-      this.store.setLastUsedFolderId(parentFolder?.id ?? null);
+      newFolderId = parentFolder?.id ?? null;
+    }
+
+    if (previousFolderId !== newFolderId) {
+      this.store.setLastUsedFolderId(newFolderId);
+      this.refresh();
     }
   }
 
@@ -239,6 +247,9 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 
   private createFolderTreeItem(folder: FolderNode): vscode.TreeItem {
+    const lastUsedFolderId = this.store.getLastUsedFolderId();
+    const isSelected = folder.id === lastUsedFolderId;
+
     const item = new vscode.TreeItem(
       folder.name,
       folder.expanded
@@ -249,6 +260,11 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     item.contextValue = 'folder';
     item.iconPath = new vscode.ThemeIcon(folder.expanded ? 'folder-opened' : 'folder');
     item.tooltip = '';
+
+    if (isSelected) {
+      item.description = '✓';
+    }
+
     return item;
   }
 
