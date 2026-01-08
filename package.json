@@ -52,7 +52,8 @@
       "filemarks": [
         {
           "id": "filemarks.treeView",
-          "name": ""
+          "name": "",
+          "icon": "images/sidebar-icon.svg"
         }
       ]
     },
