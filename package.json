@@ -475,7 +475,7 @@
     "viewsWelcome": [
       {
         "view": "filemarks.treeView",
-        "contents": "No bookmarks yet.\n\nQuick Start:\n• Toggle bookmark: `Ctrl+Shift+[0-9]` (Mac: `Cmd+Shift+[0-9]`)\n• Jump to bookmark: `Ctrl+[0-9]` (Mac: `Cmd+[0-9]`)\n• Auto bookmark: `Ctrl+Alt+P` (Mac: `Cmd+Alt+P`) - Toggle bookmark with next available number\n• Previous bookmark: `Ctrl+Alt+[` (Mac: `Cmd+Alt+[`)\n• Next bookmark: `Ctrl+Alt+]` (Mac: `Cmd+Alt+]`)\n• Focus sidebar: `Ctrl+Shift+B` (Mac: `Cmd+Shift+B`)\n\n[Create Folder](command:filemarks.createFolder)\n[Learn More](https://github.com/gyuha/vscode-filemarks#readme)",
+        "contents": "No bookmarks yet.\n\nQuick Start:\n• Toggle bookmark: `Ctrl+Shift+[0-9]`\n• Jump to bookmark: `Ctrl+[0-9]`\n• Auto bookmark: `Ctrl+Alt+P`\n• Previous bookmark: `Ctrl+Alt+[`\n• Next bookmark: `Ctrl+Alt+]`\n• Focus sidebar: `Ctrl+Shift+B`\n\n*macOS: Use `Cmd` instead of `Ctrl`*\n\n[Create Folder](command:filemarks.createFolder)\n[Learn More](https://github.com/gyuha/vscode-filemarks#readme)",
         "when": "!filemarks.hasFilter"
       },
       {
