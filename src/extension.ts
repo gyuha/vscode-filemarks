@@ -95,8 +95,8 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-      vscode.commands.registerCommand('filemarks.clear', async () => {
-        await handleClear();
+      vscode.commands.registerCommand('filemarks.clear', () => {
+        handleClear();
       })
     );
 
@@ -581,7 +581,7 @@ function collectAllFolders(nodes: TreeNode[]): Array<TreeNode & { type: 'folder'
   return folders;
 }
 
-async function handleClear(): Promise<void> {
+function handleClear(): void {
   if (!bookmarkStore) return;
 
   const editor = vscode.window.activeTextEditor;
@@ -591,15 +591,6 @@ async function handleClear(): Promise<void> {
   }
 
   const filePath = vscode.workspace.asRelativePath(editor.document.uri.fsPath);
-  const deleteButton = vscode.l10n.t('Delete');
-  const confirm = await vscode.window.showWarningMessage(
-    vscode.l10n.t('Delete all bookmarks in {0}?', path.basename(filePath)),
-    { modal: true },
-    deleteButton
-  );
-
-  if (confirm !== deleteButton) return;
-
   bookmarkStore.clearBookmarksInFile(filePath);
   vscode.window.showInformationMessage(vscode.l10n.t('Bookmarks cleared in current file'));
 }

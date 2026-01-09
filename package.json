@@ -557,7 +557,11 @@
       "editor/lineNumber/context": [
         {
           "command": "filemarks.toggleBookmarkFromGutter",
-          "group": "filemarks"
+          "group": "filemarks@1"
+        },
+        {
+          "command": "filemarks.clear",
+          "group": "filemarks@2"
         }
       ],
       "explorer/context": [
