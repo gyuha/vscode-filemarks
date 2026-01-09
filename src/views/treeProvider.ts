@@ -201,6 +201,14 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     return result;
   }
 
+  private sortFoldersFirst(nodes: TreeNode[]): TreeNode[] {
+    return [...nodes].sort((a, b) => {
+      if (a.type === 'folder' && b.type !== 'folder') return -1;
+      if (a.type !== 'folder' && b.type === 'folder') return 1;
+      return 0;
+    });
+  }
+
   getTreeItem(element: TreeNode): vscode.TreeItem {
     if (isFolderNode(element)) {
       return this.createFolderTreeItem(element);
@@ -211,11 +219,12 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   getChildren(element?: TreeNode): TreeNode[] {
     if (!element) {
       const items = this.store.getState().items;
-      return this.filterNodes(items);
+      return this.sortFoldersFirst(this.filterNodes(items));
     }
 
     if (isFolderNode(element)) {
-      return this.filterText ? this.filterNodes(element.children) : element.children;
+      const children = this.filterText ? this.filterNodes(element.children) : element.children;
+      return this.sortFoldersFirst(children);
     }
 
     return [];
