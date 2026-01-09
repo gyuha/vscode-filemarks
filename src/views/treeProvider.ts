@@ -248,18 +248,45 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 
   async expandAllFolders(): Promise<void> {
+    if (!this.treeView) return;
+
+    const folders = this.collectAllFolders(this.store.getState().items);
     this.store.setAllFoldersExpanded(true);
+
+    for (const folder of folders) {
+      try {
+        await this.treeView.reveal(folder, { expand: 3, select: false, focus: false });
+      } catch {}
+    }
   }
 
   async collapseAllFolders(): Promise<void> {
     this.store.setAllFoldersExpanded(false);
+    await vscode.commands.executeCommand(
+      'workbench.actions.treeView.filemarks.treeView.collapseAll'
+    );
+  }
+
+  private collectAllFolders(nodes: TreeNode[]): FolderNode[] {
+    const folders: FolderNode[] = [];
+    for (const node of nodes) {
+      if (isFolderNode(node)) {
+        folders.push(node);
+        folders.push(...this.collectAllFolders(node.children));
+      }
+    }
+    return folders;
   }
 
   private createFolderTreeItem(folder: FolderNode): vscode.TreeItem {
     const lastUsedFolderId = this.store.getLastUsedFolderId();
     const isSelected = folder.id === lastUsedFolderId;
 
-    const item = new vscode.TreeItem(folder.name, vscode.TreeItemCollapsibleState.Collapsed);
+    const collapsibleState = folder.expanded
+      ? vscode.TreeItemCollapsibleState.Expanded
+      : vscode.TreeItemCollapsibleState.Collapsed;
+
+    const item = new vscode.TreeItem(folder.name, collapsibleState);
     item.id = folder.id;
     item.contextValue = 'folder';
     item.iconPath = new vscode.ThemeIcon('folder');
