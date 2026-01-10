@@ -2,6 +2,17 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.9.4] - 2025-01-10
+
+### Fixed
+
+- **Folder Icon Display**: Fixed folder icons disappearing after using "Collapse All Folders"
+  - Removed `resourceUri` from folder TreeItem to prevent icon conflicts
+  - Folder icons now correctly show `folder-opened` when expanded and `folder` when collapsed
+  - Icons properly update when expanding/collapsing individual folders
+
+---
+
 ## [0.9.3] - 2025-01-09
 
 ### Added
@@ -227,6 +238,7 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.9.4** - 2025-01-10 - Fixed folder icons disappearing after collapse all
 - **0.9.3** - 2025-01-09 - Add bookmark from Explorer, consistent file icons
 - **0.9.2** - 2025-01-08 - Changed auto bookmark shortcut to Ctrl+Alt+P, storage default to global
 - **0.9.1** - 2025-01-08 - Fixed TreeView item shift when folders collapse/expand
