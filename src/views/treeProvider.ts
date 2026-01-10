@@ -125,7 +125,6 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
     if (previousFolderId !== newFolderId) {
       this.store.setLastUsedFolderId(newFolderId);
-      this.refresh();
     }
   }
 
@@ -283,9 +282,6 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 
   private createFolderTreeItem(folder: FolderNode): vscode.TreeItem {
-    const lastUsedFolderId = this.store.getLastUsedFolderId();
-    const isSelected = folder.id === lastUsedFolderId;
-
     const collapsibleState = folder.expanded
       ? vscode.TreeItemCollapsibleState.Expanded
       : vscode.TreeItemCollapsibleState.Collapsed;
@@ -295,10 +291,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     item.contextValue = 'folder';
     item.iconPath = new vscode.ThemeIcon(folder.expanded ? 'folder-opened' : 'folder');
     item.tooltip = '';
-
-    if (isSelected) {
-      item.description = '✓';
-    }
+    item.resourceUri = vscode.Uri.parse(`filemarks:/${folder.id}`);
 
     return item;
   }
