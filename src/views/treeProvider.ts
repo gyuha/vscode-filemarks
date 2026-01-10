@@ -96,12 +96,14 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     treeView.onDidExpandElement(e => {
       if (isFolderNode(e.element)) {
         this.store.setFolderExpanded(e.element.id, true);
+        this._onDidChangeTreeData.fire(e.element);
       }
     });
 
     treeView.onDidCollapseElement(e => {
       if (isFolderNode(e.element)) {
         this.store.setFolderExpanded(e.element.id, false);
+        this._onDidChangeTreeData.fire(e.element);
       }
     });
 
@@ -290,7 +292,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     const item = new vscode.TreeItem(folder.name, collapsibleState);
     item.id = folder.id;
     item.contextValue = 'folder';
-    item.iconPath = new vscode.ThemeIcon('folder');
+    item.iconPath = new vscode.ThemeIcon(folder.expanded ? 'folder-opened' : 'folder');
     item.tooltip = '';
 
     return item;
