@@ -268,6 +268,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     await vscode.commands.executeCommand(
       'workbench.actions.treeView.filemarks.treeView.collapseAll'
     );
+    this.refresh();
   }
 
   private collectAllFolders(nodes: TreeNode[]): FolderNode[] {
@@ -289,9 +290,8 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     const item = new vscode.TreeItem(folder.name, collapsibleState);
     item.id = folder.id;
     item.contextValue = 'folder';
-    item.iconPath = new vscode.ThemeIcon(folder.expanded ? 'folder-opened' : 'folder');
+    item.iconPath = new vscode.ThemeIcon('folder');
     item.tooltip = '';
-    item.resourceUri = vscode.Uri.parse(`filemarks:/${folder.id}`);
 
     return item;
   }
