@@ -82,6 +82,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   readonly dragAndDropController: vscode.TreeDragAndDropController<TreeNode>;
   private treeView: vscode.TreeView<TreeNode> | undefined;
   private filterText = '';
+  private focusedFolderId: string | null = null;
 
   constructor(private store: BookmarkStore) {
     this.dragAndDropController = new TreeDragAndDropController(store);
@@ -128,6 +129,41 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     if (previousFolderId !== newFolderId) {
       this.store.setLastUsedFolderId(newFolderId);
     }
+
+    if (this.focusedFolderId !== newFolderId) {
+      const oldFocusedFolderId = this.focusedFolderId;
+      this.focusedFolderId = newFolderId;
+
+      if (oldFocusedFolderId) {
+        const oldFolder = this.findFolderById(oldFocusedFolderId);
+        if (oldFolder) {
+          this._onDidChangeTreeData.fire(oldFolder);
+        }
+      }
+      if (newFolderId) {
+        const newFolder = this.findFolderById(newFolderId);
+        if (newFolder) {
+          this._onDidChangeTreeData.fire(newFolder);
+        }
+      }
+    }
+  }
+
+  private findFolderById(id: string): FolderNode | undefined {
+    const traverse = (nodes: TreeNode[]): FolderNode | undefined => {
+      for (const node of nodes) {
+        if (isFolderNode(node)) {
+          if (node.id === id) {
+            return node;
+          }
+          const found = traverse(node.children);
+          if (found) return found;
+        }
+      }
+      return undefined;
+    };
+
+    return traverse(this.store.getState().items);
   }
 
   recordCurrentFolder(node?: TreeNode): void {
@@ -289,10 +325,15 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
       ? vscode.TreeItemCollapsibleState.Expanded
       : vscode.TreeItemCollapsibleState.Collapsed;
 
+    const isFocused = this.focusedFolderId === folder.id;
+    const folderIcon = folder.expanded ? 'folder-opened' : 'folder';
+
     const item = new vscode.TreeItem(folder.name, collapsibleState);
     item.id = folder.id;
     item.contextValue = 'folder';
-    item.iconPath = new vscode.ThemeIcon(folder.expanded ? 'folder-opened' : 'folder');
+    item.iconPath = isFocused
+      ? new vscode.ThemeIcon(folderIcon, new vscode.ThemeColor('list.highlightForeground'))
+      : new vscode.ThemeIcon(folderIcon);
     item.tooltip = '';
 
     return item;
