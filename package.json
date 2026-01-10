@@ -476,6 +476,7 @@
     },
     "configurationDefaults": {
       "workbench.tree.indent": 22,
+      "workbench.tree.enableStickyScroll": true,
       "workbench.hover.delay": 75
     },
     "viewsWelcome": [
