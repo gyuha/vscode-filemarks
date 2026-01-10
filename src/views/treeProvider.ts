@@ -113,6 +113,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 
   private updateLastUsedFolderFromNode(node: TreeNode): void {
+    const previousFolderId = this.store.getLastUsedFolderId();
     let newFolderId: string | null;
 
     if (isFolderNode(node)) {
@@ -122,7 +123,20 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
       newFolderId = parentFolder?.id ?? null;
     }
 
-    this.store.setLastUsedFolderId(newFolderId);
+    if (previousFolderId !== newFolderId) {
+      this.store.setLastUsedFolderId(newFolderId);
+    }
+  }
+
+  recordCurrentFolder(node?: TreeNode): void {
+    if (node) {
+      this.updateLastUsedFolderFromNode(node);
+    } else {
+      const selection = this.treeView?.selection;
+      if (selection && selection.length > 0) {
+        this.updateLastUsedFolderFromNode(selection[0]);
+      }
+    }
   }
 
   refresh(): void {
