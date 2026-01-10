@@ -37,5 +37,8 @@
   "Root": "루트",
   "Move to root level": "루트 레벨로 이동",
 
-  "Failed to go to bookmark: {0}": "북마크로 이동 실패: {0}"
+  "Failed to go to bookmark: {0}": "북마크로 이동 실패: {0}",
+
+  "Filter bookmarks (fuzzy match)": "북마크 필터링 (퍼지 매치)",
+  "filtered": "필터됨"
 }

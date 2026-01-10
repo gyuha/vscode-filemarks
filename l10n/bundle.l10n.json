@@ -37,5 +37,8 @@
   "Root": "Root",
   "Move to root level": "Move to root level",
 
-  "Failed to go to bookmark: {0}": "Failed to go to bookmark: {0}"
+  "Failed to go to bookmark: {0}": "Failed to go to bookmark: {0}",
+
+  "Filter bookmarks (fuzzy match)": "Filter bookmarks (fuzzy match)",
+  "filtered": "Filtered"
 }

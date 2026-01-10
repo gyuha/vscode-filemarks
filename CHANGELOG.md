@@ -2,6 +2,18 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.9.5] - 2025-01-10
+
+### Changed
+
+- **Filter UI Improvement**: Renamed "Search" to "Filter" for better clarity
+  - Search icon changed to filter icon (`$(filter)`)
+  - Clear button now shows close icon (`$(close)`) only when filter is active
+  - Follows Todo Tree style: filter icon toggles to clear icon when filter is applied
+  - Commands renamed: `filemarks.search` → `filemarks.filter`, `filemarks.clearSearch` → `filemarks.clearFilter`
+
+---
+
 ## [0.9.4] - 2025-01-10
 
 ### Fixed
@@ -238,6 +250,7 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.9.5** - 2025-01-10 - Filter UI improvement (search → filter, dynamic icon toggle)
 - **0.9.4** - 2025-01-10 - Fixed folder icons disappearing after collapse all
 - **0.9.3** - 2025-01-09 - Add bookmark from Explorer, consistent file icons
 - **0.9.2** - 2025-01-08 - Changed auto bookmark shortcut to Ctrl+Alt+P, storage default to global

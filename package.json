@@ -2,7 +2,7 @@
   "name": "filemarks",
   "displayName": "Filemarks",
   "description": "Advanced bookmark management with numbered shortcuts and folder organization",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "publisher": "nicegyuha",
   "author": {
     "name": "Gyuha",
@@ -150,16 +150,16 @@
         "category": "Filemarks"
       },
       {
-        "command": "filemarks.search",
-        "title": "Search Bookmarks",
+        "command": "filemarks.filter",
+        "title": "Filter Bookmarks",
         "category": "Filemarks",
-        "icon": "$(search)"
+        "icon": "$(filter)"
       },
       {
-        "command": "filemarks.clearSearch",
-        "title": "Clear Search",
+        "command": "filemarks.clearFilter",
+        "title": "Clear Filter",
         "category": "Filemarks",
-        "icon": "$(search-stop)"
+        "icon": "$(close)"
       },
       {
         "command": "filemarks.toggleBookmark0",
@@ -487,46 +487,46 @@
       },
       {
         "view": "filemarks.treeView",
-        "contents": "No matching bookmarks found.\n\n[Clear Search](command:filemarks.clearSearch)",
+        "contents": "No matching bookmarks found.\n\n[Clear Filter](command:filemarks.clearFilter)",
         "when": "filemarks.hasFilter"
       }
     ],
     "menus": {
       "view/title": [
         {
-          "command": "filemarks.search",
-          "when": "view == filemarks.treeView",
+          "command": "filemarks.filter",
+          "when": "view == filemarks.treeView && !filemarks.hasFilter",
           "group": "navigation@0"
         },
         {
-          "command": "filemarks.clearSearch",
+          "command": "filemarks.clearFilter",
           "when": "view == filemarks.treeView && filemarks.hasFilter",
-          "group": "navigation@1"
+          "group": "navigation@0"
         },
         {
           "command": "filemarks.createFolder",
           "when": "view == filemarks.treeView",
-          "group": "navigation@2"
+          "group": "navigation@1"
         },
         {
           "command": "filemarks.expandAllFolders",
           "when": "view == filemarks.treeView",
-          "group": "navigation@3"
+          "group": "navigation@2"
         },
         {
           "command": "filemarks.collapseAllFolders",
           "when": "view == filemarks.treeView",
-          "group": "navigation@4"
+          "group": "navigation@3"
         },
         {
           "command": "filemarks.deleteSelected",
           "when": "view == filemarks.treeView",
-          "group": "navigation@5"
+          "group": "navigation@4"
         },
         {
           "command": "filemarks.clearAll",
           "when": "view == filemarks.treeView",
-          "group": "navigation@6"
+          "group": "navigation@5"
         }
       ],
       "view/item/context": [

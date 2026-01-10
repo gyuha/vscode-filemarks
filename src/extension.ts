@@ -10,7 +10,7 @@ import { isBookmarkNode, isFolderNode } from './types';
 let bookmarkStore: BookmarkStore | undefined;
 let decorationProvider: GutterDecorationProvider | undefined;
 let treeProvider: FilemarkTreeProvider | undefined;
-let searchInputBox: vscode.InputBox | undefined;
+let filterInputBox: vscode.InputBox | undefined;
 
 export async function activate(context: vscode.ExtensionContext) {
   if (!vscode.workspace.workspaceFolders) {
@@ -137,14 +137,14 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-      vscode.commands.registerCommand('filemarks.search', async () => {
-        await handleSearch();
+      vscode.commands.registerCommand('filemarks.filter', async () => {
+        await handleFilter();
       })
     );
 
     context.subscriptions.push(
-      vscode.commands.registerCommand('filemarks.clearSearch', () => {
-        handleClearSearch();
+      vscode.commands.registerCommand('filemarks.clearFilter', () => {
+        handleClearFilter();
       })
     );
 
@@ -365,8 +365,8 @@ async function handleJumpToAdjacentBookmark(direction: 'previous' | 'next'): Pro
 }
 
 export function deactivate() {
-  searchInputBox?.dispose();
-  searchInputBox = undefined;
+  filterInputBox?.dispose();
+  filterInputBox = undefined;
   bookmarkStore = undefined;
   decorationProvider = undefined;
   treeProvider = undefined;
@@ -627,40 +627,40 @@ async function handleCollapseAllFolders(): Promise<void> {
   await treeProvider.collapseAllFolders();
 }
 
-async function handleSearch(): Promise<void> {
+async function handleFilter(): Promise<void> {
   if (!treeProvider) return;
 
-  if (searchInputBox) {
-    searchInputBox.show();
+  if (filterInputBox) {
+    filterInputBox.show();
     return;
   }
 
-  searchInputBox = vscode.window.createInputBox();
-  searchInputBox.placeholder = vscode.l10n.t('Search bookmarks (fuzzy match)');
-  searchInputBox.value = treeProvider.getFilter();
+  filterInputBox = vscode.window.createInputBox();
+  filterInputBox.placeholder = vscode.l10n.t('Filter bookmarks (fuzzy match)');
+  filterInputBox.value = treeProvider.getFilter();
 
-  searchInputBox.onDidChangeValue(value => {
+  filterInputBox.onDidChangeValue((value: string) => {
     if (treeProvider) {
       treeProvider.setFilter(value);
     }
   });
 
-  searchInputBox.onDidAccept(() => {
-    searchInputBox?.hide();
+  filterInputBox.onDidAccept(() => {
+    filterInputBox?.hide();
   });
 
-  searchInputBox.onDidHide(() => {
+  filterInputBox.onDidHide(() => {
     // Intentionally keep filter active when hidden
   });
 
-  searchInputBox.show();
+  filterInputBox.show();
 }
 
-function handleClearSearch(): void {
+function handleClearFilter(): void {
   if (!treeProvider) return;
   treeProvider.clearFilter();
-  if (searchInputBox) {
-    searchInputBox.value = '';
+  if (filterInputBox) {
+    filterInputBox.value = '';
   }
 }
 
