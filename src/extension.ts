@@ -172,6 +172,12 @@ export async function activate(context: vscode.ExtensionContext) {
       )
     );
 
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.deleteSelected', async () => {
+        await handleDeleteSelected();
+      })
+    );
+
     for (let i = 0; i <= 9; i++) {
       const num = i;
 
@@ -715,4 +721,33 @@ async function handleAddBookmarkFromExplorer(uri: vscode.Uri): Promise<void> {
   vscode.window.showInformationMessage(
     vscode.l10n.t('Bookmark 0 added to {0}', path.basename(filePath))
   );
+}
+
+async function handleDeleteSelected(): Promise<void> {
+  if (!bookmarkStore || !treeProvider) return;
+
+  const selection = treeProvider.getSelection();
+  if (!selection || selection.length === 0) {
+    vscode.window.showWarningMessage(vscode.l10n.t('No item selected'));
+    return;
+  }
+
+  const node = selection[0];
+
+  if (isFolderNode(node)) {
+    const deleteButton = vscode.l10n.t('Delete');
+    const confirm = await vscode.window.showWarningMessage(
+      vscode.l10n.t('Delete folder "{0}" and all its contents?', node.name),
+      { modal: true },
+      deleteButton
+    );
+
+    if (confirm !== deleteButton) return;
+
+    bookmarkStore.deleteFolder(node.id);
+    vscode.window.showInformationMessage(vscode.l10n.t('Folder deleted'));
+  } else if (isBookmarkNode(node)) {
+    bookmarkStore.deleteBookmark(node.id);
+    vscode.window.showInformationMessage(vscode.l10n.t('Bookmark deleted'));
+  }
 }

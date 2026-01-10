@@ -59,6 +59,12 @@
     },
     "commands": [
       {
+        "command": "filemarks.deleteSelected",
+        "title": "Delete Selected",
+        "category": "Filemarks",
+        "icon": "$(remove)"
+      },
+      {
         "command": "filemarks.goToBookmark",
         "title": "Go to Bookmark",
         "category": "Filemarks"
@@ -512,9 +518,14 @@
           "group": "navigation@4"
         },
         {
-          "command": "filemarks.clearAll",
+          "command": "filemarks.deleteSelected",
           "when": "view == filemarks.treeView",
           "group": "navigation@5"
+        },
+        {
+          "command": "filemarks.clearAll",
+          "when": "view == filemarks.treeView",
+          "group": "navigation@6"
         }
       ],
       "view/item/context": [

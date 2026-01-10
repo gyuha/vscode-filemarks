@@ -144,6 +144,10 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     this._onDidChangeTreeData.fire(undefined);
   }
 
+  getSelection(): readonly TreeNode[] | undefined {
+    return this.treeView?.selection;
+  }
+
   setFilter(text: string): void {
     this.filterText = text;
     this.updateFilterContext();
