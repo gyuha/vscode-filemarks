@@ -2,7 +2,7 @@
   "name": "filemarks",
   "displayName": "Filemarks",
   "description": "Advanced bookmark management with numbered shortcuts and folder organization",
-  "version": "0.9.5",
+  "version": "0.10.0",
   "publisher": "nicegyuha",
   "author": {
     "name": "Gyuha",
@@ -292,62 +292,62 @@
     "keybindings": [
       {
         "command": "filemarks.toggleBookmark0",
-        "key": "ctrl+shift+0",
-        "mac": "cmd+shift+0",
+        "key": "ctrl+alt+0",
+        "mac": "cmd+alt+0",
         "when": "editorTextFocus"
       },
       {
         "command": "filemarks.toggleBookmark1",
-        "key": "ctrl+shift+1",
-        "mac": "cmd+shift+1",
+        "key": "ctrl+alt+1",
+        "mac": "cmd+alt+1",
         "when": "editorTextFocus"
       },
       {
         "command": "filemarks.toggleBookmark2",
-        "key": "ctrl+shift+2",
-        "mac": "cmd+shift+2",
+        "key": "ctrl+alt+2",
+        "mac": "cmd+alt+2",
         "when": "editorTextFocus"
       },
       {
         "command": "filemarks.toggleBookmark3",
-        "key": "ctrl+shift+3",
-        "mac": "cmd+shift+3",
+        "key": "ctrl+alt+3",
+        "mac": "cmd+alt+3",
         "when": "editorTextFocus"
       },
       {
         "command": "filemarks.toggleBookmark4",
-        "key": "ctrl+shift+4",
-        "mac": "cmd+shift+4",
+        "key": "ctrl+alt+4",
+        "mac": "cmd+alt+4",
         "when": "editorTextFocus"
       },
       {
         "command": "filemarks.toggleBookmark5",
-        "key": "ctrl+shift+5",
-        "mac": "cmd+shift+5",
+        "key": "ctrl+alt+5",
+        "mac": "cmd+alt+5",
         "when": "editorTextFocus"
       },
       {
         "command": "filemarks.toggleBookmark6",
-        "key": "ctrl+shift+6",
-        "mac": "cmd+shift+6",
+        "key": "ctrl+alt+6",
+        "mac": "cmd+alt+6",
         "when": "editorTextFocus"
       },
       {
         "command": "filemarks.toggleBookmark7",
-        "key": "ctrl+shift+7",
-        "mac": "cmd+shift+7",
+        "key": "ctrl+alt+7",
+        "mac": "cmd+alt+7",
         "when": "editorTextFocus"
       },
       {
         "command": "filemarks.toggleBookmark8",
-        "key": "ctrl+shift+8",
-        "mac": "cmd+shift+8",
+        "key": "ctrl+alt+8",
+        "mac": "cmd+alt+8",
         "when": "editorTextFocus"
       },
       {
         "command": "filemarks.toggleBookmark9",
-        "key": "ctrl+shift+9",
-        "mac": "cmd+shift+9",
+        "key": "ctrl+alt+9",
+        "mac": "cmd+alt+9",
         "when": "editorTextFocus"
       },
       {
@@ -482,7 +482,7 @@
     "viewsWelcome": [
       {
         "view": "filemarks.treeView",
-        "contents": "No bookmarks yet.\n\nQuick Start:\n• Toggle bookmark: `Ctrl+Shift+[0-9]`\n• Jump to bookmark: `Ctrl+[0-9]`\n• Auto bookmark: `Ctrl+Alt+P`\n• Previous bookmark: `Ctrl+Alt+[`\n• Next bookmark: `Ctrl+Alt+]`\n• Focus sidebar: `Ctrl+Shift+B`\n\n*macOS: Use `Cmd` instead of `Ctrl`*\n\n[Create Folder](command:filemarks.createFolder)\n[Learn More](https://github.com/gyuha/vscode-filemarks#readme)",
+        "contents": "No bookmarks yet.\n\nQuick Start:\n• Toggle bookmark: `Ctrl+Alt+[0-9]`\n• Jump to bookmark: `Ctrl+[0-9]`\n• Auto bookmark: `Ctrl+Alt+P`\n• Previous bookmark: `Ctrl+Alt+[`\n• Next bookmark: `Ctrl+Alt+]`\n• Focus sidebar: `Ctrl+Shift+B`\n\n*macOS: Use `Cmd` instead of `Ctrl`*\n\n[Create Folder](command:filemarks.createFolder)\n[Learn More](https://github.com/gyuha/vscode-filemarks#readme)",
         "when": "!filemarks.hasFilter"
       },
       {

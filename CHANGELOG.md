@@ -2,6 +2,16 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.10.0] - 2025-01-14
+
+### Changed
+
+- **Toggle Bookmark Shortcut**: Changed from `Ctrl+Shift+[0-9]` to `Ctrl+Alt+[0-9]` (macOS: `Cmd+Alt+[0-9]`)
+  - Less conflict with VS Code's default shortcuts
+  - More consistent with other Filemarks shortcuts (Auto Bookmark, Previous/Next)
+
+---
+
 ## [0.9.5] - 2025-01-10
 
 ### Changed
@@ -250,6 +260,7 @@ All notable changes to the "filemarks" extension will be documented in this file
 
 ## Version History
 
+- **0.10.0** - 2025-01-14 - Toggle Bookmark shortcut changed (Ctrl+Shift → Ctrl+Alt)
 - **0.9.5** - 2025-01-10 - Filter UI improvement (search → filter, dynamic icon toggle)
 - **0.9.4** - 2025-01-10 - Fixed folder icons disappearing after collapse all
 - **0.9.3** - 2025-01-09 - Add bookmark from Explorer, consistent file icons

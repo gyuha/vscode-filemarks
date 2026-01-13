@@ -14,13 +14,13 @@ Filemarks is a powerful bookmark extension that lets you quickly navigate your c
 
 Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 
-| Action            | Windows/Linux      | macOS             |
-| ----------------- | ------------------ | ----------------- |
-| Toggle Bookmark   | `Ctrl+Shift+[0-9]` | `Cmd+Shift+[0-9]` |
-| Jump to Bookmark  | `Ctrl+[0-9]`       | `Cmd+[0-9]`       |
-| Auto Bookmark     | `Ctrl+Alt+P`       | `Cmd+Alt+P`       |
-| Previous Bookmark | `Ctrl+Alt+[`       | `Cmd+Alt+[`       |
-| Next Bookmark     | `Ctrl+Alt+]`       | `Cmd+Alt+]`       |
+| Action            | Windows/Linux    | macOS           |
+| ----------------- | ---------------- | --------------- |
+| Toggle Bookmark   | `Ctrl+Alt+[0-9]` | `Cmd+Alt+[0-9]` |
+| Jump to Bookmark  | `Ctrl+[0-9]`     | `Cmd+[0-9]`     |
+| Auto Bookmark     | `Ctrl+Alt+P`     | `Cmd+Alt+P`     |
+| Previous Bookmark | `Ctrl+Alt+[`     | `Cmd+Alt+[`     |
+| Next Bookmark     | `Ctrl+Alt+]`     | `Cmd+Alt+]`     |
 
 ### 🔖 Visual Gutter Icons
 
@@ -91,7 +91,7 @@ Quick access buttons in the sidebar title bar:
 
 ## Quick Start
 
-1. **Set a bookmark**: Place cursor on a line, press `Ctrl+Shift+1`
+1. **Set a bookmark**: Place cursor on a line, press `Ctrl+Alt+1`
 2. **Auto bookmark**: Press `Ctrl+Alt+P` to auto-assign next available number
 3. **Jump to bookmark**: Press `Ctrl+1` to jump back
 4. **Navigate bookmarks**: Press `Ctrl+Alt+]` for next, `Ctrl+Alt+[` for previous
@@ -167,25 +167,25 @@ Access the Filemarks view from the Activity Bar:
 
 ### Windows / Linux
 
-| Shortcut                        | Action                  |
-| ------------------------------- | ----------------------- |
-| `Ctrl+Shift+0` ~ `Ctrl+Shift+9` | Toggle bookmark 0-9     |
-| `Ctrl+0` ~ `Ctrl+9`             | Jump to bookmark 0-9    |
-| `Ctrl+Alt+P`                    | Auto bookmark           |
-| `Ctrl+Alt+[`                    | Previous bookmark       |
-| `Ctrl+Alt+]`                    | Next bookmark           |
-| `Ctrl+Shift+B`                  | Focus Filemarks sidebar |
+| Shortcut                    | Action                  |
+| --------------------------- | ----------------------- |
+| `Ctrl+Alt+0` ~ `Ctrl+Alt+9` | Toggle bookmark 0-9     |
+| `Ctrl+0` ~ `Ctrl+9`         | Jump to bookmark 0-9    |
+| `Ctrl+Alt+P`                | Auto bookmark           |
+| `Ctrl+Alt+[`                | Previous bookmark       |
+| `Ctrl+Alt+]`                | Next bookmark           |
+| `Ctrl+Shift+B`              | Focus Filemarks sidebar |
 
 ### macOS
 
-| Shortcut                      | Action                  |
-| ----------------------------- | ----------------------- |
-| `Cmd+Shift+0` ~ `Cmd+Shift+9` | Toggle bookmark 0-9     |
-| `Cmd+0` ~ `Cmd+9`             | Jump to bookmark 0-9    |
-| `Cmd+Alt+P`                   | Auto bookmark           |
-| `Cmd+Alt+[`                   | Previous bookmark       |
-| `Cmd+Alt+]`                   | Next bookmark           |
-| `Cmd+Shift+B`                 | Focus Filemarks sidebar |
+| Shortcut                  | Action                  |
+| ------------------------- | ----------------------- |
+| `Cmd+Alt+0` ~ `Cmd+Alt+9` | Toggle bookmark 0-9     |
+| `Cmd+0` ~ `Cmd+9`         | Jump to bookmark 0-9    |
+| `Cmd+Alt+P`               | Auto bookmark           |
+| `Cmd+Alt+[`               | Previous bookmark       |
+| `Cmd+Alt+]`               | Next bookmark           |
+| `Cmd+Shift+B`             | Focus Filemarks sidebar |
 
 ## Requirements
 
