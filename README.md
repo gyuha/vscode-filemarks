@@ -43,7 +43,6 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 - Hierarchical structure for complex projects
 - Create subfolders within folders (right-click folder)
 
-![Folder Organization](images/folders.png)
 
 ### 🎛️ Sidebar Controls
 
