@@ -41,7 +41,7 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 - Drag and drop bookmarks between folders
 - Drop bookmark onto another bookmark to move to same folder
 - Hierarchical structure for complex projects
-- Create subfolders within folders (right-click folder)
+- Create subFolders within folders (right-click folder)
 
 
 ### 🎛️ Sidebar Controls
