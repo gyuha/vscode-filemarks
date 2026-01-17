@@ -10,13 +10,13 @@
  * @param delay - The number of milliseconds to delay
  * @returns A debounced version of the function
  */
-export function debounce<T extends (...args: any[]) => any>(
-  fn: T,
+export function debounce<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => TReturn,
   delay: number
-): (...args: Parameters<T>) => void {
+): (...args: TArgs) => void {
   let timeoutId: NodeJS.Timeout | undefined;
 
-  return (...args: Parameters<T>) => {
+  return (...args: TArgs) => {
     if (timeoutId) {
       clearTimeout(timeoutId);
     }
@@ -34,14 +34,14 @@ export function debounce<T extends (...args: any[]) => any>(
  * @param limit - The number of milliseconds to wait between invocations
  * @returns A throttled version of the function
  */
-export function throttle<T extends (...args: any[]) => any>(
-  fn: T,
+export function throttle<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => TReturn,
   limit: number
-): (...args: Parameters<T>) => void {
+): (...args: TArgs) => TReturn | undefined {
   let inThrottle: boolean;
-  let lastResult: ReturnType<T>;
+  let lastResult: TReturn | undefined;
 
-  return (...args: Parameters<T>) => {
+  return (...args: TArgs) => {
     if (!inThrottle) {
       inThrottle = true;
       setTimeout(() => {
@@ -60,7 +60,7 @@ export class LRUCache<K, V> {
   private cache: Map<K, V>;
   private maxSize: number;
 
-  constructor(maxSize: number = 100) {
+  constructor(maxSize = 100) {
     this.cache = new Map();
     this.maxSize = maxSize;
   }
@@ -113,30 +113,30 @@ export class LRUCache<K, V> {
  * @param maxCacheSize - Maximum number of cached results (default: 100)
  * @returns A memoized version of the function
  */
-export function memoize<T extends (...args: any[]) => any>(
-  fn: T,
-  getCacheKey?: (...args: Parameters<T>) => string,
-  maxCacheSize: number = 100
-): T & { clearCache: () => void } {
-  const cache = new LRUCache<string, ReturnType<T>>(maxCacheSize);
+export function memoize<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => TReturn,
+  getCacheKey?: (...args: TArgs) => string,
+  maxCacheSize = 100
+): ((...args: TArgs) => TReturn) & { clearCache: () => void } {
+  const cache = new LRUCache<string, TReturn>(maxCacheSize);
 
-  const defaultGetCacheKey = (...args: Parameters<T>): string => {
+  const defaultGetCacheKey = (...args: TArgs): string => {
     return JSON.stringify(args);
   };
 
   const keyFn = getCacheKey || defaultGetCacheKey;
 
-  const memoized = ((...args: Parameters<T>) => {
+  const memoized = ((...args: TArgs) => {
     const key = keyFn(...args);
 
     if (cache.has(key)) {
-      return cache.get(key);
+      return cache.get(key) as TReturn;
     }
 
     const result = fn(...args);
     cache.set(key, result);
     return result;
-  }) as T & { clearCache: () => void };
+  }) as ((...args: TArgs) => TReturn) & { clearCache: () => void };
 
   memoized.clearCache = () => cache.clear();
 
@@ -150,15 +150,15 @@ export function memoize<T extends (...args: any[]) => any>(
  * @param delay - The number of milliseconds to delay
  * @returns A debounced version of the async function
  */
-export function debounceAsync<T extends (...args: any[]) => Promise<any>>(
-  fn: T,
+export function debounceAsync<TArgs extends unknown[], TReturn>(
+  fn: (...args: TArgs) => Promise<TReturn>,
   delay: number
-): (...args: Parameters<T>) => Promise<ReturnType<T>> {
+): (...args: TArgs) => Promise<TReturn> {
   let timeoutId: NodeJS.Timeout | undefined;
-  let latestResolve: ((value: ReturnType<T>) => void) | undefined;
-  let latestReject: ((reason?: any) => void) | undefined;
+  let latestResolve: ((value: TReturn) => void) | undefined;
+  let latestReject: ((reason?: unknown) => void) | undefined;
 
-  return (...args: Parameters<T>): Promise<ReturnType<T>> => {
+  return (...args: TArgs): Promise<TReturn> => {
     return new Promise((resolve, reject) => {
       if (timeoutId) {
         clearTimeout(timeoutId);
@@ -194,10 +194,7 @@ export function debounceAsync<T extends (...args: any[]) => Promise<any>>(
  * @param delay - The number of milliseconds to wait before executing
  * @returns A batched version of the function
  */
-export function batchCalls<T>(
-  fn: (items: T[]) => void,
-  delay: number = 100
-): (item: T) => void {
+export function batchCalls<T>(fn: (items: T[]) => void, delay = 100): (item: T) => void {
   let items: T[] = [];
   let timeoutId: NodeJS.Timeout | undefined;
 
