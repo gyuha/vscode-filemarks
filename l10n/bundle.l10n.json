@@ -5,14 +5,19 @@
 
   "Bookmark {0} toggled at line {1}": "Bookmark {0} toggled at line {1}",
   "Bookmark {0} is not defined": "Bookmark {0} is not defined",
+  "Bookmark {0} removed from line {1}": "Bookmark {0} removed from line {1}",
+  "Bookmark {0} created at line {1}": "Bookmark {0} created at line {1}",
   "Bookmark deleted": "Bookmark deleted",
   "Bookmark renamed": "Bookmark renamed",
   "Bookmark moved": "Bookmark moved",
+  "Bookmark already exists for {0}": "Bookmark already exists for {0}",
+  "Bookmark 0 added to {0}": "Bookmark 0 added to {0}",
   "Bookmarks cleared in current file": "Bookmarks cleared in current file",
   "All bookmarks cleared": "All bookmarks cleared",
 
   "Folder \"{0}\" created": "Folder \"{0}\" created",
   "Folder created in \"{0}\"": "Folder created in \"{0}\"",
+  "Folder created in selected folder": "Folder created in selected folder",
   "Folder deleted": "Folder deleted",
   "Folder renamed": "Folder renamed",
   "Delete folder \"{0}\" and all its contents?": "Delete folder \"{0}\" and all its contents?",
@@ -20,6 +25,7 @@
 
   "No bookmarks found": "No bookmarks found",
   "No bookmarks in current file": "No bookmarks in current file",
+  "No item selected": "No item selected",
   "Select a bookmark": "Select a bookmark",
   "Select a bookmark in current file": "Select a bookmark in current file",
 
@@ -40,5 +46,14 @@
   "Failed to go to bookmark: {0}": "Failed to go to bookmark: {0}",
 
   "Filter bookmarks (fuzzy match)": "Filter bookmarks (fuzzy match)",
-  "filtered": "Filtered"
+  "filtered": "Filtered",
+
+  "file.deleted": "File deleted: {0}, bookmark removed",
+  "file.renamed": "Bookmark file path updated",
+
+  "error.corruptedFile": "Bookmark file appears corrupted, attempting recovery",
+  "error.corruptedJson": "Bookmark file contains invalid JSON, backup created",
+  "error.failedToLoad": "Failed to load bookmarks: {0}",
+  "error.failedToSave": "Failed to save bookmarks: {0}",
+  "error.fileNotFound": "File not found: {0}"
 }

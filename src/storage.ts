@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import type { FilemarkState } from './types';
+import { errorHandler, FilemarkError } from './utils/errorHandler';
 
 /**
  * Handles persistence of bookmark state to the file system.
@@ -51,23 +52,38 @@ export class StorageService {
       const parsed = JSON.parse(content) as FilemarkState;
 
       if (!parsed.version || !Array.isArray(parsed.items)) {
-        vscode.window.showWarningMessage(vscode.l10n.t('error.corruptedFile'));
+        errorHandler.handle(FilemarkError.corruptedData(storagePath), {
+          recovery: {
+            label: vscode.l10n.t('Delete'),
+            action: () => this.resetStorage(),
+          },
+        });
         return this.recoverOrDefault(parsed);
       }
 
       return parsed;
     } catch (error) {
+      const storagePath = this.getStoragePath();
+
       if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
         return this.getDefaultState();
       }
 
       if (error instanceof SyntaxError) {
-        vscode.window.showErrorMessage(vscode.l10n.t('error.corruptedJson'));
+        errorHandler.handle(FilemarkError.jsonParse(error, storagePath), {
+          recovery: {
+            label: vscode.l10n.t('Delete'),
+            action: async () => {
+              await this.createBackup();
+              await this.resetStorage();
+            },
+          },
+        });
         await this.createBackup();
         return this.getDefaultState();
       }
 
-      vscode.window.showErrorMessage(vscode.l10n.t('error.failedToLoad', String(error)));
+      errorHandler.handle(FilemarkError.storageRead(error, storagePath));
       return this.getDefaultState();
     }
   }
@@ -89,7 +105,16 @@ export class StorageService {
       const backupPath = storagePath.replace('.json', `.backup.${Date.now()}.json`);
       await fs.copyFile(storagePath, backupPath);
     } catch {
-      // Ignore backup errors
+      errorHandler.handleSilent(new Error('Backup creation failed'), { operation: 'createBackup' });
+    }
+  }
+
+  private async resetStorage(): Promise<void> {
+    try {
+      const storagePath = this.getStoragePath();
+      await fs.unlink(storagePath);
+    } catch {
+      errorHandler.handleSilent(new Error('Storage reset failed'), { operation: 'resetStorage' });
     }
   }
 
@@ -111,7 +136,7 @@ export class StorageService {
         await fs.mkdir(dirPath, { recursive: true });
         await fs.writeFile(storagePath, JSON.stringify(state, null, 2), 'utf-8');
       } catch (error) {
-        vscode.window.showErrorMessage(vscode.l10n.t('error.failedToSave', String(error)));
+        errorHandler.handle(FilemarkError.storageWrite(error, this.getStoragePath()));
       }
     }, this.DEBOUNCE_DELAY);
   }

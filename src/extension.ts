@@ -7,6 +7,7 @@ import { FilemarkTreeProvider } from './views/treeProvider';
 import type { BookmarkNode, TreeNode } from './types';
 import { isBookmarkNode, isFolderNode } from './types';
 import { debounce } from './utils/performance';
+import { errorHandler, FilemarkError, ErrorCode, ErrorSeverity } from './utils/errorHandler';
 
 let bookmarkStore: BookmarkStore | undefined;
 let decorationProvider: GutterDecorationProvider | undefined;
@@ -14,8 +15,10 @@ let treeProvider: FilemarkTreeProvider | undefined;
 let filterInputBox: vscode.InputBox | undefined;
 
 export async function activate(context: vscode.ExtensionContext) {
+  errorHandler.initialize(context);
+
   if (!vscode.workspace.workspaceFolders) {
-    vscode.window.showWarningMessage(vscode.l10n.t('Filemarks requires an open workspace'));
+    errorHandler.handle(FilemarkError.noWorkspace());
     return;
   }
 
@@ -209,9 +212,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
     vscode.window.showInformationMessage(vscode.l10n.t('Filemarks extension activated!'));
   } catch (error) {
-    vscode.window.showErrorMessage(
-      vscode.l10n.t('Failed to activate Filemarks: {0}', String(error))
-    );
+    errorHandler.handle(error, {
+      context: { phase: 'activation' },
+    });
   }
 }
 
@@ -395,7 +398,12 @@ async function handleGoToBookmark(bookmark: BookmarkNode, line: number): Promise
     editor.selection = new vscode.Selection(position, position);
     editor.revealRange(new vscode.Range(position, position), revealType);
   } catch (error) {
-    vscode.window.showErrorMessage(vscode.l10n.t('Failed to go to bookmark: {0}', String(error)));
+    errorHandler.handle(
+      FilemarkError.fromError(error, ErrorCode.Navigation, ErrorSeverity.Error, {
+        filePath: bookmark.filePath,
+        line,
+      })
+    );
   }
 }
 

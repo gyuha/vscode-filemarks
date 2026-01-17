@@ -5,14 +5,19 @@
 
   "Bookmark {0} toggled at line {1}": "북마크 {0}이(가) {1}번 줄에 토글됨",
   "Bookmark {0} is not defined": "북마크 {0}이(가) 정의되지 않음",
+  "Bookmark {0} removed from line {1}": "북마크 {0}이(가) {1}번 줄에서 제거됨",
+  "Bookmark {0} created at line {1}": "북마크 {0}이(가) {1}번 줄에 생성됨",
   "Bookmark deleted": "북마크가 삭제되었습니다",
   "Bookmark renamed": "북마크 이름이 변경되었습니다",
   "Bookmark moved": "북마크가 이동되었습니다",
+  "Bookmark already exists for {0}": "{0}에 이미 북마크가 존재합니다",
+  "Bookmark 0 added to {0}": "북마크 0이(가) {0}에 추가되었습니다",
   "Bookmarks cleared in current file": "현재 파일의 북마크가 삭제되었습니다",
   "All bookmarks cleared": "모든 북마크가 삭제되었습니다",
 
   "Folder \"{0}\" created": "폴더 \"{0}\"이(가) 생성되었습니다",
   "Folder created in \"{0}\"": "폴더가 \"{0}\" 안에 생성되었습니다",
+  "Folder created in selected folder": "선택된 폴더 안에 폴더가 생성되었습니다",
   "Folder deleted": "폴더가 삭제되었습니다",
   "Folder renamed": "폴더 이름이 변경되었습니다",
   "Delete folder \"{0}\" and all its contents?": "폴더 \"{0}\"과(와) 모든 내용을 삭제하시겠습니까?",
@@ -20,6 +25,7 @@
 
   "No bookmarks found": "북마크가 없습니다",
   "No bookmarks in current file": "현재 파일에 북마크가 없습니다",
+  "No item selected": "선택된 항목이 없습니다",
   "Select a bookmark": "북마크를 선택하세요",
   "Select a bookmark in current file": "현재 파일에서 북마크를 선택하세요",
 
@@ -40,5 +46,14 @@
   "Failed to go to bookmark: {0}": "북마크로 이동 실패: {0}",
 
   "Filter bookmarks (fuzzy match)": "북마크 필터링 (퍼지 매치)",
-  "filtered": "필터됨"
+  "filtered": "필터됨",
+
+  "file.deleted": "파일 삭제됨: {0}, 북마크 제거됨",
+  "file.renamed": "북마크 파일 경로가 업데이트되었습니다",
+
+  "error.corruptedFile": "북마크 파일이 손상된 것 같습니다. 복구를 시도합니다",
+  "error.corruptedJson": "북마크 파일에 잘못된 JSON이 포함되어 있습니다. 백업이 생성되었습니다",
+  "error.failedToLoad": "북마크 로드 실패: {0}",
+  "error.failedToSave": "북마크 저장 실패: {0}",
+  "error.fileNotFound": "파일을 찾을 수 없음: {0}"
 }

@@ -87,35 +87,25 @@ function debounce<TArgs extends unknown[], TReturn>(
 
 ### 3. 에러 핸들링 개선
 
-**상태**: 미착수
+**상태**: 완료 ✅
 
-- [ ] 중앙 집중식 에러 핸들러 생성
-- [ ] 에러 로깅 시스템 추가
-- [ ] 사용자 친화적 에러 메시지
-- [ ] 에러 복구 메커니즘
+- [x] 중앙 집중식 에러 핸들러 생성
+- [x] 에러 로깅 시스템 추가
+- [x] 사용자 친화적 에러 메시지
+- [x] 에러 복구 메커니즘
 
-**작업 내용**:
+**구현 내용**:
 
-```typescript
-// src/utils/errorHandler.ts (신규 파일)
-export class ErrorHandler {
-  static handle(error: Error, context: string) {
-    this.log(error, context);
-    this.showUserMessage(error);
-    this.reportToTelemetry(error); // 선택사항
-  }
+- `src/utils/errorHandler.ts`: `FilemarkError` 클래스와 `ErrorHandler` 싱글톤
+  - `ErrorCode` enum: 11가지 에러 타입 분류
+  - `ErrorSeverity` enum: Info, Warning, Error, Critical
+  - `FilemarkError`: 구조화된 에러 클래스 (팩토리 메서드 포함)
+  - `ErrorHandler`: 중앙 에러 처리, OutputChannel 로깅, 복구 액션 지원
+- `src/extension.ts`, `src/storage.ts`: ErrorHandler 통합
+- `src/test/suite/errorHandler.test.ts`: 27개 단위 테스트
+- `l10n/bundle.l10n.json`, `l10n/bundle.l10n.ko.json`: 에러 메시지 i18n
 
-  private static log(error: Error, context: string) {
-    // 구조화된 로깅
-  }
-
-  private static showUserMessage(error: Error) {
-    // 사용자 친화적 메시지
-  }
-}
-```
-
-**예상 시간**: 3-4시간
+**소요 시간**: ~3시간
 
 ---
 
@@ -145,23 +135,40 @@ export class ErrorHandler {
 
 ### 5. CI/CD 파이프라인 구축
 
-**상태**: 미착수
+**상태**: 완료 ✅
 
-- [ ] GitHub Actions 워크플로우 생성
-  - [ ] 린트 검사
-  - [ ] 타입 체크
-  - [ ] 단위 테스트 실행
-  - [ ] 빌드 검증
-- [ ] Pull Request 체크 자동화
-- [ ] 릴리스 자동화
-- [ ] 버전 태깅 자동화
+- [x] GitHub Actions 워크플로우 생성
+  - [x] 린트 검사
+  - [x] 타입 체크
+  - [x] 단위 테스트 실행
+  - [x] 빌드 검증
+- [x] Pull Request 체크 자동화
+- [x] 릴리스 자동화
+- [x] 버전 태깅 자동화
 
 **파일**:
 
-- `.github/workflows/ci.yml` (신규)
-- `.github/workflows/release.yml` (신규)
+- `.github/workflows/ci.yml`: PR/push 시 lint, typecheck, test, build 실행
+- `.github/workflows/release.yml`: 태그 푸시 시 GitHub Release 생성, Marketplace/Open VSX 배포
 
-**예상 시간**: 3-4시간
+**구현 내용**:
+
+1. **CI 워크플로우** (`ci.yml`):
+   - `push` (main/master), `pull_request` 트리거
+   - 병렬 실행: lint, typecheck, test
+   - build 작업은 위 3개 완료 후 실행
+   - VSIX 아티팩트 업로드 (7일 보관)
+   - 동시성 제어로 중복 실행 방지
+
+2. **Release 워크플로우** (`release.yml`):
+   - `v*` 태그 푸시 시 트리거
+   - validate → release → publish 순차 실행
+   - CHANGELOG.md에서 릴리스 노트 자동 추출
+   - GitHub Release 자동 생성 (VSIX 첨부)
+   - VS Code Marketplace 배포 (VSCE_PAT 필요, 선택적)
+   - Open VSX 배포 (OVSX_PAT 필요, 선택적)
+
+**소요 시간**: ~1시간
 
 ---
 
@@ -245,12 +252,12 @@ export class ErrorHandler {
    - 파일: `src/test/suite/performance.test.ts` (신규)
    - 영향: 코드 신뢰성
 
-3. **에러 핸들러 구현** (3-4시간)
+3. **~~에러 핸들러 구현~~** ✅ 완료 (3시간)
    - 파일: `src/utils/errorHandler.ts` (신규)
    - 영향: 사용자 경험, 디버깅
 
-4. **CI/CD 파이프라인** (3-4시간)
-   - 파일: `.github/workflows/*.yml` (신규)
+4. **~~CI/CD 파이프라인~~** ✅ 완료 (1시간)
+   - 파일: `.github/workflows/ci.yml`, `.github/workflows/release.yml`
    - 영향: 개발 효율성, 품질 보증
 
 ---
@@ -261,9 +268,10 @@ export class ErrorHandler {
 
 - [x] Task 1: TypeScript `any` 타입 제거 ✅
 - [x] Task 2: 성능 유틸리티 테스트 작성 ✅
-- [ ] Task 3: 에러 핸들러 구현
+- [x] Task 3: 에러 핸들러 구현 ✅
+- [x] Task 5: CI/CD 파이프라인 구축 ✅
 
-**예상 완료 시간**: 6-9시간
+**완료 시간**: ~10시간
 
 ---
 
@@ -271,9 +279,9 @@ export class ErrorHandler {
 
 ### 전체 진행률
 
-- 완료: 4 / 10 (40%)
+- 완료: 6 / 10 (60%)
 - 진행 중: 0 / 10 (0%)
-- 대기 중: 6 / 10 (60%)
+- 대기 중: 4 / 10 (40%)
 
 ### 카테고리별 진행률
 
@@ -281,7 +289,8 @@ export class ErrorHandler {
 - 코드 품질: ✅ 100% (완료)
 - 테스트: ✅ 100% (완료)
 - 문서화: ✅ 100% (완료)
-- CI/CD: ⏳ 0% (대기)
+- 에러 핸들링: ✅ 100% (완료)
+- CI/CD: ✅ 100% (완료)
 
 ---
 
