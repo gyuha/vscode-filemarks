@@ -6,6 +6,7 @@ import { GutterDecorationProvider } from './decorations';
 import { FilemarkTreeProvider } from './views/treeProvider';
 import type { BookmarkNode, TreeNode } from './types';
 import { isBookmarkNode, isFolderNode } from './types';
+import { debounce } from './utils/performance';
 
 let bookmarkStore: BookmarkStore | undefined;
 let decorationProvider: GutterDecorationProvider | undefined;
@@ -639,10 +640,15 @@ async function handleFilter(): Promise<void> {
   filterInputBox.placeholder = vscode.l10n.t('Filter bookmarks (fuzzy match)');
   filterInputBox.value = treeProvider.getFilter();
 
-  filterInputBox.onDidChangeValue((value: string) => {
+  // Debounce filter input to avoid excessive filtering while typing
+  const debouncedSetFilter = debounce((value: string) => {
     if (treeProvider) {
       treeProvider.setFilter(value);
     }
+  }, 300); // Wait 300ms after user stops typing
+
+  filterInputBox.onDidChangeValue((value: string) => {
+    debouncedSetFilter(value);
   });
 
   filterInputBox.onDidAccept(() => {

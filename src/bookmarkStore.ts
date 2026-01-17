@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { v4 as uuidv4 } from 'uuid';
 import type { TreeNode, BookmarkNode, FilemarkState } from './types';
 import type { StorageService } from './storage';
+import { debounce, LRUCache } from './utils/performance';
 
 export class BookmarkStore {
   private state: FilemarkState;
@@ -10,12 +11,21 @@ export class BookmarkStore {
   readonly onDidChangeBookmarks = this._onDidChangeBookmarks.event;
   private outputChannel: vscode.OutputChannel;
   private lastUsedFolderId: string | null = null;
+  private bookmarkCache = new LRUCache<string, BookmarkNode | undefined>(100);
+  private folderCache = new LRUCache<string, (TreeNode & { type: 'folder' }) | undefined>(50);
+  private debouncedSave: () => void;
 
   constructor(context: vscode.ExtensionContext, storage: StorageService) {
     this.storage = storage;
     this.state = { version: '1.0', items: [] };
     this.outputChannel = vscode.window.createOutputChannel('Filemarks');
     context.subscriptions.push(this.outputChannel);
+
+    // Debounce save operations to reduce I/O
+    this.debouncedSave = debounce(() => {
+      this.storage.save(this.state);
+      this._onDidChangeBookmarks.fire();
+    }, 200);
   }
 
   async initialize(): Promise<void> {
@@ -150,6 +160,11 @@ export class BookmarkStore {
   }
 
   findBookmarkByFilePath(filePath: string): BookmarkNode | undefined {
+    // Check cache first
+    if (this.bookmarkCache.has(filePath)) {
+      return this.bookmarkCache.get(filePath);
+    }
+
     const traverse = (nodes: TreeNode[]): BookmarkNode | undefined => {
       for (const node of nodes) {
         if (node.type === 'bookmark' && node.filePath === filePath) {
@@ -163,7 +178,9 @@ export class BookmarkStore {
       return undefined;
     };
 
-    return traverse(this.state.items);
+    const result = traverse(this.state.items);
+    this.bookmarkCache.set(filePath, result);
+    return result;
   }
 
   findBookmarkByNumber(num: number): { bookmark: BookmarkNode; line: number } | undefined {
@@ -471,6 +488,11 @@ export class BookmarkStore {
   }
 
   private findFolderById(id: string): (TreeNode & { type: 'folder' }) | undefined {
+    // Check cache first
+    if (this.folderCache.has(id)) {
+      return this.folderCache.get(id);
+    }
+
     const traverse = (nodes: TreeNode[]): (TreeNode & { type: 'folder' }) | undefined => {
       for (const node of nodes) {
         if (node.type === 'folder' && node.id === id) {
@@ -484,7 +506,9 @@ export class BookmarkStore {
       return undefined;
     };
 
-    return traverse(this.state.items);
+    const result = traverse(this.state.items);
+    this.folderCache.set(id, result);
+    return result;
   }
 
   findParentFolder(nodeId: string): (TreeNode & { type: 'folder' }) | undefined {
@@ -546,8 +570,10 @@ export class BookmarkStore {
   }
 
   private save(): void {
-    this.storage.save(this.state);
-    this._onDidChangeBookmarks.fire();
+    // Clear caches when state changes
+    this.bookmarkCache.clear();
+    this.folderCache.clear();
+    this.debouncedSave();
   }
 
   clearBookmarksInFile(filePath: string): void {

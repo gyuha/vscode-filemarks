@@ -3,19 +3,28 @@ import * as path from 'node:path';
 import type { BookmarkStore } from '../bookmarkStore';
 import type { TreeNode, BookmarkNode, FolderNode } from '../types';
 import { isFolderNode, isBookmarkNode } from '../types';
+import { debounce, memoize, LRUCache } from '../utils/performance';
 
-function fuzzyMatch(pattern: string, text: string): boolean {
-  const patternLower = pattern.toLowerCase();
-  const textLower = text.toLowerCase();
+/**
+ * Memoized fuzzy match function for better performance with repeated queries
+ * Cache key: pattern + text combination
+ */
+const fuzzyMatch = memoize(
+  (pattern: string, text: string): boolean => {
+    const patternLower = pattern.toLowerCase();
+    const textLower = text.toLowerCase();
 
-  let patternIdx = 0;
-  for (let i = 0; i < textLower.length && patternIdx < patternLower.length; i++) {
-    if (textLower[i] === patternLower[patternIdx]) {
-      patternIdx++;
+    let patternIdx = 0;
+    for (let i = 0; i < textLower.length && patternIdx < patternLower.length; i++) {
+      if (textLower[i] === patternLower[patternIdx]) {
+        patternIdx++;
+      }
     }
-  }
-  return patternIdx === patternLower.length;
-}
+    return patternIdx === patternLower.length;
+  },
+  (pattern: string, text: string) => `${pattern}:${text}`,
+  500 // Cache up to 500 recent fuzzy match results
+);
 
 class TreeDragAndDropController implements vscode.TreeDragAndDropController<TreeNode> {
   private static readonly TREE_MIME_TYPE = 'application/vnd.code.tree.filemarks';
@@ -83,11 +92,22 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   private treeView: vscode.TreeView<TreeNode> | undefined;
   private filterText = '';
   private focusedFolderId: string | null = null;
+  private filterCache = new LRUCache<string, TreeNode[]>(50);
+  private debouncedRefresh: () => void;
 
   constructor(private store: BookmarkStore) {
     this.dragAndDropController = new TreeDragAndDropController(store);
+
+    // Debounce refresh to prevent excessive redraws
+    this.debouncedRefresh = debounce(() => {
+      this._onDidChangeTreeData.fire(undefined);
+    }, 150);
+
     this.store.onDidChangeBookmarks(() => {
-      this.refresh();
+      // Clear cache when bookmarks change
+      this.filterCache.clear();
+      fuzzyMatch.clearCache();
+      this.debouncedRefresh();
     });
   }
 
@@ -178,7 +198,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   }
 
   refresh(): void {
-    this._onDidChangeTreeData.fire(undefined);
+    this.debouncedRefresh();
   }
 
   getSelection(): readonly TreeNode[] | undefined {
@@ -187,9 +207,11 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   setFilter(text: string): void {
     this.filterText = text;
+    this.filterCache.clear(); // Clear cache when filter changes
+    fuzzyMatch.clearCache();
     this.updateFilterContext();
     this.updateTreeViewTitle();
-    this.refresh();
+    this.debouncedRefresh();
   }
 
   getFilter(): string {
@@ -198,9 +220,11 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
 
   clearFilter(): void {
     this.filterText = '';
+    this.filterCache.clear();
+    fuzzyMatch.clearCache();
     this.updateFilterContext();
     this.updateTreeViewTitle();
-    this.refresh();
+    this.debouncedRefresh();
   }
 
   private updateFilterContext(): void {
@@ -216,8 +240,20 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     }
   }
 
+  /**
+   * Filter nodes based on current filter text with caching for performance
+   */
   private filterNodes(nodes: TreeNode[]): TreeNode[] {
     if (!this.filterText) return nodes;
+
+    // Generate cache key based on filter text and node IDs
+    const cacheKey = `${this.filterText}:${nodes.map(n => n.id).join(',')}`;
+
+    // Check cache first
+    const cached = this.filterCache.get(cacheKey);
+    if (cached) {
+      return cached;
+    }
 
     const result: TreeNode[] = [];
     for (const node of nodes) {
@@ -239,6 +275,9 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
         }
       }
     }
+
+    // Cache the result
+    this.filterCache.set(cacheKey, result);
     return result;
   }
 
@@ -297,7 +336,9 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     for (const folder of folders) {
       try {
         await this.treeView.reveal(folder, { expand: 3, select: false, focus: false });
-      } catch {}
+      } catch (error) {
+        // Silently ignore reveal errors (folder might not be visible due to filtering)
+      }
     }
   }
 
