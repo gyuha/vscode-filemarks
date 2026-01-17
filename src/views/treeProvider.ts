@@ -85,6 +85,10 @@ class TreeDragAndDropController implements vscode.TreeDragAndDropController<Tree
   }
 }
 
+/**
+ * Provides tree data for the Filemarks sidebar view.
+ * Supports filtering, drag-and-drop, and folder expansion state management.
+ */
 export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
   private readonly _onDidChangeTreeData = new vscode.EventEmitter<TreeNode | undefined | null>();
   readonly onDidChangeTreeData = this._onDidChangeTreeData.event;
@@ -111,6 +115,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     });
   }
 
+  /** Links this provider to its TreeView for expand/collapse and selection tracking. */
   setTreeView(treeView: vscode.TreeView<TreeNode>): void {
     this.treeView = treeView;
 
@@ -186,6 +191,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     return traverse(this.store.getState().items);
   }
 
+  /** Records the folder containing the given node (or selection) as "last used" for new bookmarks. */
   recordCurrentFolder(node?: TreeNode): void {
     if (node) {
       this.updateLastUsedFolderFromNode(node);
@@ -205,6 +211,10 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     return this.treeView?.selection;
   }
 
+  /**
+   * Sets the filter text for fuzzy search. Clears cache and updates tree title.
+   * @param text - Filter pattern (empty string clears filter)
+   */
   setFilter(text: string): void {
     this.filterText = text;
     this.filterCache.clear(); // Clear cache when filter changes
@@ -327,6 +337,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     return findParent(this.store.getState().items);
   }
 
+  /** Expands all folders in the tree view, persisting state to storage. */
   async expandAllFolders(): Promise<void> {
     if (!this.treeView) return;
 
@@ -342,6 +353,7 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     }
   }
 
+  /** Collapses all folders in the tree view, persisting state to storage. */
   async collapseAllFolders(): Promise<void> {
     this.store.setAllFoldersExpanded(false);
     await vscode.commands.executeCommand(

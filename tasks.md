@@ -123,20 +123,21 @@ export class ErrorHandler {
 
 ### 4. JSDoc 주석 추가
 
-**상태**: 미착수
+**상태**: 완료 ✅
 
-- [ ] 모든 public 메서드에 JSDoc 추가
-- [ ] 복잡한 private 메서드에 설명 추가
-- [ ] 타입 정의에 설명 추가
-- [ ] 예제 코드 포함
+- [x] 모든 public 메서드에 JSDoc 추가
+- [x] 복잡한 private 메서드에 설명 추가
+- [x] 타입 정의에 설명 추가
+- [x] 예제 코드 포함
 
 **작업 범위**:
 
-- `src/bookmarkStore.ts`: 30개 메서드
-- `src/views/treeProvider.ts`: 20개 메서드
-- `src/decorations.ts`: 15개 메서드
-- `src/storage.ts`: 5개 메서드
-- `src/utils/performance.ts`: 6개 함수 (완료)
+- `src/types.ts`: 3개 인터페이스, 2개 타입 가드 (완료)
+- `src/storage.ts`: 3개 메서드 (완료)
+- `src/bookmarkStore.ts`: 15개 public 메서드 (완료)
+- `src/decorations.ts`: 1개 클래스 (완료)
+- `src/views/treeProvider.ts`: 6개 public 메서드 (완료)
+- `src/utils/performance.ts`: 6개 함수 (이전 완료)
 
 **예상 시간**: 4-5시간
 
@@ -270,16 +271,16 @@ export class ErrorHandler {
 
 ### 전체 진행률
 
-- 완료: 3 / 10 (30%)
+- 완료: 4 / 10 (40%)
 - 진행 중: 0 / 10 (0%)
-- 대기 중: 7 / 10 (70%)
+- 대기 중: 6 / 10 (60%)
 
 ### 카테고리별 진행률
 
 - 성능 최적화: ✅ 100% (완료)
 - 코드 품질: ✅ 100% (완료)
 - 테스트: ✅ 100% (완료)
-- 문서화: 🔄 50% (진행 중)
+- 문서화: ✅ 100% (완료)
 - CI/CD: ⏳ 0% (대기)
 
 ---

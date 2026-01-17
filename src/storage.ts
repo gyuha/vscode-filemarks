@@ -3,6 +3,10 @@ import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
 import type { FilemarkState } from './types';
 
+/**
+ * Handles persistence of bookmark state to the file system.
+ * Supports both workspace-local (.vscode/filemarks.json) and global storage locations.
+ */
 export class StorageService {
   private readonly STORAGE_FILE = 'filemarks.json';
   private workspacePath: string;
@@ -10,6 +14,12 @@ export class StorageService {
   private saveTimeout: NodeJS.Timeout | undefined;
   private readonly DEBOUNCE_DELAY = 500;
 
+  /**
+   * Creates a new StorageService instance.
+   * @param context - VS Code extension context for global storage access
+   * @param workspaceFolder - Optional workspace folder override
+   * @throws Error if no workspace folder is available
+   */
   constructor(context: vscode.ExtensionContext, workspaceFolder?: vscode.WorkspaceFolder) {
     const folder = workspaceFolder || vscode.workspace.workspaceFolders?.[0];
     if (!folder) {
@@ -29,6 +39,11 @@ export class StorageService {
     return path.join(this.context.globalStorageUri.fsPath, this.STORAGE_FILE);
   }
 
+  /**
+   * Loads bookmark state from storage.
+   * Creates backup and returns default state if JSON is corrupted.
+   * @returns The loaded or default FilemarkState
+   */
   async load(): Promise<FilemarkState> {
     try {
       const storagePath = this.getStoragePath();
@@ -78,6 +93,11 @@ export class StorageService {
     }
   }
 
+  /**
+   * Persists bookmark state to storage with debouncing (500ms delay).
+   * Multiple rapid calls are coalesced into a single write operation.
+   * @param state - The FilemarkState to persist
+   */
   save(state: FilemarkState): void {
     if (this.saveTimeout) {
       clearTimeout(this.saveTimeout);

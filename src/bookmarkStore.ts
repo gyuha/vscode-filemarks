@@ -4,6 +4,10 @@ import type { TreeNode, BookmarkNode, FilemarkState } from './types';
 import type { StorageService } from './storage';
 import { debounce, LRUCache } from './utils/performance';
 
+/**
+ * Central store managing all bookmark and folder state.
+ * Handles CRUD operations, navigation, sticky bookmarks, and file watching.
+ */
 export class BookmarkStore {
   private state: FilemarkState;
   private storage: StorageService;
@@ -28,6 +32,9 @@ export class BookmarkStore {
     }, 200);
   }
 
+  /**
+   * Initializes the store by loading state, cleaning invalid bookmarks, and setting up watchers.
+   */
   async initialize(): Promise<void> {
     this.state = await this.storage.load();
     await this.removeNonExistentFileBookmarks();
@@ -159,6 +166,11 @@ export class BookmarkStore {
     return this.state;
   }
 
+  /**
+   * Finds a bookmark by its file path (workspace-relative).
+   * Results are cached for performance.
+   * @param filePath - Workspace-relative file path
+   */
   findBookmarkByFilePath(filePath: string): BookmarkNode | undefined {
     // Check cache first
     if (this.bookmarkCache.has(filePath)) {
@@ -183,6 +195,11 @@ export class BookmarkStore {
     return result;
   }
 
+  /**
+   * Finds the first bookmark containing a specific number (0-9).
+   * @param num - Bookmark number to find
+   * @returns Bookmark and line number, or undefined if not found
+   */
   findBookmarkByNumber(num: number): { bookmark: BookmarkNode; line: number } | undefined {
     const traverse = (nodes: TreeNode[]): { bookmark: BookmarkNode; line: number } | undefined => {
       for (const node of nodes) {
@@ -203,6 +220,10 @@ export class BookmarkStore {
     return traverse(this.state.items);
   }
 
+  /**
+   * Gets all bookmark numbers (0-9) assigned to a file, sorted ascending.
+   * @param filePath - Workspace-relative file path
+   */
   getBookmarkNumbersInFile(filePath: string): number[] {
     const bookmark = this.findBookmarkByFilePath(filePath);
     if (!bookmark) return [];
@@ -212,6 +233,9 @@ export class BookmarkStore {
       .sort((a, b) => a - b);
   }
 
+  /**
+   * Gets all bookmarks across all files with their numbers and lines, sorted by number.
+   */
   getAllBookmarkEntries(): Array<{ num: number; bookmark: BookmarkNode; line: number }> {
     const entries: Array<{ num: number; bookmark: BookmarkNode; line: number }> = [];
 
@@ -232,6 +256,12 @@ export class BookmarkStore {
     return entries.sort((a, b) => a.num - b.num);
   }
 
+  /**
+   * Gets the adjacent bookmark within a file (wraps around at boundaries).
+   * @param filePath - Workspace-relative file path
+   * @param currentNum - Current bookmark number
+   * @param direction - Navigation direction
+   */
   getAdjacentBookmarkInFile(
     filePath: string,
     currentNum: number,
@@ -261,6 +291,11 @@ export class BookmarkStore {
     return { num: lastNum, line: bookmark.numbers[lastNum] };
   }
 
+  /**
+   * Gets the adjacent bookmark across all files (wraps around at boundaries).
+   * @param currentNum - Current bookmark number
+   * @param direction - Navigation direction
+   */
   getAdjacentBookmarkGlobal(
     currentNum: number,
     direction: 'previous' | 'next'
@@ -281,6 +316,13 @@ export class BookmarkStore {
     return entries[entries.length - 1];
   }
 
+  /**
+   * Toggles a bookmark at the given line. Creates, updates, or removes as needed.
+   * If the same number exists at a different line, moves it. If same line has different number, replaces it.
+   * @param filePath - Workspace-relative file path
+   * @param num - Bookmark number (0-9)
+   * @param line - 0-based line number
+   */
   toggleBookmark(filePath: string, num: number, line: number): void {
     let bookmark = this.findBookmarkByFilePath(filePath);
 
@@ -318,6 +360,12 @@ export class BookmarkStore {
     this.save();
   }
 
+  /**
+   * Adds or updates a bookmark without toggle behavior.
+   * @param filePath - Workspace-relative file path
+   * @param num - Bookmark number (0-9)
+   * @param line - 0-based line number
+   */
   addBookmark(filePath: string, num: number, line: number): void {
     let bookmark = this.findBookmarkByFilePath(filePath);
 
@@ -359,6 +407,10 @@ export class BookmarkStore {
     return this.lastUsedFolderId;
   }
 
+  /**
+   * Removes a specific bookmark number from a file.
+   * Deletes the bookmark node if no numbers remain.
+   */
   removeBookmarkNumber(filePath: string, num: number): void {
     const bookmark = this.findBookmarkByFilePath(filePath);
     if (!bookmark) return;
@@ -421,6 +473,11 @@ export class BookmarkStore {
     }
   }
 
+  /**
+   * Creates a new folder, optionally nested under a parent folder.
+   * @param name - Folder display name
+   * @param parentId - Optional parent folder ID for nesting
+   */
   createFolder(name: string, parentId?: string): void {
     const now = new Date().toISOString();
     const folder: TreeNode = {
@@ -467,6 +524,9 @@ export class BookmarkStore {
     }
   }
 
+  /**
+   * Moves a node (bookmark or folder) to a target folder, or to root if targetFolderId is null.
+   */
   moveNode(nodeId: string, targetFolderId: string | null): void {
     const node = this.removeAndGetNode(nodeId);
     if (!node) return;
@@ -511,6 +571,7 @@ export class BookmarkStore {
     return result;
   }
 
+  /** Finds the parent folder containing a node, or undefined if at root. */
   findParentFolder(nodeId: string): (TreeNode & { type: 'folder' }) | undefined {
     const traverse = (
       nodes: TreeNode[],
@@ -590,6 +651,10 @@ export class BookmarkStore {
     this.save();
   }
 
+  /**
+   * Sets the expanded state of all folders recursively.
+   * @param expanded - Whether to expand or collapse all folders
+   */
   setAllFoldersExpanded(expanded: boolean): void {
     const setExpanded = (nodes: TreeNode[]): void => {
       for (const node of nodes) {
@@ -612,6 +677,11 @@ export class BookmarkStore {
     }
   }
 
+  /**
+   * Removes bookmarks with line numbers beyond the file's current line count.
+   * @param filePath - Workspace-relative file path
+   * @param maxLine - Current line count of the file
+   */
   removeInvalidBookmarks(filePath: string, maxLine: number): void {
     const bookmark = this.findBookmarkByFilePath(filePath);
     if (!bookmark) return;

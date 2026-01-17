@@ -1,6 +1,10 @@
 import * as vscode from 'vscode';
 import type { BookmarkStore } from './bookmarkStore';
 
+/**
+ * Provides numbered bookmark icons in the editor gutter.
+ * Creates SVG icons dynamically based on user color configuration.
+ */
 export class GutterDecorationProvider {
   private decorationTypes: Map<number, vscode.TextEditorDecorationType> = new Map();
   private store: BookmarkStore;
