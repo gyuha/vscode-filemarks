@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'node:fs/promises';
 import * as path from 'node:path';
+import * as crypto from 'node:crypto';
 import type { FilemarkState } from './types';
 import { errorHandler, FilemarkError } from './utils/errorHandler';
 
@@ -28,6 +29,7 @@ export class StorageService {
     }
     this.context = context;
     this.workspacePath = folder.uri.fsPath;
+    this.migrateLegacyGlobalStorage();
   }
 
   private getStoragePath(): string {
@@ -37,7 +39,56 @@ export class StorageService {
     if (saveInProject) {
       return path.join(this.workspacePath, '.vscode', this.STORAGE_FILE);
     }
-    return path.join(this.context.globalStorageUri.fsPath, this.STORAGE_FILE);
+
+    return path.join(this.context.globalStorageUri.fsPath, this.getGlobalStorageFileName());
+  }
+
+  private getGlobalStorageFileName(): string {
+    const folderName = path.basename(this.workspacePath);
+    const safeFolderName = folderName.replace(/[^a-zA-Z0-9_-]/g, '_') || 'workspace';
+    const hash = crypto.createHash('md5').update(this.workspacePath).digest('hex').substring(0, 6);
+    return `filemarks-${safeFolderName}-${hash}.json`;
+  }
+
+  private migrateLegacyGlobalStorage(): void {
+    const config = vscode.workspace.getConfiguration('filemarks');
+    const saveInProject = config.get<boolean>('saveBookmarksInProject', true);
+    if (saveInProject) return;
+
+    const legacyPath = path.join(this.context.globalStorageUri.fsPath, this.STORAGE_FILE);
+    const targetPath = path.join(
+      this.context.globalStorageUri.fsPath,
+      this.getGlobalStorageFileName()
+    );
+
+    void (async () => {
+      try {
+        await fs.stat(legacyPath);
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+          errorHandler.handleSilent(FilemarkError.storageRead(error, legacyPath));
+        }
+        return;
+      }
+
+      try {
+        await fs.stat(targetPath);
+        // Target already exists; leave legacy file untouched to avoid overwrite
+        return;
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+          errorHandler.handleSilent(FilemarkError.storageRead(error, targetPath));
+          return;
+        }
+      }
+
+      try {
+        await fs.mkdir(path.dirname(targetPath), { recursive: true });
+        await fs.rename(legacyPath, targetPath);
+      } catch (error) {
+        errorHandler.handleSilent(FilemarkError.storageWrite(error, targetPath));
+      }
+    })();
   }
 
   /**

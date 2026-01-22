@@ -2,6 +2,20 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.12.0] - 2026-01-22
+
+### Changed
+
+- Global storage now uses per-workspace filenames (`filemarks-{folderName}-{hash6}.json`) to avoid collisions and make files identifiable.
+- Automatically migrates legacy global `filemarks.json` to the new per-workspace file on first run (non-destructive if the new file already exists).
+- README updated with new storage paths and migration note.
+
+### Fixed
+
+- Ensured global storage path selection respects project/global setting while handling legacy data safely.
+
+---
+
 ## [0.11.0] - 2025-01-17
 
 ### Added

@@ -43,7 +43,6 @@ Quickly set and jump to up to 10 bookmarks per file using keyboard shortcuts.
 - Hierarchical structure for complex projects
 - Create subFolders within folders (right-click folder)
 
-
 ### 🎛️ Sidebar Controls
 
 Quick access buttons in the sidebar title bar:
@@ -142,13 +141,38 @@ Quick access buttons in the sidebar title bar:
 
 ## Storage
 
-Bookmarks are stored in `.vscode/filemarks.json` by default:
+Bookmarks are stored based on the `filemarks.saveBookmarksInProject` setting:
+
+### Project Storage (default: `saveBookmarksInProject: true`)
+
+Bookmarks are saved in your project folder:
+
+```
+{workspace}/.vscode/filemarks.json
+```
 
 - ✅ Share with team via version control
 - ✅ Project-specific bookmarks
 - ✅ Automatic backup with project
 
-Set `filemarks.saveBookmarksInProject` to `false` for global storage.
+### Global Storage (`saveBookmarksInProject: false`)
+
+Bookmarks are saved in VS Code's global storage with a per-workspace file name that includes the folder name and a path hash:
+
+```
+filemarks-{folderName}-{hash6}.json
+```
+
+| OS          | Base Path                                                                    | Example file                      |
+| ----------- | ---------------------------------------------------------------------------- | --------------------------------- |
+| **macOS**   | `~/Library/Application Support/Code/User/globalStorage/nicegyuha.filemarks/` | `filemarks-myproject-a1b2c3.json` |
+| **Windows** | `%APPDATA%\Code\User\globalStorage\nicegyuha.filemarks\`                     | `filemarks-myproject-a1b2c3.json` |
+| **Linux**   | `~/.config/Code/User/globalStorage/nicegyuha.filemarks/`                     | `filemarks-myproject-a1b2c3.json` |
+
+- ✅ Bookmarks persist across all workspaces
+- ✅ Not tracked in version control
+- ✅ Personal bookmarks that don't affect team members
+- 🔄 Existing global `filemarks.json` is automatically migrated to the new per-workspace file name
 
 ## Sidebar View
 
