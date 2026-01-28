@@ -9,6 +9,7 @@ import { debounce, LRUCache } from './utils/performance';
  * Handles CRUD operations, navigation, sticky bookmarks, and file watching.
  */
 export class BookmarkStore {
+  private static readonly DELETE_GRACE_PERIOD_MS = 1000;
   private state: FilemarkState;
   private storage: StorageService;
   private readonly _onDidChangeBookmarks = new vscode.EventEmitter<void>();
@@ -18,6 +19,7 @@ export class BookmarkStore {
   private bookmarkCache = new LRUCache<string, BookmarkNode | undefined>(100);
   private folderCache = new LRUCache<string, (TreeNode & { type: 'folder' }) | undefined>(50);
   private debouncedSave: () => void;
+  private pendingDeletes = new Map<string, NodeJS.Timeout>();
 
   constructor(context: vscode.ExtensionContext, storage: StorageService) {
     this.storage = storage;
@@ -76,13 +78,32 @@ export class BookmarkStore {
     const watcher = vscode.workspace.createFileSystemWatcher('**/*');
 
     watcher.onDidDelete(uri => {
+      // Filter out .git directory changes
+      if (/(?:\/|\\)\.git(?:\/|\\)/.test(uri.fsPath)) {
+        return;
+      }
       this.handleFileDelete(uri);
     });
 
-    watcher.onDidCreate(async _uri => {
-      const renames = await this.detectFileRename();
-      if (renames) {
-        this.handleFileRename(renames.oldUri, renames.newUri);
+    watcher.onDidCreate(uri => {
+      // Filter out .git directory changes
+      if (/(?:\/|\\)\.git(?:\/|\\)/.test(uri.fsPath)) {
+        return;
+      }
+      this.handleFileCreate(uri);
+    });
+
+    // Handle file renames using proper API
+    vscode.workspace.onDidRenameFiles(e => {
+      for (const { oldUri, newUri } of e.files) {
+        // Filter out .git directory changes
+        if (
+          /(?:\/|\\)\.git(?:\/|\\)/.test(oldUri.fsPath) ||
+          /(?:\/|\\)\.git(?:\/|\\)/.test(newUri.fsPath)
+        ) {
+          continue;
+        }
+        this.handleFileRename(oldUri, newUri);
       }
     });
   }
@@ -91,23 +112,54 @@ export class BookmarkStore {
     return null;
   }
 
+  private handleFileCreate(uri: vscode.Uri): void {
+    const filePath = vscode.workspace.asRelativePath(uri.fsPath);
+    const timeout = this.pendingDeletes.get(filePath);
+    if (timeout) {
+      clearTimeout(timeout);
+      this.pendingDeletes.delete(filePath);
+      this.outputChannel.appendLine(`File recreated: ${filePath}, cancelled pending delete`);
+    }
+  }
+
   private handleFileDelete(uri: vscode.Uri): void {
     const relativePath = vscode.workspace.asRelativePath(uri.fsPath);
-    const bookmark = this.findBookmarkByFilePath(relativePath);
+    const timeout = setTimeout(async () => {
+      try {
+        await vscode.workspace.fs.stat(uri);
+        // File exists - was temporary (git operation)
+        this.outputChannel.appendLine(
+          `File temporarily deleted: ${relativePath}, bookmark preserved`
+        );
+      } catch {
+        // File truly deleted - remove bookmark
+        const bookmark = this.findBookmarkByFilePath(relativePath);
+        if (bookmark) {
+          this.removeBookmarkNode(bookmark.id);
+          this.save();
+          this.outputChannel.appendLine(
+            `File deleted: ${relativePath}, removed bookmark ${bookmark.id}`
+          );
+          vscode.window.showInformationMessage(vscode.l10n.t('file.deleted', relativePath));
+        }
+      }
+      this.pendingDeletes.delete(relativePath);
+    }, BookmarkStore.DELETE_GRACE_PERIOD_MS);
 
-    if (bookmark) {
-      this.removeBookmarkNode(bookmark.id);
-      this.save();
-      this.outputChannel.appendLine(
-        `File deleted: ${relativePath}, removed bookmark ${bookmark.id}`
-      );
-      vscode.window.showInformationMessage(vscode.l10n.t('file.deleted', relativePath));
-    }
+    this.pendingDeletes.set(relativePath, timeout);
   }
 
   private handleFileRename(oldUri: vscode.Uri, newUri: vscode.Uri): void {
     const oldPath = vscode.workspace.asRelativePath(oldUri.fsPath);
     const newPath = vscode.workspace.asRelativePath(newUri.fsPath);
+
+    // Cancel any pending delete for old path
+    const timeout = this.pendingDeletes.get(oldPath);
+    if (timeout) {
+      clearTimeout(timeout);
+      this.pendingDeletes.delete(oldPath);
+    }
+
     const bookmark = this.findBookmarkByFilePath(oldPath);
 
     if (bookmark) {
