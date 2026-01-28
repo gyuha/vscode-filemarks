@@ -2,6 +2,30 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.13.0] - 2026-01-28
+
+### Fixed
+
+- **Bookmark Loss During Git Operations**: Bookmarks no longer disappear during git merge, checkout, rebase, or stash operations
+  - Implemented deferred delete pattern with 1000ms grace period
+  - Files temporarily deleted by git are now detected and bookmarks preserved
+  - Proper file rename detection using VS Code's `onDidRenameFiles` API
+  - .git directory changes are now filtered out to prevent spurious events
+  - Distinguishes between temporary git operations and permanent file deletions
+
+### Added
+
+- **Git Operations Test Suite**: 7 comprehensive tests verifying bookmark preservation
+  - Test for temporary file deletion/recreation (git checkout simulation)
+  - Test for grace period mechanism
+  - Test for file rename handling
+  - Test for .git directory filtering
+  - Test for multiple bookmarks in same file
+  - Test for cross-file isolation
+  - Test for rapid delete/recreate cycles
+
+---
+
 ## [0.12.0] - 2026-01-22
 
 ### Changed
