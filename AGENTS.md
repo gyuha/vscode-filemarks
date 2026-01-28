@@ -1,286 +1,152 @@
 # Agent Development Guide for vscode-filemarks
 
-This guide provides essential information for AI coding agents working on the vscode-filemarks VS Code extension.
+VS Code extension for bookmark management with numbered shortcuts (0-9) and folder organization.
 
-## Project Overview
+- **Stack**: TypeScript (ES2020), VS Code Extension API (^1.85.0), esbuild, Mocha
+- **Node**: 20.x required
 
-**vscode-filemarks** is a VS Code extension for advanced bookmark management with numbered shortcuts (0-9) and folder organization. Built with TypeScript targeting the VS Code Extension API.
-
-- **Language**: TypeScript (ES2020 target)
-- **Framework**: VS Code Extension API (^1.85.0)
-- **Build Tool**: esbuild
-- **Test Framework**: Mocha with @vscode/test-electron
-
-## Build, Lint, and Test Commands
-
-### Development
+## Commands
 
 ```bash
-# Compile TypeScript
-npm run compile
+# Development
+npm run compile          # TypeScript compile
+npm run watch            # Watch mode
+npm run package          # Production build (esbuild, minified)
 
-# Watch mode (compile on save)
-npm run watch
+# Quality
+npm run lint             # ESLint
+npm run format           # Prettier
+npx tsc --noEmit         # Type check only
 
-# Build for production (minified with esbuild)
-npm run package
+# Testing
+npm test                 # Full test (compile + lint + test)
+node ./dist/test/runTest.js                    # Run tests (pre-compiled)
+node ./dist/test/runTest.js --grep "pattern"   # Single test by name
 
-# esbuild development build
-npm run compile:esbuild
-
-# esbuild watch mode
-npm run watch:esbuild
+# Package
+npm run vsce:package     # Create .vsix
+npm run vsce:publish     # Publish to marketplace
 ```
 
-### Linting and Formatting
-
-```bash
-# Run ESLint
-npm run lint
-
-# Auto-format with Prettier
-npm run format
-```
-
-### Testing
-
-```bash
-# Run all tests (compiles, lints, then runs tests)
-npm test
-
-# Run tests without pre-steps (if already compiled)
-node ./dist/test/runTest.js
-```
-
-**Running a single test file:**
-
-```bash
-# Compile first
-npm run compile
-
-# Run specific test suite
-node ./dist/test/runTest.js --grep "Extension Integration"
-```
-
-**Note**: VS Code extension tests require launching a VS Code instance, so they run through the @vscode/test-electron runner.
-
-### Packaging
-
-```bash
-# Create .vsix package
-npm run vsce:package
-
-# Publish to marketplace
-npm run vsce:publish
-```
+**Note**: Tests require VS Code instance via @vscode/test-electron. On CI, use `xvfb-run -a npm test`.
 
 ## Project Structure
 
 ```
 src/
-├── extension.ts          # Extension entry point (activate/deactivate)
-├── bookmarkStore.ts      # Core bookmark state management
-├── storage.ts            # File system persistence layer
-├── decorations.ts        # Gutter icon decorations
-├── types.ts              # TypeScript type definitions
+├── extension.ts           # Entry point (activate/deactivate)
+├── bookmarkStore.ts       # Core state management
+├── storage.ts             # Persistence layer
+├── decorations.ts         # Gutter icons
+├── types.ts               # Type definitions
 ├── views/
-│   └── treeProvider.ts   # Tree view and drag-drop controller
+│   └── treeProvider.ts    # Tree view + drag-drop
+├── utils/
+│   ├── errorHandler.ts    # Error handling utilities
+│   └── performance.ts     # Performance utilities
 └── test/
-    ├── runTest.ts        # Test runner configuration
-    └── suite/            # Test suites
-        ├── extension.test.ts
-        ├── bookmarkStore.test.ts
-        └── storage.test.ts
+    ├── runTest.ts         # Test runner config
+    └── suite/             # Test files (*.test.ts)
 ```
 
-## Code Style Guidelines
+## Code Style
 
-### Import Organization
-
-1. **Node.js built-ins** (prefixed with `node:`)
-2. **External dependencies** (vscode, uuid, etc.)
-3. **Internal modules** (relative imports)
-4. **Type-only imports** (use `type` keyword)
+### Imports (order matters)
 
 ```typescript
-import * as vscode from 'vscode';
-import * as path from 'node:path';
-import * as fs from 'node:fs/promises';
-import { v4 as uuidv4 } from 'uuid';
-import { StorageService } from './storage';
-import { BookmarkStore } from './bookmarkStore';
-import type { BookmarkNode, TreeNode } from './types';
+import * as vscode from 'vscode'; // 1. VS Code
+import * as path from 'node:path'; // 2. Node built-ins (node: prefix)
+import { v4 as uuidv4 } from 'uuid'; // 3. External packages
+import { BookmarkStore } from './store'; // 4. Internal modules
+import type { TreeNode } from './types'; // 5. Type-only imports
 ```
 
 ### Formatting (Prettier)
 
-```json
-{
-  "semi": true, // Always use semicolons
-  "trailingComma": "es5", // Trailing commas where valid in ES5
-  "singleQuote": true, // Use single quotes
-  "printWidth": 100, // Max line width 100 characters
-  "tabWidth": 2, // 2 spaces for indentation
-  "useTabs": false, // Spaces, not tabs
-  "bracketSpacing": true, // { foo: bar } not {foo: bar}
-  "arrowParens": "avoid" // x => x not (x) => x
-}
-```
+- Semicolons: always
+- Quotes: single
+- Print width: 100
+- Trailing commas: ES5
+- Arrow parens: avoid (`x => x`)
+- Tab width: 2 spaces
 
-### TypeScript Configuration
+### Naming
 
-- **Strict mode enabled** (`strict: true`)
-- **Target**: ES2020
-- **Module**: CommonJS
-- **Source maps**: Enabled for debugging
-- **Declaration files**: Generated (`.d.ts`)
+| Element           | Convention        | Example              |
+| ----------------- | ----------------- | -------------------- |
+| Files             | camelCase         | `bookmarkStore.ts`   |
+| Classes           | PascalCase        | `BookmarkStore`      |
+| Interfaces/Types  | PascalCase        | `TreeNode`           |
+| Functions/Methods | camelCase         | `handleGoToBookmark` |
+| Constants         | UPPER_SNAKE       | `DEBOUNCE_DELAY`     |
+| Private members   | underscore prefix | `_onDidChange`       |
+| Unused params     | underscore prefix | `_uri`               |
 
-### Naming Conventions
+### TypeScript
 
-- **Files**: camelCase (e.g., `bookmarkStore.ts`, `treeProvider.ts`)
-- **Classes**: PascalCase (e.g., `BookmarkStore`, `StorageService`)
-- **Interfaces/Types**: PascalCase (e.g., `TreeNode`, `BookmarkNode`)
-- **Functions/Methods**: camelCase (e.g., `handleGoToBookmark`, `initialize`)
-- **Constants**: UPPER_SNAKE_CASE (e.g., `STORAGE_FILE`, `DEBOUNCE_DELAY`)
-- **Private members**: Prefix with underscore (e.g., `_onDidChangeTreeData`)
-- **Unused parameters**: Prefix with underscore (e.g., `_uri`)
-
-### Type Definitions
-
-**Always use explicit types for:**
-
-- Public API interfaces
-- Function parameters
-- Complex return types
-
-**Avoid:**
-
-- `any` type (ESLint warns on this)
-- Type assertions without good reason
-- Implicit `any` returns
-
-```typescript
-// ✅ Good: Explicit types
-export interface BookmarkNode {
-  type: 'bookmark';
-  id: string;
-  label?: string;
-  filePath: string;
-  numbers: Record<number, number>;
-  createdAt: string;
-  updatedAt: string;
-}
-
-// ✅ Good: Type guards
-export function isBookmarkNode(node: TreeNode): node is BookmarkNode {
-  return node.type === 'bookmark';
-}
-
-// ❌ Bad: Using 'any'
-const data: any = JSON.parse(content);
-
-// ✅ Good: Proper typing
-const data = JSON.parse(content) as FilemarkState;
-```
+- Strict mode enabled
+- Use explicit types for public APIs, parameters, complex returns
+- Use type guards: `function isFolderNode(node: TreeNode): node is FolderNode`
+- **Avoid**: `any`, type assertions without reason, implicit any
 
 ### Error Handling
 
-**Always handle errors appropriately:**
-
 ```typescript
-// ✅ Good: Graceful error handling with user feedback
 try {
-  const content = await fs.readFile(storagePath, 'utf-8');
-  return JSON.parse(content) as FilemarkState;
+  const data = await fs.readFile(path, 'utf-8');
+  return JSON.parse(data) as FilemarkState;
 } catch (error) {
   if ((error as NodeJS.ErrnoException).code === 'ENOENT') {
-    return this.getDefaultState();
+    return this.getDefaultState(); // Expected: file doesn't exist
   }
-  if (error instanceof SyntaxError) {
-    vscode.window.showErrorMessage(vscode.l10n.t('error.corruptedJson'));
-    await this.createBackup();
-    return this.getDefaultState();
-  }
-  vscode.window.showErrorMessage(vscode.l10n.t('error.failedToLoad', String(error)));
+  vscode.window.showErrorMessage(vscode.l10n.t('error.failedToLoad'));
   return this.getDefaultState();
-}
-
-// ✅ Good: Silent error handling for non-critical operations
-try {
-  await fs.copyFile(storagePath, backupPath);
-} catch {
-  // Ignore backup errors
 }
 ```
 
-### Event Emitters Pattern
-
-Use VS Code's EventEmitter pattern for reactive updates:
+### VS Code Patterns
 
 ```typescript
-private readonly _onDidChangeBookmarks = new vscode.EventEmitter<void>();
-readonly onDidChangeBookmarks = this._onDidChangeBookmarks.event;
+// Commands - register with context.subscriptions
+context.subscriptions.push(
+  vscode.commands.registerCommand('filemarks.cmd', async () => { /* ... */ })
+);
 
-// Trigger events
-this._onDidChangeBookmarks.fire();
+// Events - use EventEmitter pattern
+private readonly _onDidChange = new vscode.EventEmitter<void>();
+readonly onDidChange = this._onDidChange.event;
 
-// Subscribe to events
-this.store.onDidChangeBookmarks(() => {
-  this.refresh();
+// Config access
+const config = vscode.workspace.getConfiguration('filemarks');
+const value = config.get<boolean>('setting', defaultValue);
+
+// i18n - all user strings
+vscode.window.showWarningMessage(vscode.l10n.t('message.key'));
+```
+
+### Logging
+
+- **No** `console.log` in production (ESLint warns)
+- Use OutputChannel: `vscode.window.createOutputChannel('Filemarks')`
+
+## Testing
+
+```typescript
+import * as assert from 'node:assert';
+
+suite('Feature', () => {
+  test('should work', async function () {
+    this.timeout(10000); // Required for async operations
+    const ext = vscode.extensions.getExtension('gyuha.filemarks');
+    await ext?.activate();
+    assert.strictEqual(ext?.isActive, true);
+  });
 });
 ```
 
-### Console Logging
-
-- **Avoid** `console.log()` in production code (ESLint warns)
-- **Use** VS Code OutputChannel for debugging:
-
-```typescript
-this.outputChannel = vscode.window.createOutputChannel('Filemarks');
-this.outputChannel.appendLine('Debug message');
-```
-
-### Internationalization
-
-Use `vscode.l10n.t()` for all user-facing strings:
-
-```typescript
-// ✅ Good
-vscode.window.showWarningMessage(vscode.l10n.t('Filemarks requires an open workspace'));
-
-// ❌ Bad
-vscode.window.showWarningMessage('Filemarks requires an open workspace');
-```
-
-### Async/Await
-
-- Use `async/await` consistently (no callback-style code)
-- Always handle promise rejections
-- Use `Promise<void>` for functions with no return value
-
-```typescript
-async function initialize(): Promise<void> {
-  this.state = await this.storage.load();
-  await this.removeNonExistentFileBookmarks();
-  this.setupStickyBookmarks();
-}
-```
-
-### Resource Cleanup
-
-Register disposables with extension context:
-
-```typescript
-context.subscriptions.push(
-  vscode.commands.registerCommand('filemarks.goToBookmark', async bookmark => {
-    await handleGoToBookmark(bookmark);
-  })
-);
-
-context.subscriptions.push(decorationProvider);
-context.subscriptions.push(treeView);
-context.subscriptions.push(this.outputChannel);
-```
+- Use Mocha's `suite()` and `test()` (TDD style)
+- Always set timeouts for async tests
+- Use `node:assert` module
 
 ## ESLint Rules
 
@@ -288,81 +154,26 @@ context.subscriptions.push(this.outputChannel);
 {
   "@typescript-eslint/no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
   "@typescript-eslint/no-explicit-any": "warn",
-  "@typescript-eslint/explicit-function-return-type": "off",
-  "@typescript-eslint/explicit-module-boundary-types": "off",
   "no-console": "warn"
 }
 ```
 
-## VS Code API Patterns
+## Gotchas
 
-### Command Registration
+1. **Activation**: Handle missing workspace folders gracefully
+2. **Paths**: Use `vscode.Uri` and `vscode.workspace.asRelativePath()`
+3. **Disposables**: Register ALL with `context.subscriptions`
+4. **Save debouncing**: Batch rapid saves (see `StorageService`)
+5. **Test env**: Tests run in separate VS Code instance
 
-```typescript
-context.subscriptions.push(
-  vscode.commands.registerCommand('filemarks.commandName', async (arg1, arg2) => {
-    await handleCommand(arg1, arg2);
-  })
-);
-```
+## Checklist
 
-### Configuration Access
+Before committing:
 
-```typescript
-const config = vscode.workspace.getConfiguration('filemarks');
-const value = config.get<boolean>('settingName', defaultValue);
-```
-
-### File System Operations
-
-```typescript
-// Check file exists
-try {
-  await vscode.workspace.fs.stat(uri);
-} catch {
-  // File doesn't exist
-}
-
-// Use vscode.Uri for paths
-const absolutePath = vscode.Uri.joinPath(workspaceFolder.uri, relativePath);
-const relativePath = vscode.workspace.asRelativePath(uri.fsPath);
-```
-
-## Common Gotchas
-
-1. **Extension activation**: Extensions must handle missing workspace folders
-2. **File paths**: Always use `vscode.Uri` and `vscode.workspace.asRelativePath()`
-3. **Dispose resources**: Register all subscriptions with `context.subscriptions`
-4. **Save debouncing**: Batch rapid saves (see `StorageService.save()`)
-5. **Test environment**: Tests run in a separate VS Code instance
-
-## Testing Guidelines
-
-- Use Mocha's `suite()` and `test()` functions
-- Set timeouts for async operations: `this.timeout(10000)`
-- Test extension presence, activation, and command registration
-- Use `assert` from `node:assert` module
-
-```typescript
-import * as assert from 'node:assert';
-
-test('Extension should activate', async function () {
-  this.timeout(10000);
-  const ext = vscode.extensions.getExtension('gyuha.filemarks');
-  await ext.activate();
-  assert.strictEqual(ext.isActive, true);
-});
-```
-
-## When Making Changes
-
-1. ✅ **DO**: Run `npm run lint` before committing
-2. ✅ **DO**: Format with `npm run format` or enable format-on-save
-3. ✅ **DO**: Add type definitions for new interfaces
-4. ✅ **DO**: Handle errors gracefully with user feedback
-5. ✅ **DO**: Use internationalization for strings
-6. ✅ **DO**: Register disposables with context
-7. ❌ **DON'T**: Use `any` type without good reason
-8. ❌ **DON'T**: Use `console.log()` in production code
-9. ❌ **DON'T**: Hardcode strings shown to users
-10. ❌ **DON'T**: Forget to clean up resources
+- [ ] `npm run lint` passes
+- [ ] `npm run format` applied
+- [ ] Types defined for new interfaces
+- [ ] Errors handled with user feedback
+- [ ] Strings use `vscode.l10n.t()`
+- [ ] Disposables registered
+- [ ] No `any`, `console.log`, or hardcoded strings
