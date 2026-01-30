@@ -2,6 +2,26 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.14.0] - 2026-01-30
+
+### Added
+
+- **Drag-and-Drop Placeholder**: Empty bookmark tree now shows an interactive drop zone
+  - Displays placeholder node with inbox icon when no bookmarks exist
+  - Localized message: "Drop files here to create bookmarks" (English) / "파일을 드래그하여 북마크를 생성하세요" (Korean)
+  - Supports dragging files from OS (Finder/Explorer) directly onto the placeholder
+  - Placeholder automatically disappears when bookmarks are added
+  - Does not show when filter is active (shows "No matching bookmarks" message instead)
+  - Context key `filemarks.isEmpty` tracks empty state for UI updates
+
+### Technical
+
+- Added `PlaceholderNode` type with type guard function
+- Enhanced `TreeDragAndDropController` to handle placeholder as drop target
+- 4 new integration tests covering placeholder behavior (all passing)
+
+---
+
 ## [0.13.0] - 2026-01-28
 
 ### Fixed
