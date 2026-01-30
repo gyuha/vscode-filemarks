@@ -12,6 +12,8 @@
   "Bookmark moved": "Bookmark moved",
   "Bookmark already exists for {0}": "Bookmark already exists for {0}",
   "Bookmark 0 added to {0}": "Bookmark 0 added to {0}",
+  "bookmark.addedSingle": "Bookmark 0 added to {0}",
+  "bookmark.addedMultiple": "{0} files added as bookmarks",
   "Bookmarks cleared in current file": "Bookmarks cleared in current file",
   "All bookmarks cleared": "All bookmarks cleared",
 
@@ -55,5 +57,6 @@
   "error.corruptedJson": "Bookmark file contains invalid JSON, backup created",
   "error.failedToLoad": "Failed to load bookmarks: {0}",
   "error.failedToSave": "Failed to save bookmarks: {0}",
-  "error.fileNotFound": "File not found: {0}"
+  "error.fileNotFound": "File not found: {0}",
+  "error.failedToParseUri": "Failed to parse URI: {0}"
 }

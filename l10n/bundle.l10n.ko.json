@@ -12,6 +12,8 @@
   "Bookmark moved": "북마크가 이동되었습니다",
   "Bookmark already exists for {0}": "{0}에 이미 북마크가 존재합니다",
   "Bookmark 0 added to {0}": "북마크 0이(가) {0}에 추가되었습니다",
+  "bookmark.addedSingle": "북마크 0이(가) {0}에 추가되었습니다",
+  "bookmark.addedMultiple": "{0}개 파일이 북마크로 추가되었습니다",
   "Bookmarks cleared in current file": "현재 파일의 북마크가 삭제되었습니다",
   "All bookmarks cleared": "모든 북마크가 삭제되었습니다",
 
@@ -55,5 +57,6 @@
   "error.corruptedJson": "북마크 파일에 잘못된 JSON이 포함되어 있습니다. 백업이 생성되었습니다",
   "error.failedToLoad": "북마크 로드 실패: {0}",
   "error.failedToSave": "북마크 저장 실패: {0}",
-  "error.fileNotFound": "파일을 찾을 수 없음: {0}"
+  "error.fileNotFound": "파일을 찾을 수 없음: {0}",
+  "error.failedToParseUri": "URI 파싱 실패: {0}"
 }

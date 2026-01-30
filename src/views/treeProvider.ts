@@ -30,7 +30,10 @@ class TreeDragAndDropController implements vscode.TreeDragAndDropController<Tree
   private static readonly TREE_MIME_TYPE = 'application/vnd.code.tree.filemarks';
   private static readonly URI_LIST_MIME_TYPE = 'text/uri-list';
 
-  dropMimeTypes = [TreeDragAndDropController.TREE_MIME_TYPE];
+  dropMimeTypes = [
+    TreeDragAndDropController.TREE_MIME_TYPE,
+    TreeDragAndDropController.URI_LIST_MIME_TYPE,
+  ];
   dragMimeTypes = [
     TreeDragAndDropController.TREE_MIME_TYPE,
     TreeDragAndDropController.URI_LIST_MIME_TYPE,
@@ -61,27 +64,97 @@ class TreeDragAndDropController implements vscode.TreeDragAndDropController<Tree
   }
 
   async handleDrop(target: TreeNode | undefined, dataTransfer: vscode.DataTransfer): Promise<void> {
-    const transferItem = dataTransfer.get(TreeDragAndDropController.TREE_MIME_TYPE);
-    if (!transferItem) return;
+    // Handle internal tree drag-and-drop
+    const treeTransferItem = dataTransfer.get(TreeDragAndDropController.TREE_MIME_TYPE);
+    if (treeTransferItem) {
+      const source = treeTransferItem.value as TreeNode[];
+      if (!source || source.length === 0) return;
 
-    const source = transferItem.value as TreeNode[];
-    if (!source || source.length === 0) return;
+      const sourceNode = source[0];
 
-    const sourceNode = source[0];
+      let targetFolderId: string | null = null;
+      if (target) {
+        if (isFolderNode(target)) {
+          targetFolderId = target.id;
+        } else {
+          const parentFolder = this.store.findParentFolder(target.id);
+          targetFolderId = parentFolder?.id ?? null;
+        }
+      }
 
+      if (sourceNode.id === targetFolderId) return;
+
+      await this.store.moveNode(sourceNode.id, targetFolderId);
+      return;
+    }
+
+    // Handle external file drops
+    const uriListTransferItem = dataTransfer.get(TreeDragAndDropController.URI_LIST_MIME_TYPE);
+    if (!uriListTransferItem) return;
+
+    const uriListString = await uriListTransferItem.asString();
+    if (!uriListString) return;
+
+    const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+    if (!workspaceFolder) return;
+
+    // Parse URI list (format: URIs separated by \r\n)
+    const uris = uriListString
+      .split('\r\n')
+      .map(line => line.trim())
+      .filter(line => line.length > 0);
+
+    if (uris.length === 0) return;
+
+    // Determine target folder
     let targetFolderId: string | null = null;
     if (target) {
       if (isFolderNode(target)) {
         targetFolderId = target.id;
-      } else {
+      } else if (isBookmarkNode(target)) {
         const parentFolder = this.store.findParentFolder(target.id);
         targetFolderId = parentFolder?.id ?? null;
       }
     }
 
-    if (sourceNode.id === targetFolderId) return;
+    // If targeting a folder, set it as the last used folder
+    if (targetFolderId) {
+      this.store.setLastUsedFolderId(targetFolderId);
+    }
 
-    await this.store.moveNode(sourceNode.id, targetFolderId);
+    const addedFiles: string[] = [];
+    for (const uriString of uris) {
+      try {
+        const uri = vscode.Uri.parse(uriString);
+        const filePath = vscode.workspace.asRelativePath(uri.fsPath);
+
+        // Skip folders, only process files
+        try {
+          const stat = await vscode.workspace.fs.stat(uri);
+          if (stat.type === vscode.FileType.Directory) {
+            continue;
+          }
+        } catch {
+          // If we can't stat, skip this URI
+          continue;
+        }
+
+        // Create bookmark at number 0, line 0
+        this.store.toggleBookmark(filePath, 0, 0);
+        addedFiles.push(path.basename(filePath));
+      } catch (error) {
+        // Log parsing error but continue with other files
+        vscode.window.showWarningMessage(vscode.l10n.t('error.failedToParseUri', uriString));
+      }
+    }
+
+    if (addedFiles.length > 0) {
+      const message =
+        addedFiles.length === 1
+          ? vscode.l10n.t('bookmark.addedSingle', addedFiles[0])
+          : vscode.l10n.t('bookmark.addedMultiple', addedFiles.length.toString());
+      vscode.window.showInformationMessage(message);
+    }
   }
 }
 
