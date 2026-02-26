@@ -2,6 +2,14 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.14.1] - 2026-02-27
+
+### Fixed
+
+- **Sidebar Bookmark Icon Fill**: Filled the center of the sidebar bookmark icon for improved visibility in the Activity Bar and Filemarks view.
+
+---
+
 ## [0.14.0] - 2026-01-30
 
 ### Added
