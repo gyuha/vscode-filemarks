@@ -1,15 +1,17 @@
 import * as assert from 'node:assert';
 import * as vscode from 'vscode';
 
+const EXTENSION_ID = 'nicegyuha.filemarks';
+
 suite('Extension Integration Test Suite', () => {
   test('Extension should be present', () => {
-    assert.ok(vscode.extensions.getExtension('gyuha.filemarks'));
+    assert.ok(vscode.extensions.getExtension(EXTENSION_ID));
   });
 
   test('Extension should activate', async function () {
     this.timeout(10000);
 
-    const ext = vscode.extensions.getExtension('gyuha.filemarks');
+    const ext = vscode.extensions.getExtension(EXTENSION_ID);
     assert.ok(ext);
 
     await ext.activate();
@@ -19,7 +21,7 @@ suite('Extension Integration Test Suite', () => {
   test('Commands should be registered', async function () {
     this.timeout(10000);
 
-    const ext = vscode.extensions.getExtension('gyuha.filemarks');
+    const ext = vscode.extensions.getExtension(EXTENSION_ID);
     assert.ok(ext);
     await ext.activate();
 
