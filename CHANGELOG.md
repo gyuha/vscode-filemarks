@@ -2,6 +2,14 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.14.2] - 2026-03-01
+
+### Changed
+
+- Bumped extension version to `0.14.2`.
+
+---
+
 ## [0.14.1] - 2026-02-27
 
 ### Fixed
