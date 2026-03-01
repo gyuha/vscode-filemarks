@@ -133,6 +133,16 @@
         "icon": "$(trash)"
       },
       {
+        "command": "filemarks.exportBookmarksJson",
+        "title": "Export Bookmarks (JSON)",
+        "category": "Filemarks"
+      },
+      {
+        "command": "filemarks.importBookmarksJson",
+        "title": "Import Bookmarks (JSON)",
+        "category": "Filemarks"
+      },
+      {
         "command": "filemarks.expandAllFolders",
         "title": "Expand All Folders",
         "category": "Filemarks",

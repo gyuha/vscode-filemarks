@@ -14,6 +14,8 @@
   "commands.moveToFolder.title": "Filemarks: Move to Folder",
   "commands.clear.title": "Filemarks: Clear Bookmarks in Current File",
   "commands.clearAll.title": "Filemarks: Clear All Bookmarks",
+  "commands.exportBookmarksJson.title": "Filemarks: Export Bookmarks (JSON)",
+  "commands.importBookmarksJson.title": "Filemarks: Import Bookmarks (JSON)",
   "commands.expandAllFolders.title": "Filemarks: Expand All Folders",
   "commands.collapseAllFolders.title": "Filemarks: Collapse All Folders",
   "commands.focusSidebar.title": "Filemarks: Focus Sidebar",

@@ -16,6 +16,8 @@
   "bookmark.addedMultiple": "{0} files added as bookmarks",
   "Bookmarks cleared in current file": "Bookmarks cleared in current file",
   "All bookmarks cleared": "All bookmarks cleared",
+  "Bookmarks exported to {0}": "Bookmarks exported to {0}",
+  "Bookmarks imported from {0}": "Bookmarks imported from {0}",
 
   "Folder \"{0}\" created": "Folder \"{0}\" created",
   "Folder created in \"{0}\"": "Folder created in \"{0}\"",
@@ -34,6 +36,8 @@
   "Delete all bookmarks in {0}?": "Delete all bookmarks in {0}?",
   "Delete ALL bookmarks in ALL files? This cannot be undone.": "Delete ALL bookmarks in ALL files? This cannot be undone.",
   "Delete All": "Delete All",
+  "Export": "Export",
+  "Import": "Import",
 
   "No active editor": "No active editor",
   "Folder name": "Folder name",
@@ -42,6 +46,8 @@
   "Bookmark name (optional)": "Bookmark name (optional)",
   "Enter new bookmark name": "Enter new bookmark name",
   "Select target folder": "Select target folder",
+  "Export bookmarks as JSON": "Export bookmarks as JSON",
+  "Import bookmarks from JSON": "Import bookmarks from JSON",
   "Root": "Root",
   "Move to root level": "Move to root level",
 
@@ -58,5 +64,10 @@
   "error.failedToLoad": "Failed to load bookmarks: {0}",
   "error.failedToSave": "Failed to save bookmarks: {0}",
   "error.fileNotFound": "File not found: {0}",
-  "error.failedToParseUri": "Failed to parse URI: {0}"
+  "error.failedToParseUri": "Failed to parse URI: {0}",
+
+  "Failed to export bookmarks": "Failed to export bookmarks",
+  "Failed to import bookmarks": "Failed to import bookmarks",
+  "Failed to import bookmarks: invalid JSON": "Failed to import bookmarks: invalid JSON",
+  "Failed to import bookmarks: invalid bookmark format": "Failed to import bookmarks: invalid bookmark format"
 }

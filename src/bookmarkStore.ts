@@ -218,6 +218,29 @@ export class BookmarkStore {
     return this.state;
   }
 
+  exportState(): FilemarkState {
+    return JSON.parse(JSON.stringify(this.state)) as FilemarkState;
+  }
+
+  importState(state: unknown): void {
+    if (!this.isValidFilemarkState(state)) {
+      throw new Error('Invalid bookmark JSON format');
+    }
+
+    this.state = state;
+    this.lastUsedFolderId = null;
+    this.save();
+  }
+
+  private isValidFilemarkState(state: unknown): state is FilemarkState {
+    if (!state || typeof state !== 'object') {
+      return false;
+    }
+
+    const candidate = state as Partial<FilemarkState>;
+    return typeof candidate.version === 'string' && Array.isArray(candidate.items);
+  }
+
   /**
    * Finds a bookmark by its file path (workspace-relative).
    * Results are cached for performance.

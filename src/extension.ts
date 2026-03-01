@@ -111,6 +111,18 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.exportBookmarksJson', async () => {
+        await handleExportBookmarksJson();
+      })
+    );
+
+    context.subscriptions.push(
+      vscode.commands.registerCommand('filemarks.importBookmarksJson', async () => {
+        await handleImportBookmarksJson();
+      })
+    );
+
+    context.subscriptions.push(
       vscode.commands.registerCommand('filemarks.expandAllFolders', async () => {
         await handleExpandAllFolders();
       })
@@ -624,6 +636,76 @@ async function handleClearAll(): Promise<void> {
 
   bookmarkStore.clearAllBookmarks();
   vscode.window.showInformationMessage(vscode.l10n.t('All bookmarks cleared'));
+}
+
+async function handleExportBookmarksJson(): Promise<void> {
+  if (!bookmarkStore) return;
+
+  const defaultUri = await getDefaultBookmarkJsonUri();
+  const uri = await vscode.window.showSaveDialog({
+    defaultUri,
+    filters: { JSON: ['json'] },
+    saveLabel: vscode.l10n.t('Export'),
+    title: vscode.l10n.t('Export bookmarks as JSON'),
+  });
+
+  if (!uri) return;
+
+  try {
+    const encoded = new TextEncoder().encode(JSON.stringify(bookmarkStore.exportState(), null, 2));
+    await vscode.workspace.fs.writeFile(uri, encoded);
+    vscode.window.showInformationMessage(vscode.l10n.t('Bookmarks exported to {0}', uri.fsPath));
+  } catch {
+    vscode.window.showErrorMessage(vscode.l10n.t('Failed to export bookmarks'));
+  }
+}
+
+async function handleImportBookmarksJson(): Promise<void> {
+  if (!bookmarkStore) return;
+
+  const picked = await vscode.window.showOpenDialog({
+    canSelectFiles: true,
+    canSelectFolders: false,
+    canSelectMany: false,
+    filters: { JSON: ['json'] },
+    openLabel: vscode.l10n.t('Import'),
+    title: vscode.l10n.t('Import bookmarks from JSON'),
+  });
+
+  if (!picked || picked.length === 0) return;
+
+  try {
+    const bytes = await vscode.workspace.fs.readFile(picked[0]);
+    const decoded = new TextDecoder().decode(bytes);
+    const imported = JSON.parse(decoded) as unknown;
+    bookmarkStore.importState(imported);
+    vscode.window.showInformationMessage(
+      vscode.l10n.t('Bookmarks imported from {0}', picked[0].fsPath)
+    );
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      vscode.window.showErrorMessage(vscode.l10n.t('Failed to import bookmarks: invalid JSON'));
+      return;
+    }
+
+    if (error instanceof Error && error.message === 'Invalid bookmark JSON format') {
+      vscode.window.showErrorMessage(
+        vscode.l10n.t('Failed to import bookmarks: invalid bookmark format')
+      );
+      return;
+    }
+
+    vscode.window.showErrorMessage(vscode.l10n.t('Failed to import bookmarks'));
+  }
+}
+
+async function getDefaultBookmarkJsonUri(): Promise<vscode.Uri | undefined> {
+  const workspaceFolder = vscode.workspace.workspaceFolders?.[0];
+  if (workspaceFolder) {
+    return vscode.Uri.joinPath(workspaceFolder.uri, 'filemarks-bookmarks.json');
+  }
+
+  return undefined;
 }
 
 async function handleExpandAllFolders(): Promise<void> {

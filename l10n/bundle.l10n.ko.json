@@ -16,6 +16,8 @@
   "bookmark.addedMultiple": "{0}개 파일이 북마크로 추가되었습니다",
   "Bookmarks cleared in current file": "현재 파일의 북마크가 삭제되었습니다",
   "All bookmarks cleared": "모든 북마크가 삭제되었습니다",
+  "Bookmarks exported to {0}": "북마크를 {0}(으)로 내보냈습니다",
+  "Bookmarks imported from {0}": "북마크를 {0}에서 가져왔습니다",
 
   "Folder \"{0}\" created": "폴더 \"{0}\"이(가) 생성되었습니다",
   "Folder created in \"{0}\"": "폴더가 \"{0}\" 안에 생성되었습니다",
@@ -34,6 +36,8 @@
   "Delete all bookmarks in {0}?": "{0}의 모든 북마크를 삭제하시겠습니까?",
   "Delete ALL bookmarks in ALL files? This cannot be undone.": "모든 파일의 모든 북마크를 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.",
   "Delete All": "전체 삭제",
+  "Export": "내보내기",
+  "Import": "가져오기",
 
   "No active editor": "활성화된 편집기가 없습니다",
   "Folder name": "폴더 이름",
@@ -42,6 +46,8 @@
   "Bookmark name (optional)": "북마크 이름 (선택사항)",
   "Enter new bookmark name": "새 북마크 이름을 입력하세요",
   "Select target folder": "대상 폴더를 선택하세요",
+  "Export bookmarks as JSON": "북마크를 JSON으로 내보내기",
+  "Import bookmarks from JSON": "JSON에서 북마크 가져오기",
   "Root": "루트",
   "Move to root level": "루트 레벨로 이동",
 
@@ -58,5 +64,10 @@
   "error.failedToLoad": "북마크 로드 실패: {0}",
   "error.failedToSave": "북마크 저장 실패: {0}",
   "error.fileNotFound": "파일을 찾을 수 없음: {0}",
-  "error.failedToParseUri": "URI 파싱 실패: {0}"
+  "error.failedToParseUri": "URI 파싱 실패: {0}",
+
+  "Failed to export bookmarks": "북마크 내보내기에 실패했습니다",
+  "Failed to import bookmarks": "북마크 가져오기에 실패했습니다",
+  "Failed to import bookmarks: invalid JSON": "북마크 가져오기에 실패했습니다: 잘못된 JSON",
+  "Failed to import bookmarks: invalid bookmark format": "북마크 가져오기에 실패했습니다: 잘못된 북마크 형식"
 }
