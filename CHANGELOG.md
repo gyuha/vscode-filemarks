@@ -2,6 +2,16 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.14.3] - 2026-03-14
+
+### Changed
+
+- **Localization Placeholders**: Implemented localization placeholders in package manifest for internationalization support
+  - Added placeholder references (`%key%`) for display names, descriptions, and command titles
+  - Updated command implementations to support localized strings
+
+---
+
 ## [0.14.2] - 2026-03-01
 
 ### Changed
