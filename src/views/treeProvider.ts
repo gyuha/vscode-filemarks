@@ -284,6 +284,30 @@ export class FilemarkTreeProvider implements vscode.TreeDataProvider<TreeNode> {
     return this.treeView?.selection;
   }
 
+  async revealBookmarkForFile(filePath: string, options?: { refresh?: boolean }): Promise<void> {
+    if (!this.treeView || this.filterText) {
+      return;
+    }
+
+    const bookmark = this.store.findBookmarkByFilePath(filePath);
+    if (!bookmark) {
+      return;
+    }
+
+    if (options?.refresh) {
+      this._onDidChangeTreeData.fire(undefined);
+      await new Promise<void>(resolve => {
+        setTimeout(resolve, 0);
+      });
+    }
+
+    try {
+      await this.treeView.reveal(bookmark, { select: true, focus: false });
+    } catch {
+      return;
+    }
+  }
+
   /**
    * Sets the filter text for fuzzy search. Clears cache and updates tree title.
    * @param text - Filter pattern (empty string clears filter)

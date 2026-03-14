@@ -51,6 +51,7 @@ suite('Extension Integration Test Suite', () => {
   test('Configuration should have expected properties', () => {
     const config = vscode.workspace.getConfiguration('filemarks');
 
+    assert.ok(config.has('autoReveal'));
     assert.ok(config.has('saveBookmarksInProject'));
     assert.ok(config.has('navigateThroughAllFiles'));
     assert.ok(config.has('showBookmarkNotDefinedWarning'));

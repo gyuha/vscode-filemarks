@@ -37,6 +37,13 @@ export async function activate(context: vscode.ExtensionContext) {
     });
     treeProvider.setTreeView(treeView);
     context.subscriptions.push(treeView);
+    syncTreeViewToActiveEditor();
+
+    context.subscriptions.push(
+      vscode.window.onDidChangeActiveTextEditor(editor => {
+        void syncTreeViewToActiveEditor(editor);
+      })
+    );
 
     context.subscriptions.push(
       vscode.commands.registerCommand('filemarks.goToBookmark', async (bookmark, line) => {
@@ -230,6 +237,31 @@ export async function activate(context: vscode.ExtensionContext) {
   }
 }
 
+async function syncTreeViewToActiveEditor(
+  editor?: vscode.TextEditor,
+  options?: { refresh?: boolean }
+): Promise<void> {
+  if (!treeProvider) return;
+
+  const targetEditor = editor ?? vscode.window.activeTextEditor;
+  if (!targetEditor || targetEditor.document.uri.scheme !== 'file') {
+    return;
+  }
+
+  const config = vscode.workspace.getConfiguration('filemarks');
+  if (!config.get<boolean>('autoReveal', true)) {
+    return;
+  }
+
+  const workspaceFolder = vscode.workspace.getWorkspaceFolder(targetEditor.document.uri);
+  if (!workspaceFolder) {
+    return;
+  }
+
+  const filePath = vscode.workspace.asRelativePath(targetEditor.document.uri.fsPath);
+  await treeProvider.revealBookmarkForFile(filePath, options);
+}
+
 function handleToggleBookmark(num: number): void {
   if (!bookmarkStore) return;
 
@@ -243,6 +275,7 @@ function handleToggleBookmark(num: number): void {
   const line = editor.selection.active.line;
 
   bookmarkStore.toggleBookmark(filePath, num, line);
+  void syncTreeViewToActiveEditor(editor, { refresh: true });
   vscode.window.showInformationMessage(
     vscode.l10n.t('Bookmark {0} toggled at line {1}', num, line + 1)
   );
@@ -267,6 +300,7 @@ function handleAutoBookmark(): void {
     if (existingNum) {
       const num = Number(existingNum[0]);
       bookmarkStore.removeBookmarkNumber(filePath, num);
+      void syncTreeViewToActiveEditor(editor, { refresh: true });
       vscode.window.showInformationMessage(
         vscode.l10n.t('Bookmark {0} removed from line {1}', num, line + 1)
       );
@@ -285,6 +319,7 @@ function handleAutoBookmark(): void {
   }
 
   bookmarkStore.toggleBookmark(filePath, targetNum, line);
+  void syncTreeViewToActiveEditor(editor, { refresh: true });
   vscode.window.showInformationMessage(
     vscode.l10n.t('Bookmark {0} created at line {1}', targetNum, line + 1)
   );
@@ -778,6 +813,7 @@ function handleToggleBookmarkFromGutter(lineNumber?: number): void {
     if (existingNum) {
       const num = Number(existingNum[0]);
       bookmarkStore.removeBookmarkNumber(filePath, num);
+      void syncTreeViewToActiveEditor(editor, { refresh: true });
       vscode.window.showInformationMessage(
         vscode.l10n.t('Bookmark {0} removed from line {1}', num, line + 1)
       );
@@ -795,6 +831,7 @@ function handleToggleBookmarkFromGutter(lineNumber?: number): void {
   }
 
   bookmarkStore.toggleBookmark(filePath, targetNum, line);
+  void syncTreeViewToActiveEditor(editor, { refresh: true });
   vscode.window.showInformationMessage(
     vscode.l10n.t('Bookmark {0} created at line {1}', targetNum, line + 1)
   );

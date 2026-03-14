@@ -11,6 +11,7 @@ suite('TreeProvider Performance Test Suite', () => {
   let treeProvider: FilemarkTreeProvider;
   let context: vscode.ExtensionContext;
   let testDir: string;
+  let revealCalls: Array<{ element: unknown; options: unknown }>;
 
   setup(async () => {
     testDir = path.join('/tmp', `tree-perf-test-${Date.now()}`);
@@ -32,6 +33,7 @@ suite('TreeProvider Performance Test Suite', () => {
     await store.initialize();
 
     treeProvider = new FilemarkTreeProvider(store);
+    revealCalls = [];
   });
 
   teardown(async () => {
@@ -194,6 +196,114 @@ suite('TreeProvider Performance Test Suite', () => {
     const parent = treeProvider.getParent(bookmark);
     assert.ok(parent);
     assert.strictEqual(parent.id, folder.id);
+  });
+
+  test('Should reveal bookmarked file in tree view', async () => {
+    await store.addBookmark('reveal.ts', 0, 10);
+    const bookmark = store.findBookmarkByFilePath('reveal.ts');
+    assert.ok(bookmark);
+
+    const treeView = {
+      selection: [],
+      reveal: async (element: unknown, options?: unknown) => {
+        revealCalls.push({ element, options });
+      },
+      onDidExpandElement: () => new vscode.Disposable(() => {}),
+      onDidCollapseElement: () => new vscode.Disposable(() => {}),
+      onDidChangeSelection: () => new vscode.Disposable(() => {}),
+    } as unknown as vscode.TreeView<vscode.TreeItem>;
+
+    treeProvider.setTreeView(
+      treeView as unknown as vscode.TreeView<import('../../types').TreeNode>
+    );
+
+    await treeProvider.revealBookmarkForFile('reveal.ts');
+
+    assert.strictEqual(revealCalls.length, 1);
+    assert.strictEqual(revealCalls[0].element, bookmark);
+    assert.deepStrictEqual(revealCalls[0].options, { select: true, focus: false });
+  });
+
+  test('Should not reveal when file is not bookmarked', async () => {
+    const treeView = {
+      selection: [],
+      reveal: async (element: unknown, options?: unknown) => {
+        revealCalls.push({ element, options });
+      },
+      onDidExpandElement: () => new vscode.Disposable(() => {}),
+      onDidCollapseElement: () => new vscode.Disposable(() => {}),
+      onDidChangeSelection: () => new vscode.Disposable(() => {}),
+    } as unknown as vscode.TreeView<vscode.TreeItem>;
+
+    treeProvider.setTreeView(
+      treeView as unknown as vscode.TreeView<import('../../types').TreeNode>
+    );
+
+    await treeProvider.revealBookmarkForFile('missing.ts');
+
+    assert.strictEqual(revealCalls.length, 0);
+  });
+
+  test('Should not reveal when filter is active', async () => {
+    await store.addBookmark('filtered.ts', 0, 10);
+
+    const treeView = {
+      selection: [],
+      reveal: async (element: unknown, options?: unknown) => {
+        revealCalls.push({ element, options });
+      },
+      onDidExpandElement: () => new vscode.Disposable(() => {}),
+      onDidCollapseElement: () => new vscode.Disposable(() => {}),
+      onDidChangeSelection: () => new vscode.Disposable(() => {}),
+    } as unknown as vscode.TreeView<vscode.TreeItem>;
+
+    treeProvider.setTreeView(
+      treeView as unknown as vscode.TreeView<import('../../types').TreeNode>
+    );
+    treeProvider.setFilter('filtered');
+
+    await treeProvider.revealBookmarkForFile('filtered.ts');
+
+    assert.strictEqual(revealCalls.length, 0);
+  });
+
+  test('Should not reveal without tree view', async () => {
+    await store.addBookmark('detached.ts', 0, 10);
+
+    await assert.doesNotReject(async () => {
+      await treeProvider.revealBookmarkForFile('detached.ts');
+    });
+  });
+
+  test('Should refresh tree data before revealing newly added bookmark when requested', async () => {
+    await store.addBookmark('newly-added.ts', 0, 10);
+
+    let refreshCount = 0;
+    treeProvider.onDidChangeTreeData(() => {
+      refreshCount += 1;
+    });
+
+    const treeView = {
+      selection: [],
+      reveal: async (element: unknown, options?: unknown) => {
+        if (refreshCount === 0) {
+          throw new Error('tree not refreshed yet');
+        }
+        revealCalls.push({ element, options });
+      },
+      onDidExpandElement: () => new vscode.Disposable(() => {}),
+      onDidCollapseElement: () => new vscode.Disposable(() => {}),
+      onDidChangeSelection: () => new vscode.Disposable(() => {}),
+    } as unknown as vscode.TreeView<vscode.TreeItem>;
+
+    treeProvider.setTreeView(
+      treeView as unknown as vscode.TreeView<import('../../types').TreeNode>
+    );
+
+    await treeProvider.revealBookmarkForFile('newly-added.ts', { refresh: true });
+
+    assert.strictEqual(refreshCount, 1);
+    assert.strictEqual(revealCalls.length, 1);
   });
 
   test('Should return undefined for root item parent', async () => {

@@ -1,7 +1,7 @@
 {
   "name": "filemarks",
-  "displayName": "Filemarks",
-  "description": "Advanced bookmark management with numbered shortcuts and folder organization",
+  "displayName": "%displayName%",
+  "description": "%description%",
   "version": "0.14.2",
   "publisher": "nicegyuha",
   "author": {
@@ -43,7 +43,7 @@
       "activitybar": [
         {
           "id": "filemarks",
-          "title": "Filemarks",
+          "title": "%viewsContainers.filemarks.title%",
           "icon": "images/sidebar-icon.svg"
         }
       ]
@@ -52,7 +52,7 @@
       "filemarks": [
         {
           "id": "filemarks.treeView",
-          "name": "",
+          "name": "%views.filemarks.treeView.name%",
           "icon": "images/sidebar-icon.svg"
         }
       ]
@@ -60,242 +60,242 @@
     "commands": [
       {
         "command": "filemarks.deleteSelected",
-        "title": "Delete Selected",
-        "category": "Filemarks",
+        "title": "%commands.deleteSelected.title%",
+        "category": "%category.filemarks%",
         "icon": "$(remove)"
       },
       {
         "command": "filemarks.goToBookmark",
-        "title": "Go to Bookmark",
-        "category": "Filemarks"
+        "title": "%commands.goToBookmark.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.deleteBookmark",
-        "title": "Delete Bookmark",
-        "category": "Filemarks",
+        "title": "%commands.deleteBookmark.title%",
+        "category": "%category.filemarks%",
         "icon": "$(trash)"
       },
       {
         "command": "filemarks.renameBookmark",
-        "title": "Rename Bookmark",
-        "category": "Filemarks",
+        "title": "%commands.renameBookmark.title%",
+        "category": "%category.filemarks%",
         "icon": "$(edit)"
       },
       {
         "command": "filemarks.list",
-        "title": "List Bookmarks in Current File",
-        "category": "Filemarks"
+        "title": "%commands.list.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.listAll",
-        "title": "List All Bookmarks",
-        "category": "Filemarks"
+        "title": "%commands.listAll.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.createFolder",
-        "title": "Create Folder",
-        "category": "Filemarks",
+        "title": "%commands.createFolder.title%",
+        "category": "%category.filemarks%",
         "icon": "$(new-folder)"
       },
       {
         "command": "filemarks.createFolderIn",
-        "title": "Create Folder",
-        "category": "Filemarks",
+        "title": "%commands.createFolderIn.title%",
+        "category": "%category.filemarks%",
         "icon": "$(new-folder)"
       },
       {
         "command": "filemarks.deleteFolder",
-        "title": "Delete Folder",
-        "category": "Filemarks",
+        "title": "%commands.deleteFolder.title%",
+        "category": "%category.filemarks%",
         "icon": "$(trash)"
       },
       {
         "command": "filemarks.renameFolder",
-        "title": "Rename Folder",
-        "category": "Filemarks",
+        "title": "%commands.renameFolder.title%",
+        "category": "%category.filemarks%",
         "icon": "$(edit)"
       },
       {
         "command": "filemarks.moveToFolder",
-        "title": "Move to Folder",
-        "category": "Filemarks",
+        "title": "%commands.moveToFolder.title%",
+        "category": "%category.filemarks%",
         "icon": "$(folder)"
       },
       {
         "command": "filemarks.clear",
-        "title": "Clear Bookmarks in Current File",
-        "category": "Filemarks"
+        "title": "%commands.clear.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.clearAll",
-        "title": "Clear All Bookmarks",
-        "category": "Filemarks",
+        "title": "%commands.clearAll.title%",
+        "category": "%category.filemarks%",
         "icon": "$(trash)"
       },
       {
         "command": "filemarks.exportBookmarksJson",
-        "title": "Export Bookmarks (JSON)",
-        "category": "Filemarks"
+        "title": "%commands.exportBookmarksJson.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.importBookmarksJson",
-        "title": "Import Bookmarks (JSON)",
-        "category": "Filemarks"
+        "title": "%commands.importBookmarksJson.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.expandAllFolders",
-        "title": "Expand All Folders",
-        "category": "Filemarks",
+        "title": "%commands.expandAllFolders.title%",
+        "category": "%category.filemarks%",
         "icon": "$(expand-all)"
       },
       {
         "command": "filemarks.collapseAllFolders",
-        "title": "Collapse All Folders",
-        "category": "Filemarks",
+        "title": "%commands.collapseAllFolders.title%",
+        "category": "%category.filemarks%",
         "icon": "$(collapse-all)"
       },
       {
         "command": "filemarks.focusSidebar",
-        "title": "Focus Sidebar",
-        "category": "Filemarks"
+        "title": "%commands.focusSidebar.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.filter",
-        "title": "Filter Bookmarks",
-        "category": "Filemarks",
+        "title": "%commands.filter.title%",
+        "category": "%category.filemarks%",
         "icon": "$(filter)"
       },
       {
         "command": "filemarks.clearFilter",
-        "title": "Clear Filter",
-        "category": "Filemarks",
+        "title": "%commands.clearFilter.title%",
+        "category": "%category.filemarks%",
         "icon": "$(close)"
       },
       {
         "command": "filemarks.toggleBookmark0",
-        "title": "Toggle Bookmark 0",
-        "category": "Filemarks"
+        "title": "%commands.toggleBookmark0.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.toggleBookmark1",
-        "title": "Toggle Bookmark 1",
-        "category": "Filemarks"
+        "title": "%commands.toggleBookmark1.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.toggleBookmark2",
-        "title": "Toggle Bookmark 2",
-        "category": "Filemarks"
+        "title": "%commands.toggleBookmark2.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.toggleBookmark3",
-        "title": "Toggle Bookmark 3",
-        "category": "Filemarks"
+        "title": "%commands.toggleBookmark3.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.toggleBookmark4",
-        "title": "Toggle Bookmark 4",
-        "category": "Filemarks"
+        "title": "%commands.toggleBookmark4.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.toggleBookmark5",
-        "title": "Toggle Bookmark 5",
-        "category": "Filemarks"
+        "title": "%commands.toggleBookmark5.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.toggleBookmark6",
-        "title": "Toggle Bookmark 6",
-        "category": "Filemarks"
+        "title": "%commands.toggleBookmark6.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.toggleBookmark7",
-        "title": "Toggle Bookmark 7",
-        "category": "Filemarks"
+        "title": "%commands.toggleBookmark7.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.toggleBookmark8",
-        "title": "Toggle Bookmark 8",
-        "category": "Filemarks"
+        "title": "%commands.toggleBookmark8.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.toggleBookmark9",
-        "title": "Toggle Bookmark 9",
-        "category": "Filemarks"
+        "title": "%commands.toggleBookmark9.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToBookmark0",
-        "title": "Jump to Bookmark 0",
-        "category": "Filemarks"
+        "title": "%commands.jumpToBookmark0.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToBookmark1",
-        "title": "Jump to Bookmark 1",
-        "category": "Filemarks"
+        "title": "%commands.jumpToBookmark1.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToBookmark2",
-        "title": "Jump to Bookmark 2",
-        "category": "Filemarks"
+        "title": "%commands.jumpToBookmark2.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToBookmark3",
-        "title": "Jump to Bookmark 3",
-        "category": "Filemarks"
+        "title": "%commands.jumpToBookmark3.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToBookmark4",
-        "title": "Jump to Bookmark 4",
-        "category": "Filemarks"
+        "title": "%commands.jumpToBookmark4.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToBookmark5",
-        "title": "Jump to Bookmark 5",
-        "category": "Filemarks"
+        "title": "%commands.jumpToBookmark5.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToBookmark6",
-        "title": "Jump to Bookmark 6",
-        "category": "Filemarks"
+        "title": "%commands.jumpToBookmark6.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToBookmark7",
-        "title": "Jump to Bookmark 7",
-        "category": "Filemarks"
+        "title": "%commands.jumpToBookmark7.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToBookmark8",
-        "title": "Jump to Bookmark 8",
-        "category": "Filemarks"
+        "title": "%commands.jumpToBookmark8.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToBookmark9",
-        "title": "Jump to Bookmark 9",
-        "category": "Filemarks"
+        "title": "%commands.jumpToBookmark9.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToPreviousBookmark",
-        "title": "Jump to Previous Bookmark",
-        "category": "Filemarks"
+        "title": "%commands.jumpToPreviousBookmark.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.jumpToNextBookmark",
-        "title": "Jump to Next Bookmark",
-        "category": "Filemarks"
+        "title": "%commands.jumpToNextBookmark.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.autoBookmark",
-        "title": "Auto Bookmark",
-        "category": "Filemarks"
+        "title": "%commands.autoBookmark.title%",
+        "category": "%category.filemarks%"
       },
       {
         "command": "filemarks.toggleBookmarkFromGutter",
-        "title": "Toggle Bookmark",
-        "category": "Filemarks",
+        "title": "%commands.toggleBookmarkFromGutter.title%",
+        "category": "%category.filemarks%",
         "icon": "$(bookmark)"
       },
       {
         "command": "filemarks.addBookmarkFromExplorer",
-        "title": "Add Bookmark",
-        "category": "Filemarks",
+        "title": "%commands.addBookmarkFromExplorer.title%",
+        "category": "%category.filemarks%",
         "icon": "$(bookmark)"
       }
     ],
@@ -446,22 +446,27 @@
     ],
     "configuration": {
       "type": "object",
-      "title": "Filemarks",
+      "title": "%configuration.title%",
       "properties": {
+        "filemarks.autoReveal": {
+          "type": "boolean",
+          "default": true,
+          "description": "%configuration.autoReveal.description%"
+        },
         "filemarks.saveBookmarksInProject": {
           "type": "boolean",
           "default": false,
-          "description": "Save bookmarks in project's .vscode folder (true) or global storage (false)"
+          "description": "%configuration.saveBookmarksInProject.description%"
         },
         "filemarks.navigateThroughAllFiles": {
           "type": "boolean",
           "default": false,
-          "description": "Navigate through bookmarks across all files when jumping (true) or only within current file (false)"
+          "description": "%configuration.navigateThroughAllFiles.description%"
         },
         "filemarks.showBookmarkNotDefinedWarning": {
           "type": "boolean",
           "default": true,
-          "description": "Show warning message when jumping to a bookmark number that doesn't exist"
+          "description": "%configuration.showBookmarkNotDefinedWarning.description%"
         },
         "filemarks.revealLocation": {
           "type": "string",
@@ -470,17 +475,17 @@
             "center"
           ],
           "default": "center",
-          "description": "Where to position the cursor when jumping to a bookmark"
+          "description": "%configuration.revealLocation.description%"
         },
         "filemarks.gutterIconFillColor": {
           "type": "string",
           "default": "#FBC74F",
-          "description": "Gutter icon fill color"
+          "description": "%configuration.gutterIconFillColor.description%"
         },
         "filemarks.gutterIconNumberColor": {
           "type": "string",
           "default": "#A05A14",
-          "description": "Gutter icon number color"
+          "description": "%configuration.gutterIconNumberColor.description%"
         }
       }
     },
@@ -492,12 +497,12 @@
     "viewsWelcome": [
       {
         "view": "filemarks.treeView",
-        "contents": "No bookmarks yet.\n\nQuick Start:\n• Toggle bookmark: `Ctrl+Alt+[0-9]`\n• Jump to bookmark: `Ctrl+[0-9]`\n• Auto bookmark: `Ctrl+Alt+P`\n• Previous bookmark: `Ctrl+Alt+[`\n• Next bookmark: `Ctrl+Alt+]`\n• Focus sidebar: `Ctrl+Shift+B`\n\n*macOS: Use `Cmd` instead of `Ctrl`*\n\n[Create Folder](command:filemarks.createFolder)\n[Learn More](https://github.com/gyuha/vscode-filemarks#readme)",
+        "contents": "%viewsWelcome.filemarks.treeView.empty.contents%",
         "when": "!filemarks.hasFilter"
       },
       {
         "view": "filemarks.treeView",
-        "contents": "No matching bookmarks found.\n\n[Clear Filter](command:filemarks.clearFilter)",
+        "contents": "%viewsWelcome.filemarks.treeView.filtered.contents%",
         "when": "filemarks.hasFilter"
       }
     ],
