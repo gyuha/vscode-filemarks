@@ -13,6 +13,13 @@ let bookmarkStore: BookmarkStore | undefined;
 let decorationProvider: GutterDecorationProvider | undefined;
 let treeProvider: FilemarkTreeProvider | undefined;
 let filterInputBox: vscode.InputBox | undefined;
+let filemarksTreeView: vscode.TreeView<TreeNode> | undefined;
+
+const FILEMARKS_TREE_VIEW_ID = 'filemarks.treeView';
+
+export function shouldAutoRevealInFilemarksView(isTreeViewVisible?: boolean): boolean {
+  return isTreeViewVisible === true;
+}
 
 export async function activate(context: vscode.ExtensionContext) {
   errorHandler.initialize(context);
@@ -31,10 +38,11 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(decorationProvider);
 
     treeProvider = new FilemarkTreeProvider(bookmarkStore);
-    const treeView = vscode.window.createTreeView('filemarks.treeView', {
+    const treeView = vscode.window.createTreeView(FILEMARKS_TREE_VIEW_ID, {
       treeDataProvider: treeProvider,
       dragAndDropController: treeProvider.dragAndDropController,
     });
+    filemarksTreeView = treeView;
     treeProvider.setTreeView(treeView);
     context.subscriptions.push(treeView);
     syncTreeViewToActiveEditor();
@@ -143,7 +151,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(
       vscode.commands.registerCommand('filemarks.focusSidebar', async () => {
-        await vscode.commands.executeCommand('filemarks.treeView.focus');
+        await vscode.commands.executeCommand(`${FILEMARKS_TREE_VIEW_ID}.focus`);
       })
     );
 
@@ -255,6 +263,10 @@ async function syncTreeViewToActiveEditor(
 
   const workspaceFolder = vscode.workspace.getWorkspaceFolder(targetEditor.document.uri);
   if (!workspaceFolder) {
+    return;
+  }
+
+  if (!shouldAutoRevealInFilemarksView(filemarksTreeView?.visible)) {
     return;
   }
 
@@ -418,6 +430,7 @@ async function handleJumpToAdjacentBookmark(direction: 'previous' | 'next'): Pro
 export function deactivate() {
   filterInputBox?.dispose();
   filterInputBox = undefined;
+  filemarksTreeView = undefined;
   bookmarkStore = undefined;
   decorationProvider = undefined;
   treeProvider = undefined;

@@ -1,5 +1,6 @@
 import * as assert from 'node:assert';
 import * as vscode from 'vscode';
+import { shouldAutoRevealInFilemarksView } from '../../extension';
 
 const EXTENSION_ID = 'nicegyuha.filemarks';
 
@@ -58,5 +59,14 @@ suite('Extension Integration Test Suite', () => {
     assert.ok(config.has('revealLocation'));
     assert.ok(config.has('gutterIconFillColor'));
     assert.ok(config.has('gutterIconNumberColor'));
+  });
+
+  test('Auto reveal should stay disabled when Filemarks view is not focused', () => {
+    assert.strictEqual(shouldAutoRevealInFilemarksView(undefined), false);
+    assert.strictEqual(shouldAutoRevealInFilemarksView(false), false);
+  });
+
+  test('Auto reveal should stay enabled when Filemarks view is focused', () => {
+    assert.strictEqual(shouldAutoRevealInFilemarksView(true), true);
   });
 });
