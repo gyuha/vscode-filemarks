@@ -2,6 +2,14 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.14.5] - 2026-03-18
+
+### Changed
+
+- **VSIX Packaging Cleanup**: Excluded development-only files and test artifacts from the published extension package.
+  - Tightened `.vscodeignore` so local agent metadata, lockfiles, compiled tests, declaration files, and temporary packaging artifacts are no longer shipped in the VSIX.
+  - Reduced package size and kept the published extension focused on runtime assets only.
+
 ## [0.14.4] - 2026-03-18
 
 ### Fixed
