@@ -2,6 +2,16 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.14.4] - 2026-03-18
+
+### Fixed
+
+- **Explorer-like Focus Behavior**: Selecting files no longer forces the Filemarks view to activate when the view is hidden.
+- **Bookmark Navigation Focus**: Clicking a bookmark now focuses the target editor normally.
+- **View Focus Sync**: When Filemarks becomes visible (or focused via command), the current active editor bookmark is revealed in the Filemarks tree.
+
+---
+
 ## [0.14.3] - 2026-03-14
 
 ### Changed
