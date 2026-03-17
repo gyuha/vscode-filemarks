@@ -1,6 +1,9 @@
 import * as assert from 'node:assert';
 import * as vscode from 'vscode';
-import { shouldAutoRevealInFilemarksView } from '../../extension';
+import {
+  handleFilemarksTreeViewVisibilityChange,
+  shouldAutoRevealInFilemarksView,
+} from '../../extension';
 
 const EXTENSION_ID = 'nicegyuha.filemarks';
 
@@ -68,5 +71,25 @@ suite('Extension Integration Test Suite', () => {
 
   test('Auto reveal should stay enabled when Filemarks view is focused', () => {
     assert.strictEqual(shouldAutoRevealInFilemarksView(true), true);
+  });
+
+  test('Filemarks visibility change should sync active editor when view becomes visible', () => {
+    let syncCount = 0;
+
+    handleFilemarksTreeViewVisibilityChange(true, () => {
+      syncCount += 1;
+    });
+
+    assert.strictEqual(syncCount, 1);
+  });
+
+  test('Filemarks visibility change should not sync active editor when view stays hidden', () => {
+    let syncCount = 0;
+
+    handleFilemarksTreeViewVisibilityChange(false, () => {
+      syncCount += 1;
+    });
+
+    assert.strictEqual(syncCount, 0);
   });
 });

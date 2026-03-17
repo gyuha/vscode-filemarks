@@ -21,6 +21,17 @@ export function shouldAutoRevealInFilemarksView(isTreeViewVisible?: boolean): bo
   return isTreeViewVisible === true;
 }
 
+export function handleFilemarksTreeViewVisibilityChange(
+  isVisible: boolean,
+  syncActiveEditor: () => void
+): void {
+  if (!isVisible) {
+    return;
+  }
+
+  syncActiveEditor();
+}
+
 export async function activate(context: vscode.ExtensionContext) {
   errorHandler.initialize(context);
 
@@ -46,6 +57,14 @@ export async function activate(context: vscode.ExtensionContext) {
     treeProvider.setTreeView(treeView);
     context.subscriptions.push(treeView);
     syncTreeViewToActiveEditor();
+
+    context.subscriptions.push(
+      treeView.onDidChangeVisibility(event => {
+        handleFilemarksTreeViewVisibilityChange(event.visible, () => {
+          void syncTreeViewToActiveEditor();
+        });
+      })
+    );
 
     context.subscriptions.push(
       vscode.window.onDidChangeActiveTextEditor(editor => {
@@ -152,6 +171,7 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
       vscode.commands.registerCommand('filemarks.focusSidebar', async () => {
         await vscode.commands.executeCommand(`${FILEMARKS_TREE_VIEW_ID}.focus`);
+        await syncTreeViewToActiveEditor();
       })
     );
 
