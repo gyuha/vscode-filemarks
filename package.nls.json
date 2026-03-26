@@ -57,6 +57,6 @@
   "configuration.revealLocation.description": "Where to position the cursor when jumping to a bookmark",
   "configuration.gutterIconFillColor.description": "Gutter icon fill color",
   "configuration.gutterIconNumberColor.description": "Gutter icon number color",
-  "viewsWelcome.filemarks.treeView.empty.contents": "No bookmarks yet.\n\nQuick Start:\n• Toggle bookmark: `Ctrl+Alt+[0-9]`\n• Jump to bookmark: `Ctrl+[0-9]`\n• Auto bookmark: `Ctrl+Alt+P`\n• Previous bookmark: `Ctrl+Alt+[`\n• Next bookmark: `Ctrl+Alt+]`\n• Focus sidebar: `Ctrl+Shift+B`\n\n*macOS: Use `Cmd` instead of `Ctrl`*\n\n[Create Folder](command:filemarks.createFolder)\n[Learn More](https://github.com/gyuha/vscode-filemarks#readme)",
+  "viewsWelcome.filemarks.treeView.empty.contents": "No bookmarks yet.\n\nQuick Start:\n• Toggle bookmark: `Ctrl+Alt+[0-9]`\n• Jump to bookmark: `Ctrl+[0-9]`\n• Auto bookmark: `Ctrl+Alt+P`\n• Previous bookmark: `Ctrl+Alt+[`\n• Next bookmark: `Ctrl+Alt+]`\n• Focus sidebar: `Ctrl+Shift+B`\n\n*macOS: Use `Cmd` instead of `Ctrl`*\n\n[Create Folder](command:filemarks.createFolder)\n[Import Bookmarks (JSON)](command:filemarks.importBookmarksJson)\n[Learn More](https://github.com/gyuha/vscode-filemarks#readme)",
   "viewsWelcome.filemarks.treeView.filtered.contents": "No matching bookmarks found.\n\n[Clear Filter](command:filemarks.clearFilter)"
 }

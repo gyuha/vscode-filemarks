@@ -2,6 +2,13 @@
 
 All notable changes to the "filemarks" extension will be documented in this file.
 
+## [0.14.7] - 2026-03-26
+
+### Changed
+
+- **Import Link in Welcome View**: Added an "Import Bookmarks (JSON)" link to the empty Welcome view (shown when no bookmarks exist), allowing users to import bookmarks from a JSON file directly from the placeholder screen.
+  - Applied to both English (`package.nls.json`) and Korean (`package.nls.ko.json`) localizations.
+
 ## [0.14.5] - 2026-03-18
 
 ### Changed
